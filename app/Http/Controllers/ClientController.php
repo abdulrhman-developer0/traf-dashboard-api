@@ -12,17 +12,18 @@ class ClientController extends Controller
     ) {
         $clients = $this->clientService->getClients();
 
-        return response()->json([
-            'data' => $clients,
-        ]);
+       
     }
 
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         //
+       
+
     }
 
     /**
