@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Message;
 use App\Models\ChatMessages;
 use Illuminate\Http\Request;
 
@@ -43,7 +44,7 @@ class ChatMessagesController extends Controller
             'content' => $validated['content'],
             'read_at' => null, // default to unread
         ]);
-
+       broadcast(new Message($chatMessage))->toOthers();
         return response()->json(['message' => 'Message created successfully', 'chat_message' => $chatMessage], 201);
     }
     public function deleteMessage($id)

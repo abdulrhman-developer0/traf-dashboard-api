@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Message;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
     //
+  
     public function getAllChats()
     {
         $chats = Chat::all();
@@ -24,6 +26,7 @@ class ChatController extends Controller
 
     public function createChat(Request $request)
     {
+        
         $chat = Chat::create();
         return response()->json(['message' => 'Chat created successfully', 'chat' => $chat], 201);
     }
