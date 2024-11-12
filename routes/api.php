@@ -2,19 +2,19 @@
 
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Auth\ProfileController;
+use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\ReviewsController;
+use App\Http\Controllers\API\ServiceCategoryController;
+use App\Http\Controllers\API\ServiceController;
+use App\Http\Controllers\API\ServiceOfferController;
 use App\Http\Controllers\API\ServiceProviderController;
-use App\Http\Controllers\BookingController;
+use App\Http\Controllers\API\ServiceProviderPortfolioController;
+use App\Http\Controllers\API\ServiceScheduleController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ChatMemberController;
 use App\Http\Controllers\ChatMessagesController;
-use App\Http\Controllers\ServiceCategoryController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\ServiceOfferController;
-use App\Http\Controllers\ServiceProviderPortfolioController;
-use App\Http\Controllers\ServiceScheduleController;
-use App\Models\ServiceProviderPortfolio;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

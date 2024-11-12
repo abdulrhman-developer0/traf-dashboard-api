@@ -31,7 +31,7 @@ class ReviewsController extends Controller
         return $this->createdResponse([], 'Review created successfuly');;
     }
 
-    public function show(Review $review $review)
+    public function show(Review $review )
     {
         return $this->okResponse(
             ReviewResource::make($review),
