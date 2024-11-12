@@ -3,6 +3,9 @@
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Auth\ProfileController;
 use App\Http\Controllers\API\BookingController;
+use App\Http\Controllers\API\ChatController;
+use App\Http\Controllers\API\ChatMemberController;
+use App\Http\Controllers\API\ChatMessagesController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\ReviewsController;
 use App\Http\Controllers\API\ServiceCategoryController;
@@ -11,10 +14,7 @@ use App\Http\Controllers\API\ServiceOfferController;
 use App\Http\Controllers\API\ServiceProviderController;
 use App\Http\Controllers\API\ServiceProviderPortfolioController;
 use App\Http\Controllers\API\ServiceScheduleController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ChatMemberController;
-use App\Http\Controllers\ChatMessagesController;
-
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -97,7 +97,9 @@ Route::get('/service-provider-portfolios/{id}', [ServiceProviderPortfolioControl
 Route::post('/service-provider-portfolios', [ServiceProviderPortfolioController::class, 'store']);
 Route::put('/service-provider-portfolios/{id}', [ServiceProviderPortfolioController::class, 'update']);
 Route::delete('/service-provider-portfolios/{id}', [ServiceProviderPortfolioController::class, 'destroy']);
+// user 
 
+Route::post('/user/create-user', [UsersController::class, 'store']);
 
 
 Route::get('/user', function (Request $request) {

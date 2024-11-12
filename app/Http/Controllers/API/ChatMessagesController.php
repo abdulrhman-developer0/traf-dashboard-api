@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
 
 use App\Events\Message;
+use App\Events\MessageDeleted;
 use App\Models\ChatMessages;
 use Illuminate\Http\Request;
 
@@ -26,7 +29,7 @@ class ChatMessagesController extends Controller
 
         $chatMessage->read_at = now();
         $chatMessage->save();
-
+        broadcast(new Message($chatMessage,'read'))->toOthers();
         return response()->json(['message' => 'Message marked as read']);
     }
 
@@ -44,7 +47,7 @@ class ChatMessagesController extends Controller
             'content' => $validated['content'],
             'read_at' => null, // default to unread
         ]);
-       broadcast(new Message($chatMessage))->toOthers();
+       broadcast(new Message($chatMessage,'create'))->toOthers();
         return response()->json(['message' => 'Message created successfully', 'chat_message' => $chatMessage], 201);
     }
     public function deleteMessage($id)
@@ -55,6 +58,7 @@ class ChatMessagesController extends Controller
     }
 
     $chatMessage->delete();
+    broadcast(new MessageDeleted($id, $chatMessage->chat_id))->toOthers();
     return response()->json(['message' => 'Message deleted successfully']);
 }
 public function getUnreadMessages($chat_id, $user_id)
@@ -63,7 +67,7 @@ public function getUnreadMessages($chat_id, $user_id)
                                   ->where('user_id', '!=', $user_id)
                                   ->whereNull('read_at')
                                   ->get();
-
+    
     return response()->json($unreadMessages);
 }
 public function updateMessage(Request $request, $id)
@@ -79,7 +83,7 @@ public function updateMessage(Request $request, $id)
 
     $chatMessage->content = $validated['content'];
     $chatMessage->save();
-
+    broadcast(new Message($chatMessage, 'update'))->toOthers();
     return response()->json(['message' => 'Message updated successfully', 'chat_message' => $chatMessage]);
 }
 
