@@ -1,29 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\SErvices\ClientService;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function __construct(
-        protected  ClientService $clientService
-    ) {
-        $clients = $this->clientService->getClients();
-
-       
-    }
-
     /**
      * Display a listing of the resource.
      */
-
     public function index()
     {
         //
-       
-
     }
 
     /**
