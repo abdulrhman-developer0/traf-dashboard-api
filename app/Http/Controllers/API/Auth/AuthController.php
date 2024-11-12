@@ -19,9 +19,9 @@ class AuthController extends Controller
             'password'  => 'required|string|min:8'
         ]);
 
-        $user = User::whereEmail($request->email);
+        $user = User::firstWhere('email', $request->email);
 
-        if (!$user || Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->badResponse([], 'Invalid email or password');
         }
 
@@ -32,10 +32,10 @@ class AuthController extends Controller
         ], 'Token created successfuly');
     }
 
-    public function lpgout(Request $request)
+    public function logout(Request $request)
     {
         $user = $request->user();
-        $user->currentToken()->delete();
+        $user->currentAccessToken()->delete();
 
         return $this->okResponse([], 'Token deleted successfuly');
     }

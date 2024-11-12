@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\Auth\ProfileController;
+use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ChatMemberController;
@@ -13,6 +16,20 @@ use App\Models\ServiceProviderPortfolio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::prefix('auth')->group(function() {
+
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::middleware(['auth:sanctum'])->group(function() {
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+        Route::post('/change-password', [ProfileController::class, 'changePassword']);
+
+        Route::get('/profile', [ProfileController::class, 'data']);
+    });
+});
+
+Route::apiResource('/clients', ClientController::class);
 
 // chat 
 Route::get('/chats', [ChatController::class, 'getAllChats']);
