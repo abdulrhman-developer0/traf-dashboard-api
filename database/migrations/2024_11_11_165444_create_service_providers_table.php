@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->integer('years_of_experience')->default(0);
-            $table->string('phone')->default('');
-            $table->string('address')->default('');
+            $table->string('phone');
+            $table->string('address')->nullable();
             $table->float('rating', 2, 1)->default(0.0);
             $table->timestamps();
 

@@ -39,7 +39,7 @@ class ClientController extends Controller
             'name'      => 'required|string|min:1|max:255',
             'email'     => 'required|email|min:5|max:255',
             'password'  => 'required|string|min:8|max:255|confirmed',
-            'phone'     => 'nullable|string|min:9|max:20',
+            'phone'     => 'required|string|min:9|max:20',
             'address'   => 'nullable|string|min:1|max:255',
         ]);
 
@@ -80,9 +80,14 @@ class ClientController extends Controller
     {
 
         $request->validate([
-            'phone'     => 'nullable|string|min:9|max:20',
-            'address'   => 'nullable|string|min:1|max:255',
+            'name'      => 'required|string|min:1|max:255',
+            'phone'     => 'required|string|min:9|max:20',
+            'address'   => 'required|string|min:1|max:255',
         ]);
+
+        $user = $client->user;
+        $user->name = $request->name;
+        $user->save();
 
         $client->update($request->only(['phone', 'address']));
 

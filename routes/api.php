@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Auth\ProfileController;
 use App\Http\Controllers\API\ClientController;
+use App\Http\Controllers\API\ReviewsController;
+use App\Http\Controllers\API\ServiceProviderController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ChatMemberController;
@@ -30,6 +32,8 @@ Route::prefix('auth')->group(function() {
 });
 
 Route::apiResource('/clients', ClientController::class);
+Route::apiResource('/service-providers', ServiceProviderController::class);
+Route::apiResource('/reviews', ReviewsController::class);
 
 // chat 
 Route::get('/chats', [ChatController::class, 'getAllChats']);
