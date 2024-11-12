@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\ChatMessages;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,22 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class Message implements ShouldBroadcast
+class MessageDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-   
-    public $message;
-    public $action; 
+    public $messageId;
+    public $chatId;
     /**
      * Create a new event instance.
      */
-    public function __construct(
-       ChatMessages $message, $action
-    )
+    public function __construct($messageId,$chatId)
     {
         //
-        $this->message = $message;
-        $this->action = $action;
+        $this->messageId=$messageId;
+        $this->chatId=$chatId;
     }
 
     /**
@@ -36,9 +32,11 @@ class Message implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('chat.' . $this->message->chat_id);
+      
+            return new PrivateChannel('chat.' . $this->chatId);
+
     }
     public function broadcastAs(){
-        return 'message.sent';
+        return 'message.delete';
     }
 }
