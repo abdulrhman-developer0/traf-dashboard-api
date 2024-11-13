@@ -6,6 +6,7 @@ use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\ChatMemberController;
 use App\Http\Controllers\API\ChatMessagesController;
+use App\Http\Controllers\API\CityController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\ReviewsController;
 use App\Http\Controllers\API\ServiceCategoryController;
@@ -30,6 +31,8 @@ Route::prefix('auth')->group(function() {
         Route::get('/profile', [ProfileController::class, 'data']);
     });
 });
+
+Route::apiResource('/cities', CityController::class);
 
 Route::apiResource('/clients', ClientController::class);
 

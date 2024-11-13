@@ -13,6 +13,7 @@ class ServiceProvider extends Model implements HasMedia
 
     protected $fillable = [
         'user_id',
+        'city_id',
         'years_of_experience',
         'phone',
         'address',
@@ -32,6 +33,11 @@ class ServiceProvider extends Model implements HasMedia
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 
     public function serviceProviderPartners()

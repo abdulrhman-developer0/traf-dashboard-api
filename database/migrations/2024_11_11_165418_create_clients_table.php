@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedInteger('city_id')->nullable();
             $table->string('phone');
             $table->string('address')->nullable();
             $table->float('rating', 2, 1)->default(0.0);
