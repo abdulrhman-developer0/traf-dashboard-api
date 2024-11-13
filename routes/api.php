@@ -32,7 +32,10 @@ Route::prefix('auth')->group(function() {
 });
 
 Route::apiResource('/clients', ClientController::class);
+
 Route::apiResource('/service-providers', ServiceProviderController::class);
+Route::get('/service-providers/{id}/partners', [ServiceProviderController::class, 'indexForPartners']);
+
 Route::apiResource('/reviews', ReviewsController::class);
 
 // chat 

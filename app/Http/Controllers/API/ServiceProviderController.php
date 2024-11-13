@@ -30,6 +30,22 @@ class ServiceProviderController extends Controller
     }
 
     /**
+     *  Get Partner Service Providers
+     */
+    public function indexForPartners(string $id)
+    {
+        $partnerServiceProviders =  ServiceProvider::whereHas(
+            'serviceProviderPartners',
+            fn($q) => $q->whereServiceProviderId($id)
+        )->get();
+
+        return $this->okResponse(
+            ServiceProviderResource::collection($partnerServiceProviders),
+            'Retrieve Partner Service provider'
+        );
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -40,6 +56,7 @@ class ServiceProviderController extends Controller
             'email'     => 'required|email|min:5|max:255',
             'password'  => 'required|string|min:8|max:255|confirmed',
             'phone'     => 'required|string|min:9|max:20',
+            'years_of_experience' => 'required|integer|between:1,100',
             'address'   => 'nullable|string|min:1|max:255',
         ]);
 
@@ -65,11 +82,18 @@ class ServiceProviderController extends Controller
         return $this->createdResponse([], 'Created ServiceProvider Successfully');
     }
 
+
     /**
      * Display the specified resource.
      */
-    public function show(ServiceProvider $serviceProvider)
+    public function show(string $id)
     {
+        $serviceProvider = ServiceProvider::find($id);
+
+        if (! $serviceProvider) {
+            return $this->badResponse([], "No Service Provider With id '{$id}'");
+        }
+
         // Return the serviceProvider details, including associated user data
         return $this->okResponse(
             ServiceProviderResource::make($serviceProvider->load('user')),
@@ -80,16 +104,40 @@ class ServiceProviderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ServiceProvider $serviceProvider)
+    public function update(Request $request, string $id)
     {
+        $serviceProvider = ServiceProvider::find($id);
+
+        if (! $serviceProvider) {
+            return $this->badResponse([], "No Service Provider With id '{$id}'");
+        }
 
         $request->validate([
             'name'      => 'required|string|min:1|max:255',
             'phone'     => 'required|string|min:9|max:20',
             'address'   => 'nullable|string|min:1|max:255',
+            'years_of_experience' => 'nullable|integer|between:1,100',
+            'photo'               => 'nullable|image|max:4096',
+            'partnerIds'          => 'nullable|array|min:1',
+            'partnerIds.*'        => 'required|integer|exists:service_providers,id',
         ]);
 
-        $serviceProvider->update($request->only(['phone', 'address']));
+        $serviceProvider->update($request->only(['phone', 'address', 'years_of_experience']));
+
+        if ($request->name) {
+            $serviceProvider->user->update([
+                'name' => $request->name
+            ]);
+        }
+
+        if ($request->photo) {
+            $serviceProvider->addMedia($request->photo)
+                ->toMediaCollection('photo');
+        }
+
+        if ( $request->partnerIds ) {
+            $serviceProvider->syncPartners($request->partnerIds);
+        }
 
         return $this->okResponse([], 'ServiceProvider Updated Successfully');
     }
@@ -97,8 +145,13 @@ class ServiceProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ServiceProvider $serviceProvider)
+    public function destroy(string $id)
     {
+        $serviceProvider = ServiceProvider::find($id);
+
+        if (! $serviceProvider) {
+            return $this->badResponse([], "No Service Provider With id '{$id}'");
+        }
 
         $user = $serviceProvider->user;
 

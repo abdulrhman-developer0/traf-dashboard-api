@@ -24,6 +24,11 @@ class ServiceProvider extends Model implements HasMedia
         $this->addMediaCollection('photo')->singleFile();
     }
 
+    public function syncPartners(array $partnerServiceProviderIds)
+    {
+        return $this->serviceProviderPartners()->sync([$this->id, ...$partnerServiceProviderIds]);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

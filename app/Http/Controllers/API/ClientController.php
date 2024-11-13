@@ -64,8 +64,14 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Client $client)
+    public function show(string $id)
     {
+        $client = Client::find($id);
+
+        if (! $client) {
+            return $this->badResponse([], "No Client With id '{$id}'");
+        }
+
         // Return the client details, including associated user data
         return $this->okResponse(
             ClientResource::make($client->load('user')),
@@ -76,20 +82,34 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Client $client)
+    public function update(Request $request, string $id)
     {
+        $client = Client::find($id);
+
+        if (! $client) {
+            return $this->badResponse([], "No Client With id '{$id}'");
+        }
 
         $request->validate([
             'name'      => 'required|string|min:1|max:255',
             'phone'     => 'required|string|min:9|max:20',
             'address'   => 'required|string|min:1|max:255',
+            'photo'     => 'nullable|image|max:4096',
         ]);
 
-        $user = $client->user;
-        $user->name = $request->name;
-        $user->save();
 
         $client->update($request->only(['phone', 'address']));
+
+        if ($request->name) {
+            $client->user->update([
+                'name' => $request->name
+            ]);
+        }
+
+        if ($request->photo) {
+            $client->addMedia($request->photo)
+                ->toMediaCollection('photo');
+        }
 
         return $this->okResponse([], 'Client Updated Successfully');
     }
@@ -97,9 +117,14 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Client $client)
+    public function destroy(string $id)
     {
-        
+        $client = Client::find($id);
+
+        if (! $client) {
+            return $this->badResponse([], "No Client With id '{$id}'");
+        }
+
         $user = $client->user;
 
         $client->delete();
