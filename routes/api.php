@@ -51,6 +51,7 @@ Route::get('/chat-members/check', [ChatMemberController::class, 'isMember']);
 // chat messages 
 Route::post('/chat-messages', [ChatMessagesController::class, 'createMessage']);
 Route::get('/chat-messages/{chat_id}', [ChatMessagesController::class, 'getMessages']);
+Route::get('/chat-messages', [ChatMessagesController::class, 'index']);
 Route::put('/chat-messages/read/{id}', [ChatMessagesController::class, 'markAsRead']);
 Route::delete('/chat-messages/{id}', [ChatMessagesController::class, 'deleteMessage']);
 Route::get('/chat-messages/unread/{chat_id}/{user_id}', [ChatMessagesController::class, 'getUnreadMessages']);

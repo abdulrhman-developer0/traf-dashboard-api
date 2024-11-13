@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 
 use App\Events\Message;
 use App\Events\MessageDeleted;
+use App\Models\Chat;
 use App\Models\ChatMessages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChatMessagesController extends Controller
 {
@@ -20,6 +22,18 @@ class ChatMessagesController extends Controller
         }
         return response()->json($messages);
     }
+  
+    public function index() {
+        $chats = Chat::whereHas('chatMembers', function ($q) {
+            $q->where('user_id','1');
+        })->get(); 
+    
+        return response()->json($chats);
+    }
+    
+
+
+
     public function markAsRead($id)
     {
         $chatMessage = ChatMessages::find($id);
@@ -39,15 +53,14 @@ class ChatMessagesController extends Controller
             'chat_id' => 'required|exists:chats,id',
             'user_id' => 'required|exists:users,id',
             'content' => 'required|string',
-        ]);
-
+        ]); 
         $chatMessage = ChatMessages::create([
             'chat_id' => $validated['chat_id'],
             'user_id' => $validated['user_id'],
             'content' => $validated['content'],
-            'read_at' => null, // default to unread
+            'read_at' => null, 
         ]);
-       broadcast(new Message($chatMessage,'create'))->toOthers();
+        broadcast(new Message($chatMessage,'create'))->toOthers();
         return response()->json(['message' => 'Message created successfully', 'chat_message' => $chatMessage], 201);
     }
     public function deleteMessage($id)
