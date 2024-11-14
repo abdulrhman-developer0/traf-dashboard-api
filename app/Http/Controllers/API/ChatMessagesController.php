@@ -14,14 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class ChatMessagesController extends Controller
 {
     //
-    public function getMessages($chat_id)
-    {
-        $messages = ChatMessages::where('chat_id', $chat_id)->with('user')->get();
-        if ($messages->isEmpty()) {
-            return response()->json(['message' => 'No messages found in this chat'], 404);
-        }
-        return response()->json($messages);
-    }
+  
   
     public function index() {
         $chats = Chat::whereHas('chatMembers', function ($q) {
@@ -30,10 +23,6 @@ class ChatMessagesController extends Controller
     
         return response()->json($chats);
     }
-    
-
-
-
     public function markAsRead($id)
     {
         $chatMessage = ChatMessages::find($id);
@@ -47,7 +36,7 @@ class ChatMessagesController extends Controller
         return response()->json(['message' => 'Message marked as read']);
     }
 
-    public function createMessage(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'chat_id' => 'required|exists:chats,id',
@@ -63,7 +52,7 @@ class ChatMessagesController extends Controller
         broadcast(new Message($chatMessage,'create'))->toOthers();
         return response()->json(['message' => 'Message created successfully', 'chat_message' => $chatMessage], 201);
     }
-    public function deleteMessage($id)
+    public function destroy($id)
 {
     $chatMessage = ChatMessages::find($id);
     if (!$chatMessage) {
@@ -74,16 +63,8 @@ class ChatMessagesController extends Controller
     broadcast(new MessageDeleted($id, $chatMessage->chat_id))->toOthers();
     return response()->json(['message' => 'Message deleted successfully']);
 }
-public function getUnreadMessages($chat_id, $user_id)
-{
-    $unreadMessages = ChatMessages::where('chat_id', $chat_id)
-                                  ->where('user_id', '!=', $user_id)
-                                  ->whereNull('read_at')
-                                  ->get();
-    
-    return response()->json($unreadMessages);
-}
-public function updateMessage(Request $request, $id)
+
+public function update(Request $request, $id)
 {
     $validated = $request->validate([
         'content' => 'required|string',

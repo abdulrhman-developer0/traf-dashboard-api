@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 
 use App\Models\ServiceProviderPortfolio;
 use Illuminate\Http\Request;
+use App\Traits\APIResponses;
 
 class ServiceProviderPortfolioController extends Controller
 {
     //
+    use APIResponses;
     public function index()
     {
         $portfolios = ServiceProviderPortfolio::with('service_provider')->get();
-        return response()->json($portfolios);
+    return $this->okResponse($portfolios, 'Retrieved all portfolios successfully');
     }
 
     // Get a specific portfolio
@@ -21,9 +23,9 @@ class ServiceProviderPortfolioController extends Controller
     {
         $portfolio = ServiceProviderPortfolio::with('service_provider')->find($id);
         if (!$portfolio) {
-            return response()->json(['message' => 'Portfolio not found'], 404);
+            return $this->notFoundResponse('Portfolio not found');
         }
-        return response()->json($portfolio);
+        return $this->okResponse($portfolio, 'Retrieved portfolio successfully');
     }
 
     // Create a new portfolio
@@ -34,9 +36,9 @@ class ServiceProviderPortfolioController extends Controller
             'website_url' => 'required|url',
             'description' => 'required|string',
         ]);
-
+    
         $portfolio = ServiceProviderPortfolio::create($validated);
-        return response()->json(['message' => 'Portfolio created successfully', 'portfolio' => $portfolio], 201);
+        return $this->createdResponse(['portfolio' => $portfolio], 'Portfolio created successfully');
     }
 
     // Update an existing portfolio
@@ -44,16 +46,16 @@ class ServiceProviderPortfolioController extends Controller
     {
         $portfolio = ServiceProviderPortfolio::find($id);
         if (!$portfolio) {
-            return response()->json(['message' => 'Portfolio not found'], 404);
+            return $this->notFoundResponse('Portfolio not found');
         }
-
+    
         $validated = $request->validate([
             'website_url' => 'url',
             'description' => 'string',
         ]);
-
+    
         $portfolio->update($validated);
-        return response()->json(['message' => 'Portfolio updated successfully', 'portfolio' => $portfolio]);
+        return $this->okResponse(['portfolio' => $portfolio], 'Portfolio updated successfully');
     }
 
     // Delete a portfolio
@@ -61,10 +63,10 @@ class ServiceProviderPortfolioController extends Controller
     {
         $portfolio = ServiceProviderPortfolio::find($id);
         if (!$portfolio) {
-            return response()->json(['message' => 'Portfolio not found'], 404);
+            return $this->notFoundResponse('Portfolio not found');
         }
-
+    
         $portfolio->delete();
-        return response()->json(['message' => 'Portfolio deleted successfully']);
+        return $this->okResponse([], 'Portfolio deleted successfully');
     }
 }

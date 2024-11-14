@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ChatMemberController extends Controller
 {
     //
-    public function getMembers($chat_id)
+    public function index($chat_id)
     {
         $members = ChatMember::where('chat_id', $chat_id)->get();
         if ($members->isEmpty()) {
@@ -18,7 +18,7 @@ class ChatMemberController extends Controller
         }
         return response()->json($members);
     }
-    public function getChatsByUser($user_id)
+    public function show($user_id)
     {
         $chats = ChatMember::where('user_id', $user_id)->with('chat')->get();
         if ($chats->isEmpty()) {
@@ -26,7 +26,7 @@ class ChatMemberController extends Controller
         }
         return response()->json($chats);
     }
-    public function addMember(Request $request)
+    public function sindextore(Request $request)
     {
         $request->validate([
             'chat_id' => 'required|exists:chats,id',
@@ -40,7 +40,7 @@ class ChatMemberController extends Controller
 
         return response()->json(['message' => 'Member added to chat successfully', 'chat_member' => $chatMember], 201);
     }
-    public function removeMember($id)
+    public function destroy($id)
     {
         $chatMember = ChatMember::find($id);
         if (!$chatMember) {
