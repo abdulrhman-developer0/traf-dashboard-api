@@ -15,7 +15,9 @@ use App\Http\Controllers\API\ServiceOfferController;
 use App\Http\Controllers\API\ServiceProviderController;
 use App\Http\Controllers\API\ServiceProviderPortfolioController;
 use App\Http\Controllers\API\ServiceScheduleController;
+use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\UsersController;
+use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,8 +40,8 @@ Route::apiResource('/clients', ClientController::class);
 
 Route::apiResource('/service-providers', ServiceProviderController::class);
 Route::get('/service-providers/{id}/partners', [ServiceProviderController::class, 'indexForPartners']);
-
 Route::apiResource('/reviews', ReviewsController::class);
+
 
 // chat 
 Route::get('/chats', [ChatController::class, 'getAllChats']);
@@ -108,7 +110,11 @@ Route::delete('/service-provider-portfolios/{id}', [ServiceProviderPortfolioCont
 
 Route::post('/user/create-user', [UsersController::class, 'store']);
 
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('verify/code', [TwoFactorController::class, 'store']); 
+    Route::post('verify', [TwoFactorController::class, 'show']); 
+});
+// two factor Auth middleware use alias two-factor 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+})->middleware(['auth:sanctum']);
