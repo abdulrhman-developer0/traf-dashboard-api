@@ -35,6 +35,9 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'last_activity',
+        'code',
+        'expire_at'
+
     ];
 
     /**
@@ -70,5 +73,17 @@ class User extends Authenticatable implements HasMedia
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function generateCode()
+    {
+        $this->timestamps = false;
+
+        do {
+            $this->code = rand(1000, 9999);
+        } while (User::where('code', $this->code)->exists()); // Ensure the code is unique
+        $this->expire_at = now()->addMinutes(20);
+        
+        $this->save();
     }
 }

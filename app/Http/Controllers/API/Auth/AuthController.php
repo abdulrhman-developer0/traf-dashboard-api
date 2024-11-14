@@ -4,13 +4,13 @@ namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Traits\ApiResponses;
+use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    use ApiResponses;
+    use APIResponses;
 
     public function login(Request $request)
     {
@@ -20,7 +20,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::firstWhere('email', $request->email);
-
+        $user->generateCode();
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->badResponse([], 'Invalid email or password');
         }
