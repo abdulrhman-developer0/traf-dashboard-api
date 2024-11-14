@@ -44,68 +44,36 @@ Route::apiResource('/reviews', ReviewsController::class);
 
 
 // chat 
-Route::get('/chats', [ChatController::class, 'getAllChats']);
-Route::get('/chat/{id}', [ChatController::class, 'getChat']);
-Route::post('/chat/create', [ChatController::class, 'createChat']);
-Route::put('/chat/update/{id}', [ChatController::class, 'updateChat']);
-Route::delete('/chat/delete/{id}', [ChatController::class, 'deleteChat']);
+Route::apiResource('/chats', ChatController::class);
+
 // chat member 
-Route::post('/chat-members', [ChatMemberController::class, 'addMember']);
-Route::get('/chat-members/{chat_id}', [ChatMemberController::class, 'getMembers']);
-Route::get('/user-chats/{user_id}', [ChatMemberController::class, 'getChatsByUser']);
-Route::delete('/chat-members/{id}', [ChatMemberController::class, 'removeMember']);
-Route::get('/chat-members/check', [ChatMemberController::class, 'isMember']);
+Route::apiResource('/chat-members', ChatMemberController::class);
+
 
 // chat messages 
-Route::post('/chat-messages', [ChatMessagesController::class, 'createMessage']);
-Route::get('/chat-messages/{chat_id}', [ChatMessagesController::class, 'getMessages']);
-Route::get('/chat-messages', [ChatMessagesController::class, 'index']);
+Route::apiResource('/chat-messages', ChatMessagesController::class);
 Route::put('/chat-messages/read/{id}', [ChatMessagesController::class, 'markAsRead']);
-Route::delete('/chat-messages/{id}', [ChatMessagesController::class, 'deleteMessage']);
-Route::get('/chat-messages/unread/{chat_id}/{user_id}', [ChatMessagesController::class, 'getUnreadMessages']);
-Route::put('/chat-messages/{id}', [ChatMessagesController::class, 'updateMessage']);
+
 
 // services 
-Route::get('/services', [ServiceController::class, 'index']);
-Route::get('/services/{id}', [ServiceController::class, 'show']);
-Route::post('/services', [ServiceController::class, 'store']);
-Route::put('/services/{id}', [ServiceController::class, 'update']);
-Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
+Route::apiResource('services', ServiceController::class);
 
 //Serivce Categories 
-Route::get('/service-categories', [ServiceCategoryController::class, 'index']);
-Route::get('/service-categories/{id}', [ServiceCategoryController::class, 'show']);
-Route::post('/service-categories', [ServiceCategoryController::class, 'store']);
-Route::put('/service-categories/{id}', [ServiceCategoryController::class, 'update']);
-Route::delete('/service-categories/{id}', [ServiceCategoryController::class, 'destroy']);
+Route::apiResource('/service-categories', ServiceCategoryController::class);
 
 // ServiceSchedule
-Route::get('/service-schedules', [ServiceScheduleController::class, 'index']);
-Route::get('/service-schedules/{id}', [ServiceScheduleController::class, 'show']);
-Route::post('/service-schedules', [ServiceScheduleController::class, 'store']);
-Route::put('/service-schedules/{id}', [ServiceScheduleController::class, 'update']);
-Route::delete('/service-schedules/{id}', [ServiceScheduleController::class, 'destroy']);
+Route::apiResource('/service-schedules', ServiceScheduleController::class);
 
 // booking 
-Route::get('/bookings', [BookingController::class, 'index']);
-Route::get('/bookings/{id}', [BookingController::class, 'show']);
-Route::post('/bookings', [BookingController::class, 'store']);
-Route::put('/bookings/{id}', [BookingController::class, 'update']);
-Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
+Route::apiResource('/bookings', BookingController::class);
 
 // service-offers
-Route::get('/service-offers', [ServiceOfferController::class, 'index']);
-Route::get('/service-offers/{id}', [ServiceOfferController::class, 'show']);
-Route::post('/service-offers', [ServiceOfferController::class, 'store']);
-Route::put('/service-offers/{id}', [ServiceOfferController::class, 'update']);
-Route::delete('/service-offers/{id}', [ServiceOfferController::class, 'destroy']);
+Route::apiResource('/service-offers', ServiceOfferController::class);
+
 
 // portfolio
-Route::get('/service-provider-portfolios', [ServiceProviderPortfolioController::class, 'index']);
-Route::get('/service-provider-portfolios/{id}', [ServiceProviderPortfolioController::class, 'show']);
-Route::post('/service-provider-portfolios', [ServiceProviderPortfolioController::class, 'store']);
-Route::put('/service-provider-portfolios/{id}', [ServiceProviderPortfolioController::class, 'update']);
-Route::delete('/service-provider-portfolios/{id}', [ServiceProviderPortfolioController::class, 'destroy']);
+Route::apiResource('/service-provider-portfolios', ServiceProviderPortfolioController::class);
+
 // user 
 
 Route::post('/user/create-user', [UsersController::class, 'store']);

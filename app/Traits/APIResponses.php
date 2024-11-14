@@ -23,6 +23,10 @@ trait APIResponses
     { 
         return $this->response($data, 401, $message ?? 'Unauthorized');
     }
+    public function notFoundResponse(mixed $data = [], string $message = null)
+{ 
+    return $this->response($data, 404, $message ?? 'Not Found');
+}
 
     public function response(mixed $data, int $code, string $message)
     {

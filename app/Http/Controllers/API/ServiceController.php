@@ -1,27 +1,30 @@
 <?php
 
+
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use App\Traits\APIResponses;
 
 class ServiceController extends Controller
 {
     //
+    use APIResponses;
     public function index()
     {
         $services = Service::all();
-        return response()->json($services);
+        return $this->okResponse($services, 'Services retrieved successfully');
     }
 
     public function show($id)
     {
         $service = Service::find($id);
         if (!$service) {
-            return response()->json(['message' => 'Service not found'], 404);
+            return $this->badResponse([], 'Service not found');
         }
-        return response()->json($service);
+        return $this->okResponse($service, 'Service retrieved successfully');
     }
     public function store(Request $request)
     {
@@ -35,18 +38,18 @@ class ServiceController extends Controller
             'price_before' => 'required|numeric',
             'is_offer' => 'boolean',
         ]);
-
+    
         $service = Service::create($validated);
-        return response()->json(['message' => 'Service created successfully', 'service' => $service], 201);
+        return $this->createdResponse($service, 'Service created successfully');
     }
 
     public function update(Request $request, $id)
     {
         $service = Service::find($id);
         if (!$service) {
-            return response()->json(['message' => 'Service not found'], 404);
+            return $this->badResponse([], 'Service not found');
         }
-
+    
         $validated = $request->validate([
             'service_category_id' => 'exists:service_categories,id',
             'partner_service_provider_id' => 'nullable',
@@ -57,19 +60,19 @@ class ServiceController extends Controller
             'price_before' => 'numeric',
             'is_offer' => 'boolean',
         ]);
-
+    
         $service->update($validated);
-        return response()->json(['message' => 'Service updated successfully', 'service' => $service]);
+        return $this->okResponse($service, 'Service updated successfully');
     }
 
     public function destroy($id)
     {
         $service = Service::find($id);
         if (!$service) {
-            return response()->json(['message' => 'Service not found'], 404);
+            return $this->badResponse([], 'Service not found');
         }
-
+    
         $service->delete();
-        return response()->json(['message' => 'Service deleted successfully']);
+        return $this->okResponse([], 'Service deleted successfully');
     }
 }

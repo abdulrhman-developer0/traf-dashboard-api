@@ -5,14 +5,16 @@ use App\Http\Controllers\Controller;
 
 use App\Models\SerivceOffer;
 use Illuminate\Http\Request;
+use App\Traits\APIResponses;
 
 class ServiceOfferController extends Controller
 {
     //
+    use APIResponses;
     public function index()
     {
         $offers = SerivceOffer::with('service')->get();
-        return response()->json($offers);
+        return $this->okResponse($offers, 'Retrieved all offers successfully');
     }
 
     // Get a specific service offer
@@ -20,9 +22,9 @@ class ServiceOfferController extends Controller
     {
         $offer = SerivceOffer::with('service')->find($id);
         if (!$offer) {
-            return response()->json(['message' => 'Offer not found'], 404);
+            return $this->notFoundResponse([], 'Offer not found');
         }
-        return response()->json($offer);
+        return $this->okResponse($offer, 'Retrieved offer successfully');
     }
 
     // Create a new service offer
@@ -36,9 +38,9 @@ class ServiceOfferController extends Controller
             'start_at' => 'required|date',
             'end_at' => 'required|date|after:start_at',
         ]);
-
+    
         $offer = SerivceOffer::create($validated);
-        return response()->json(['message' => 'Offer created successfully', 'offer' => $offer], 201);
+        return $this->createdResponse($offer, 'Offer created successfully');
     }
 
     // Update an existing service offer
@@ -46,9 +48,9 @@ class ServiceOfferController extends Controller
     {
         $offer = SerivceOffer::find($id);
         if (!$offer) {
-            return response()->json(['message' => 'Offer not found'], 404);
+            return $this->notFoundResponse([], 'Offer not found');
         }
-
+    
         $validated = $request->validate([
             'service_id' => 'integer|exists:services,id',
             'discount_percentage' => 'integer|min:0|max:100',
@@ -57,20 +59,20 @@ class ServiceOfferController extends Controller
             'start_at' => 'date',
             'end_at' => 'date|after:start_at',
         ]);
-
+    
         $offer->update($validated);
-        return response()->json(['message' => 'Offer updated successfully', 'offer' => $offer]);
+        return $this->okResponse($offer, 'Offer updated successfully');
     }
 
     // Delete a service offer
     public function destroy($id)
     {
         $offer = SerivceOffer::find($id);
-        if (!$offer) {
-            return response()->json(['message' => 'Offer not found'], 404);
-        }
+    if (!$offer) {
+        return $this->notFoundResponse([], 'Offer not found');
+    }
 
-        $offer->delete();
-        return response()->json(['message' => 'Offer deleted successfully']);
+    $offer->delete();
+    return $this->okResponse([], 'Offer deleted successfully');
     }
 }

@@ -11,12 +11,12 @@ class ChatController extends Controller
 {
     //
   
-    public function getAllChats()
+    public function index()
     {
         $chats = Chat::all();
         return response()->json($chats);
     }
-    public function getChat($id)
+    public function show($id)
     {
         $chat = Chat::find($id);
         if (!$chat) {
@@ -25,7 +25,7 @@ class ChatController extends Controller
         return response()->json($chat);
     }
 
-    public function createChat(Request $request)
+    public function store(Request $request)
     {
         
         $chat = Chat::create();
@@ -33,7 +33,7 @@ class ChatController extends Controller
     }
 
 
-    public function updateChat(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $chat = Chat::find($id);
         if (!$chat) {
@@ -43,7 +43,7 @@ class ChatController extends Controller
         $chat->save();
         return response()->json(['message' => 'Chat updated successfully', 'chat' => $chat]);
     }
-    public function deleteChat($id)
+    public function destroy($id)
     {
         $chat = Chat::find($id);
         if (!$chat) {

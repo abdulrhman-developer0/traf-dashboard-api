@@ -6,23 +6,24 @@ use App\Http\Controllers\Controller;
 
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
-
+use App\Traits\APIResponses;
 class ServiceCategoryController extends Controller
 {
     //
+    use APIResponses;
     public function index()
     {
         $categories = ServiceCategory::all();
-        return response()->json($categories);
+        return $this->okResponse($categories, 'Service categories retrieved successfully');
     }
 
     public function show($id)
     {
         $category = ServiceCategory::find($id);
         if (!$category) {
-            return response()->json(['message' => 'Service category not found'], 404);
+            return $this->badResponse([], 'Service category not found');
         }
-        return response()->json($category);
+        return $this->okResponse($category, 'Service category retrieved successfully');
     }
 
 
@@ -32,35 +33,35 @@ class ServiceCategoryController extends Controller
             'name' => 'required|string|max:255',
             'is_active' => 'boolean',
         ]);
-
+    
         $category = ServiceCategory::create($validated);
-        return response()->json(['message' => 'Service category created successfully', 'category' => $category], 201);
+        return $this->createdResponse($category, 'Service category created successfully');
     }
 
     public function update(Request $request, $id)
     {
         $category = ServiceCategory::find($id);
         if (!$category) {
-            return response()->json(['message' => 'Service category not found'], 404);
+            return $this->badResponse([], 'Service category not found');
         }
-
+    
         $validated = $request->validate([
             'name' => 'string|max:255',
             'is_active' => 'boolean',
         ]);
-
+    
         $category->update($validated);
-        return response()->json(['message' => 'Service category updated successfully', 'category' => $category]);
+        return $this->okResponse($category, 'Service category updated successfully');
     }
 
     public function destroy($id)
     {
         $category = ServiceCategory::find($id);
-        if (!$category) {
-            return response()->json(['message' => 'Service category not found'], 404);
-        }
+    if (!$category) {
+        return $this->badResponse([], 'Service category not found');
+    }
 
-        $category->delete();
-        return response()->json(['message' => 'Service category deleted successfully']);
+    $category->delete();
+    return $this->okResponse([], 'Service category deleted successfully');
     }
 }
