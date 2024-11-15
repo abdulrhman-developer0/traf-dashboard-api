@@ -20,23 +20,29 @@ class ReviewsController extends Controller
         ]);
 
         $user = $request->user();
-        
+
         $reviewable = $user->client ?? $user->serviceProvider;
         $reviewable->reviews()->create($reviewData);
 
         $reviewable->rating = $reviewable->reviews()->avg('rating');
         $reviewable->save();
 
-        
+
         return $this->createdResponse([], 'Review created successfuly');;
     }
 
-    public function show(Review $review )
+    public function show(string $id)
     {
+        $review = Review::find($id);
+
+        if (! $review) {
+            return $this->badResponse([], "No Riview With id '{$id}'");
+        }
+
         return $this->okResponse(
             ReviewResource::make($review),
-        'Retrieved Review data successfuly'
-    );
+            'Retrieved Review data successfuly'
+        );
     }
 
     public function update(Request $request, Review $review)
