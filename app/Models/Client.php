@@ -33,4 +33,9 @@ class Client extends Model implements HasMedia
     {
         return $this->belongsTo(City::class);
     }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class,'reviewable');
+    }
 }

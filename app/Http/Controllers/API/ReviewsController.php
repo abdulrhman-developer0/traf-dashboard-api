@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReviewResource;
 use App\Models\Review;
+use App\Models\User;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewsController extends Controller
 {
@@ -15,11 +17,15 @@ class ReviewsController extends Controller
     public function store(Request $request)
     {
         $reviewData = $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
             'rating'  => 'required|integer|between:1,5',
             'comment' => 'required|string|min:1|max:500',
         ]);
 
-        $user = $request->user();
+        $user = User::find($request->user_id);
+        if (! $user ) {
+            return $this->badResponse([], "No User With id '{$id}'");
+        }
 
         $reviewable = $user->client ?? $user->serviceProvider;
         $reviewable->reviews()->create($reviewData);
