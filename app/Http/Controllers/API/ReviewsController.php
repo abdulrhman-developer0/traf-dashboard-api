@@ -45,8 +45,14 @@ class ReviewsController extends Controller
         );
     }
 
-    public function update(Request $request, Review $review)
+    public function update(Request $request, string $id)
     {
+        $review = Review::find($id);
+
+        if (! $review) {
+            return $this->badResponse([], "No Riview With id '{$id}'");
+        }
+
         $reviewData = $request->validate([
             'rating'  => 'required|integer|between:1,5',
             'comment' => 'required|string|min:1|max:500',
@@ -62,8 +68,14 @@ class ReviewsController extends Controller
         return $this->okResponse([], 'Review updated successfuly');;
     }
 
-    public function destroy(Review $review)
+    public function destroy(string $id)
     {
+        $review = Review::find($id);
+
+        if (! $review) {
+            return $this->badResponse([], "No Riview With id '{$id}'");
+        }
+
         $review->delete();
 
         return $this->okResponse([], 'Review deleted successfuly');
