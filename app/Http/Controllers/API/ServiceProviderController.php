@@ -17,10 +17,25 @@ class ServiceProviderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = ServiceProvider::with('user');
+
+        if ($request->has('search')) {
+            $query->whereHas(
+                'user',
+                fn($q) => $q->where('name', 'like', "%{$request->search}%")
+            );
+        }
+
+
+
         // Retrieve all serviceProviders with associated user data
-        $serviceProviders = ServiceProvider::with('user')->get();
+        if ($request->has('paginate')) {
+            $serviceProviders = $query->paginate(10);
+        } else {
+            $serviceProviders = $query->get();
+        }
 
         // Return response with serviceProviders data
         return $this->okResponse(
@@ -135,7 +150,7 @@ class ServiceProviderController extends Controller
                 ->toMediaCollection('photo');
         }
 
-        if ( $request->partnerIds ) {
+        if ($request->partnerIds) {
             $serviceProvider->syncPartners($request->partnerIds);
         }
 
