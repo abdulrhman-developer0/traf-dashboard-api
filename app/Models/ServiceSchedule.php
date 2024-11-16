@@ -29,8 +29,8 @@ class ServiceSchedule extends Model
     /**
      * Get the partner service provider offering this schedule.
      */
-    // public function partnerServiceProvider()
-    // {
-    //     return $this->belongsTo(PartnerServiceProvider::class, 'partner_service_provider_id');
-    // }
+    public function partnerServiceProvider()
+    {
+        return $this->belongsTo(ServiceProvider::class, 'partner_service_provider_id');
+    }
 }

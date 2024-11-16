@@ -22,33 +22,45 @@ class BookingController extends Controller
     public function show($id)
     {
         $booking = Booking::with('serviceSchedule')->find($id);
-    if (!$booking) {
-        return $this->notFoundResponse('Booking not found');
-    }
-    return $this->okResponse($booking, 'Retrieved booking successfully');
+        if (!$booking) {
+            return $this->notFoundResponse('Booking not found');
+        }
+        return $this->okResponse($booking, 'Retrieved booking successfully');
     }
     public function store(Request $request)
     {
         $validated = $request->validate([
             'service_schedule_id' => 'required|integer|exists:service_schedules,id',
-            'status' => 'in:pending,paid,canceled,done',
+            // 'status' => 'in:pending,paid,canceled,done',
         ]);
-    
+
+        // inject client id.
+        $user                   = Auth::user();
+        $validated['client_id'] = $user->client?->id;
+
+
+
         $booking = Booking::create($validated);
+
+        $booking->serviceSchedule->update([
+            'status'  => 'booked'
+        ]);
+
         return $this->createdResponse(['booking' => $booking], 'Booking created successfully');
     }
+
     public function update(Request $request, $id)
     {
         $booking = Booking::find($id);
         if (!$booking) {
             return $this->notFoundResponse('Booking not found');
         }
-    
+
         $validated = $request->validate([
             'service_schedule_id' => 'integer|exists:service_schedules,id',
             'status' => 'in:pending,paid,canceled,done',
         ]);
-    
+
         $booking->update($validated);
         return $this->okResponse(['booking' => $booking], 'Booking updated successfully');
     }
@@ -59,7 +71,7 @@ class BookingController extends Controller
         if (!$booking) {
             return $this->notFoundResponse('Booking not found');
         }
-    
+
         $booking->delete();
         return $this->okResponse([], 'Booking deleted successfully');
     }

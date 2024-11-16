@@ -21,6 +21,7 @@ class ServiceProviderResource extends JsonResource
             'email'         => $this->user->email,
             'phone'         => $this->phone,
             'address'       => $this->address,
+            'rating'        => $this->rating,
             'created_at'    => $this->created_at->format('Y-m-d'),
         ];
     }

@@ -10,6 +10,7 @@ class Booking extends Model
     use HasFactory;
     protected $fillable = [
         'service_schedule_id',
+        'client_id',
         'status',
     ];
 

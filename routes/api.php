@@ -21,11 +21,11 @@ use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('auth')->group(function() {
+Route::prefix('auth')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login']);
 
-    Route::middleware(['auth:sanctum'])->group(function() {
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
 
         Route::post('/change-password', [ProfileController::class, 'changePassword']);
@@ -34,53 +34,56 @@ Route::prefix('auth')->group(function() {
     });
 });
 
-Route::apiResource('/cities', CityController::class);
 
-Route::apiResource('/clients', ClientController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('/cities', CityController::class);
 
-Route::apiResource('/service-providers', ServiceProviderController::class);
-Route::get('/service-providers/{id}/partners', [ServiceProviderController::class, 'indexForPartners']);
-Route::apiResource('/reviews', ReviewsController::class);
+    Route::apiResource('/clients', ClientController::class);
 
-
-// chat 
-Route::apiResource('/chats', ChatController::class);
-
-// chat member 
-Route::apiResource('/chat-members', ChatMemberController::class);
+    Route::apiResource('/service-providers', ServiceProviderController::class);
+    Route::get('/service-providers/{id}/partners', [ServiceProviderController::class, 'indexForPartners']);
+    Route::apiResource('/reviews', ReviewsController::class);
 
 
-// chat messages 
-Route::apiResource('/chat-messages', ChatMessagesController::class);
-Route::put('/chat-messages/read/{id}', [ChatMessagesController::class, 'markAsRead']);
+    // chat 
+    Route::apiResource('/chats', ChatController::class);
+
+    // chat member 
+    Route::apiResource('/chat-members', ChatMemberController::class);
 
 
-// services 
-Route::apiResource('services', ServiceController::class);
-
-//Serivce Categories 
-Route::apiResource('/service-categories', ServiceCategoryController::class);
-
-// ServiceSchedule
-Route::apiResource('/service-schedules', ServiceScheduleController::class);
-
-// booking 
-Route::apiResource('/bookings', BookingController::class);
-
-// service-offers
-Route::apiResource('/service-offers', ServiceOfferController::class);
+    // chat messages 
+    Route::apiResource('/chat-messages', ChatMessagesController::class);
+    Route::put('/chat-messages/read/{id}', [ChatMessagesController::class, 'markAsRead']);
 
 
-// portfolio
-Route::apiResource('/service-provider-portfolios', ServiceProviderPortfolioController::class);
+    // services 
+    Route::apiResource('services', ServiceController::class);
+
+    //Serivce Categories 
+    Route::apiResource('/service-categories', ServiceCategoryController::class);
+
+    // ServiceSchedule
+    Route::apiResource('/service-schedules', ServiceScheduleController::class);
+
+    // booking 
+    Route::apiResource('/bookings', BookingController::class);
+
+    // service-offers
+    Route::apiResource('/service-offers', ServiceOfferController::class);
+
+
+    // portfolio
+    Route::apiResource('/service-provider-portfolios', ServiceProviderPortfolioController::class);
+});
 
 // user 
 
 Route::post('/user/create-user', [UsersController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('verify/code', [TwoFactorController::class, 'store']); 
-    Route::post('verify', [TwoFactorController::class, 'show']); 
+    Route::post('verify/code', [TwoFactorController::class, 'store']);
+    Route::post('verify', [TwoFactorController::class, 'show']);
 });
 // two factor Auth middleware use alias two-factor 
 Route::get('/user', function (Request $request) {

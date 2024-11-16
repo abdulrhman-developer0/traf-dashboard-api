@@ -1,23 +1,47 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
+use App\Filters\Schedules\ProviderFilter;
 use App\Http\Controllers\Controller;
 
 use App\Models\ServiceSchedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ServiceScheduleController extends Controller
 {
-    
-    
-    public function index()
+
+
+    public function index(Request $request)
     {
-        $schedules = ServiceSchedule::all();
+        $query = ServiceSchedule::query();
+
+        if ($request->has('serviceId')) {
+            $query->whereServiceId($request->serviceId);
+        }
+
+        if ($request->has('providerId')) {
+            $query->where('partner_service_provider_id', $request->providerId);
+        }
+
+        if ($request->has('date')) {
+            $query->whereDate('date', $request->date);
+        }
+
+        if ($request->has('time')) {
+            $query->whereDate('time', $request->time);
+        }
+
+
+        $schedules = $query->get();
+
         return response()->json($schedules);
     }
 
-    
+
     public function show($id)
     {
         $schedule = ServiceSchedule::find($id);
@@ -27,7 +51,7 @@ class ServiceScheduleController extends Controller
         return response()->json($schedule);
     }
 
-    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -35,7 +59,7 @@ class ServiceScheduleController extends Controller
             'service_id' => 'required|integer|exists:services,id',
             'date' => 'required|date',
             'time' => 'required',
-            'status' => 'in:available,off,booked',
+            // 'status' => 'in:available,off,booked',
         ]);
 
         $schedule = ServiceSchedule::create($validated);
@@ -62,7 +86,7 @@ class ServiceScheduleController extends Controller
         ], 201);
     }
 
-    
+
     public function update(Request $request, $id)
     {
         $schedule = ServiceSchedule::find($id);
@@ -82,7 +106,7 @@ class ServiceScheduleController extends Controller
         return response()->json(['message' => 'Service schedule updated successfully', 'schedule' => $schedule]);
     }
 
-    
+
     public function destroy($id)
     {
         $schedule = ServiceSchedule::find($id);

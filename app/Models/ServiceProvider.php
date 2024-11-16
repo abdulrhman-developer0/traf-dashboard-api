@@ -49,4 +49,9 @@ class ServiceProvider extends Model implements HasMedia
     {
         return $this->belongsToMany(ServiceProvider::class, 'service_provider_partners', 'service_provider_id', 'partner_service_provider_id');
     }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class,'reviewable');
+    }
 }
