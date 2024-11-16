@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\User;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ClientController extends Controller
@@ -19,8 +20,12 @@ class ClientController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
+        $query = Client::with('user');
+
         // Retrieve all clients with associated user data
-        $clients = Client::with('user')->get();
+        $clients = $query->get();
 
         // Return response with clients data
         return $this->okResponse(
