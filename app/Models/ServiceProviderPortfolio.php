@@ -18,8 +18,8 @@ class ServiceProviderPortfolio extends Model
     /**
      * Get the service provider associated with this portfolio.
      */
-    // public function serviceProvider()
-    // {
-    //     return $this->belongsTo(ServiceProvider::class, 'service_provider_id');
-    // }
+    public function serviceProvider()
+    {
+        return $this->belongsTo(ServiceProvider::class, 'service_provider_id');
+    }
 }

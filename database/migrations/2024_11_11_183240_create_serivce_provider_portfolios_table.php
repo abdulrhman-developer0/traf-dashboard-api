@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('serivce_provider_portfolios', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('service_provider_id')->constrained()->onDelete('cascade');  // Foreign key to service_providers table
+            $table->foreignId('service_provider_id')->constrained()->onDelete('cascade');  // Foreign key to service_providers table
             $table->text('website_url'); 
             $table->longText('description');
             $table->timestamps();

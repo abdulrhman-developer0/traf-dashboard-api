@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();  
             $table->foreignId('service_schedule_id')->constrained('service_schedules')->onDelete('cascade');  
-            // $table->foreignId('client_id')->constrained()->onDelete('cascade');  
+            $table->foreignId('client_id')->constrained()->onDelete('cascade');  
             $table->enum('status', ['pending', 'paid', 'canceled', 'done'])->default('pending');  
             $table->timestamps();  
         });

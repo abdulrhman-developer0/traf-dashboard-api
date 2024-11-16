@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use App\Models\ServiceSchedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ServiceScheduleController extends Controller
@@ -38,7 +39,27 @@ class ServiceScheduleController extends Controller
         ]);
 
         $schedule = ServiceSchedule::create($validated);
-        return response()->json(['message' => 'Service schedule created successfully', 'schedule' => $schedule], 201);
+        $addtionalSchedules=[];
+        $date=Carbon::parse($validated['date']);
+        for($i=1;$i<=4;$i++){
+            $newDate=$date->copy()->addDays(7*$i);
+            if ($newDate->month != $date->month) {
+                break; 
+            }
+            $addtionalSchedules[] = ServiceSchedule::create([
+                'partner_service_provider_id' => $validated['partner_service_provider_id'],
+                'service_id' => $validated['service_id'],
+                'date' => $newDate,
+                'time' => $validated['time'],
+                'status' => 'available', 
+            ]);
+
+        }
+        return response()->json([
+            'message' => 'Service schedule created successfully',
+            'initial_schedule' => $schedule,
+            'additional_schedules' => $addtionalSchedules,
+        ], 201);
     }
 
     
@@ -54,7 +75,7 @@ class ServiceScheduleController extends Controller
             'service_id' => 'integer|exists:services,id',
             'date' => 'date',
             'time' => 'nullable',
-            'status' => 'in:available,off,booked',
+            // 'status' => 'in:available,off,booked',
         ]);
 
         $schedule->update($validated);

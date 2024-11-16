@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('is_offer')->default(false);
             $table->timestamps();
             $table->foreign('service_category_id')->references('id')->on('service_categories')->onDelete('cascade');
-            // $table->foreign('partner_service_provider_id')->references('id')->on('partner_service_providers')->onDelete('cascade');
+            $table->foreign('partner_service_provider_id')->references('id')->on('partner_service_providers')->onDelete('cascade');
         });
     }
 
