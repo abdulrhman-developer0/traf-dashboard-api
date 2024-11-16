@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Events\Message;
 use App\Models\Chat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -13,8 +14,19 @@ class ChatController extends Controller
   
     public function index()
     {
-        $chats = Chat::all();
-        return response()->json($chats);
+        $user=Auth::user();
+        $userId = $user->id; 
+
+        if (!$userId) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+        $chats = Chat::where('user_id', $userId)->get();
+    
+        if ($chats->isEmpty()) {
+            return response()->json(['message' => 'No chats found for the current user'], 404);
+        }
+    
+        return response()->json($chats, 200);
     }
     public function show($id)
     {

@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Traits\APIResponses;
-
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {

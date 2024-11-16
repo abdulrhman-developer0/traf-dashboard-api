@@ -6,13 +6,18 @@ use App\Http\Controllers\Controller;
 
 use App\Models\ChatMember;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChatMemberController extends Controller
 {
     //
     public function index($chat_id)
     {
-        $members = ChatMember::where('chat_id', $chat_id)->get();
+        $user=Auth::user();
+        $userId=$user->id;
+        $members = ChatMember::where('chat_id', $chat_id)
+        ->where('user_id',$userId)
+        ->get();
         if ($members->isEmpty()) {
             return response()->json(['message' => 'No members found for this chat'], 404);
         }

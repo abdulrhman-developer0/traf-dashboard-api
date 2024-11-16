@@ -17,8 +17,11 @@ class ChatMessagesController extends Controller
   
   
     public function index() {
-        $chats = Chat::whereHas('chatMembers', function ($q) {
-            $q->where('user_id','1');
+        $user = Auth::user();
+        $userId = $user->id;
+    
+        $chats = Chat::whereHas('chatMembers', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
         })->get(); 
     
         return response()->json($chats);
