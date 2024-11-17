@@ -31,7 +31,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'service_schedule_id' => 'required|integer|exists:service_schedules,id',
-            // 'status' => 'in:pending,paid,canceled,done',
+            'status' => 'in:pending,paid,canceled,done',
         ]);
 
         // inject client id.
@@ -58,7 +58,8 @@ class BookingController extends Controller
 
         $validated = $request->validate([
             'service_schedule_id' => 'integer|exists:service_schedules,id',
-            'status' => 'in:pending,paid,canceled,done',
+            'client_id'=>'required|exists:clients,id',
+            // 'status' => 'in:pending,paid,canceled,done',
         ]);
 
         $booking->update($validated);
