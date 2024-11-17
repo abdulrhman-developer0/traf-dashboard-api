@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('service_providers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->boolean('is_personal')->default(true);
+            $table->string('tax_registeration_number')->nullable();
             $table->unsignedInteger('city_id')->nullable();
             $table->integer('years_of_experience')->default(0);
             $table->string('phone');

@@ -67,12 +67,12 @@ class ServiceProviderController extends Controller
     {
         // Validate incoming request data
         $request->validate([
-            'name'      => 'required|string|min:1|max:255',
-            'email'     => 'required|email|min:5|max:255',
-            'password'  => 'required|string|min:8|max:255|confirmed',
-            'phone'     => 'required|string|min:9|max:20',
-            'years_of_experience' => 'required|integer|between:1,100',
-            'address'   => 'nullable|string|min:1|max:255',
+            'name'                      => 'required|string|min:1|max:255',
+            'email'                     => 'required|email|min:5|max:255',
+            'password'                  => 'required|string|min:8|max:255|confirmed',
+            'phone'                     => 'required|string|min:9|max:20',
+            'is_personal'               => 'required|boolean',
+            'tax_registeration_number'  => 'required_with:is_personal|string|min:1|max:255'
         ]);
 
         // Create the user first (since the serviceProvider depends on the user)
@@ -84,14 +84,23 @@ class ServiceProviderController extends Controller
 
         // Create the serviceProvider associated with the user
         $serviceProvider = ServiceProvider::create([
-            'user_id'       => $user->id, // Assuming a relationship between ServiceProvider and User
-            'phone'         => $request->phone,
-            'address'       => $request->address,
+            'user_id'                       => $user->id, // Assuming a relationship between ServiceProvider and User
+            'phone'                         => $request->phone,
+            'is_personal'                   => $request->is_personal,
+            'tax_registeration_number'      => $request->tax_registeration_number,
         ]);
 
-        $serviceProvider->serviceProviderPartners()->create([
-            'partner_service_provider_id' => $serviceProvider->id,
-        ]);
+        if (! $request->is_personal ) {
+            $serviceProvider->serviceProviderPartners()->create([
+                'partner_service_provider_id' => $serviceProvider->id,
+            ]);
+        }
+
+        $data = [];
+
+        if ( $request->has('withToken') ) {
+            $data['token'] = $user->createToken($user->email)->plainTextToken;
+        }
 
         // Return successful creation response
         return $this->createdResponse([], 'Created ServiceProvider Successfully');

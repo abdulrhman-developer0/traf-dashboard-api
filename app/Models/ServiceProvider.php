@@ -13,6 +13,8 @@ class ServiceProvider extends Model implements HasMedia
 
     protected $fillable = [
         'user_id',
+        'is_personal',
+        'tax_registeration_number',
         'city_id',
         'years_of_experience',
         'phone',
