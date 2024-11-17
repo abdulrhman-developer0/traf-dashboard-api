@@ -103,7 +103,28 @@ class ServiceScheduleController extends Controller
         ]);
 
         $schedule->update($validated);
-        return response()->json(['message' => 'Service schedule updated successfully', 'schedule' => $schedule]);
+        $addtionalSchedules=[];
+        $date=Carbon::parse($validated['date']);
+        for($i=1;$i<=4;$i++){
+            $newDate=$date->copy()->addDays(7*$i);
+            if ($newDate->month != $date->month) {
+                break; 
+            }
+            $addtionalSchedules[] = ServiceSchedule::create([
+                'partner_service_provider_id' => $validated['partner_service_provider_id'],
+                'service_id' => $validated['service_id'],
+                'date' => $newDate,
+                'time' => $validated['time'],
+                'status' => 'available', 
+            ]);
+
+        }
+        return response()->json([
+            'message' => 'Service schedule updated successfully',
+            'initial_schedule' => $schedule,
+            'additional_schedules' => $addtionalSchedules,
+        ], 201);
+       
     }
 
 
