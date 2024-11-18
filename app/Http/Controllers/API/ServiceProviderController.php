@@ -14,6 +14,11 @@ class ServiceProviderController extends Controller
 {
     use APIResponses;
 
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum'])->except(['store']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -68,11 +73,11 @@ class ServiceProviderController extends Controller
         // Validate incoming request data
         $request->validate([
             'name'                      => 'required|string|min:1|max:255',
-            'email'                     => 'required|email|min:5|max:255',
+            'email'                     => 'required|email|min:5|max:255|unique:users,email',
             'password'                  => 'required|string|min:8|max:255|confirmed',
             'phone'                     => 'required|string|min:9|max:20',
             'is_personal'               => 'required|boolean',
-            'tax_registeration_number'  => 'required_with:is_personal|string|min:1|max:255'
+            'tax_registeration_number'  => 'required_without:is_personal|string|min:1|max:255'
         ]);
 
         // Create the user first (since the serviceProvider depends on the user)
@@ -103,7 +108,7 @@ class ServiceProviderController extends Controller
         }
 
         // Return successful creation response
-        return $this->createdResponse([], 'Created ServiceProvider Successfully');
+        return $this->createdResponse($data, 'Created ServiceProvider Successfully');
     }
 
 
