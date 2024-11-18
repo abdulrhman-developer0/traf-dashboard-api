@@ -15,6 +15,11 @@ class ClientController extends Controller
 {
     use APIResponses;
 
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum'])->except(['store']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -42,7 +47,7 @@ class ClientController extends Controller
         // Validate incoming request data
         $request->validate([
             'name'      => 'required|string|min:1|max:255',
-            'email'     => 'required|email|min:5|max:255',
+            'email'     => 'required|email|min:5|max:255|unique:users,email',
             'password'  => 'required|string|min:8|max:255|confirmed',
             'phone'     => 'required|string|min:9|max:20',
             'address'   => 'nullable|string|min:1|max:255',
@@ -62,8 +67,14 @@ class ClientController extends Controller
             'address'       => $request->address,
         ]);
 
+        $data = [];
+
+        if ( $request->has('withToken') ) {
+            $data['token'] = $user->createToken($user->email)->plainTextToken;
+        }
+
         // Return successful creation response
-        return $this->createdResponse([], 'Created Client Successfully');
+        return $this->createdResponse($data, 'Created Client Successfully');
     }
 
     /**
