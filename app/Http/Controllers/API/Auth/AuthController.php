@@ -20,11 +20,12 @@ class AuthController extends Controller
         ]);
 
         $user = User::firstWhere('email', $request->email);
-        $user->generateCode();
+        
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->badResponse([], 'Invalid email or password');
         }
 
+        $user->generateCode();
         $token = $user->createToken('api-user-login');
 
         return $this->okResponse([
