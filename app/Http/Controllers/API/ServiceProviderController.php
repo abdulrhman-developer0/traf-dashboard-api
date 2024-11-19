@@ -73,7 +73,7 @@ class ServiceProviderController extends Controller
             'password'                  => 'required|string|min:8|max:255|confirmed',
             'phone'                     => 'required|string|min:9|max:20',
             'is_personal'               => 'required|boolean',
-            'tax_registeration_number'  => 'required_without:is_personal|string|min:1|max:255'
+            'tax_registeration_number'  => 'required_if:is_personal,false|string|min:1|max:255'
         ]);
 
         // Create the user first (since the serviceProvider depends on the user)
@@ -99,9 +99,8 @@ class ServiceProviderController extends Controller
 
         $data = [];
 
-        if ($request->has('withToken')) {
-            $data['token'] = $user->createToken($user->email)->plainTextToken;
-        }
+        $data['token'] = $user->createToken($user->email)->plainTextToken;
+
 
         // Return successful creation response
         return $this->createdResponse($data, 'Created ServiceProvider Successfully');

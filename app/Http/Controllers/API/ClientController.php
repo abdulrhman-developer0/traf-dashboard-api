@@ -69,9 +69,8 @@ class ClientController extends Controller
 
         $data = [];
 
-        if ( $request->has('withToken') ) {
-            $data['token'] = $user->createToken($user->email)->plainTextToken;
-        }
+        $data['token'] = $user->createToken($user->email)->plainTextToken;
+
 
         // Return successful creation response
         return $this->createdResponse($data, 'Created Client Successfully');
