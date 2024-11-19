@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\Auth\ForgetPassswordController;
 use App\Http\Controllers\API\Auth\ProfileController;
 use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\ChatController;
@@ -24,6 +25,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login']);
+
+    Route::post('/forget-password/send', [ForgetPassswordController::class, 'send']);
+    Route::post('/forget-password/check', [ForgetPassswordController::class, 'check']);
+    Route::post('/forget-password/reset', [ForgetPassswordController::class, 'reset']);
 
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
