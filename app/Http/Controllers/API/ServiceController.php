@@ -12,9 +12,21 @@ class ServiceController extends Controller
 {
     //
     use APIResponses;
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::all();
+        $query    =  Service::query();
+
+        if ($request->has('categoryId')) {
+            $query->whereCategoryId($request->categoryId);
+        }
+
+        if ($request->has('providerId')) {
+            $query->where('partner_service_provider_id', $request->providerId);
+        }
+
+        $services =  $query->pagnate(10);
+
+
         return $this->okResponse($services, 'Services retrieved successfully');
     }
 
@@ -38,7 +50,7 @@ class ServiceController extends Controller
             'price_before' => 'required|numeric',
             'is_offer' => 'boolean',
         ]);
-    
+
         $service = Service::create($validated);
         return $this->createdResponse($service, 'Service created successfully');
     }
@@ -49,7 +61,7 @@ class ServiceController extends Controller
         if (!$service) {
             return $this->badResponse([], 'Service not found');
         }
-    
+
         $validated = $request->validate([
             'service_category_id' => 'exists:service_categories,id',
             'partner_service_provider_id' => 'nullable',
@@ -60,7 +72,7 @@ class ServiceController extends Controller
             'price_before' => 'numeric',
             'is_offer' => 'boolean',
         ]);
-    
+
         $service->update($validated);
         return $this->okResponse($service, 'Service updated successfully');
     }
@@ -71,7 +83,7 @@ class ServiceController extends Controller
         if (!$service) {
             return $this->badResponse([], 'Service not found');
         }
-    
+
         $service->delete();
         return $this->okResponse([], 'Service deleted successfully');
     }

@@ -35,12 +35,8 @@ class ServiceProviderController extends Controller
 
 
 
-        // Retrieve all serviceProviders with associated user data
-        if ($request->has('paginate')) {
-            $serviceProviders = $query->paginate(10);
-        } else {
-            $serviceProviders = $query->get();
-        }
+
+        $serviceProviders = $query->paginate(10);
 
         // Return response with serviceProviders data
         return $this->okResponse(
@@ -95,7 +91,7 @@ class ServiceProviderController extends Controller
             'tax_registeration_number'      => $request->tax_registeration_number,
         ]);
 
-        if (! $request->is_personal ) {
+        if (! $request->is_personal) {
             $serviceProvider->serviceProviderPartners()->create([
                 'partner_service_provider_id' => $serviceProvider->id,
             ]);
@@ -103,7 +99,7 @@ class ServiceProviderController extends Controller
 
         $data = [];
 
-        if ( $request->has('withToken') ) {
+        if ($request->has('withToken')) {
             $data['token'] = $user->createToken($user->email)->plainTextToken;
         }
 
