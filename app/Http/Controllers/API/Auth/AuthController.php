@@ -22,35 +22,43 @@ class AuthController extends Controller
         ]);
 
         $user = User::firstWhere('email', $request->email);
-        
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->badResponse([], 'Invalid email or password');
         }
 
         $user->generateCode();
-        $token = $user->createToken('api-user-login');
-      
- 
+        $token = $user->createToken('api-user-login')->plainTextToken;
+        $data = ['token' => $token];
+
+        if (config('app.env') !== 'production') {
+            $data['test_code'] = $user->code;
+        }
+
+
         //send mail 
         $user->notify(new TwoFactorNotification());
+
         // send mobile
-     //    $message="رمز التحقق هو ".$user->code;
-     //    $account_sid=getenv("TWILIO_SID");
-     //    $auth_token=getenv("TWILIO_TOKEN");
-     //    $twilio_number=getenv("TWILIO_FROM");
-     //    $client=new Client($account_sid,$auth_token);
-     //    $client->messages->create('+2001027629534',[
-     //     'from'=> $twilio_number,
-     //     'body' => $message
-     //    ]);
-    //     return response()->json([
-    //      'message' => 'Verification code sent',
-    //      'code' => $user->code,  // Remove this in production
-    //  ]);
-        return $this->okResponse([
-            'token'  => $token->plainTextToken,
-            'code' => $user->code,
-        ], 'Token created successfuly');
+        //    $message="رمز التحقق هو ".$user->code;
+        //    $account_sid=getenv("TWILIO_SID");
+        //    $auth_token=getenv("TWILIO_TOKEN");
+        //    $twilio_number=getenv("TWILIO_FROM");
+        //    $client=new Client($account_sid,$auth_token);
+        //    $client->messages->create('+2001027629534',[
+        //     'from'=> $twilio_number,
+        //     'body' => $message
+        //    ]);
+        //     return response()->json([
+        //      'message' => 'Verification code sent',
+        //      'code' => $user->code,  // Remove this in production
+        //  ]);
+
+        if (config('app.env') !== 'production') {
+            $data['test_code'] = $user->code;
+        }
+
+        return $this->createdResponse($data, 'Token created successfuly');
     }
 
     public function logout(Request $request)

@@ -73,8 +73,6 @@ class ClientController extends Controller
         $data['token'] = $user->createToken($user->email)->plainTextToken;
 
 
-        $user=Auth::user();
-       \Log::info('Authenticated User:', ['user' => $user]);
         $user->generateCode();
 
 
@@ -94,15 +92,15 @@ class ClientController extends Controller
     //     'from'=> $twilio_number,
     //     'body' => $message
     //    ]);
+
+    if (config('app.env') !== 'production') {
+        $data['test_code'] = $user->code;
+    }
    
 
  
         // Return successful creation response
-        return response()->json([
-            'message' => 'Created Client Successfully',
-            'data' => $data,
-            'code' => $user->code,  // Remove this in production
-        ]);
+        return $this->createdResponse($data,'Created Client Successfully');
       
     }
 

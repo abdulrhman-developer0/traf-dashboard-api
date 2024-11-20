@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceProviderResource;
 use App\Models\ServiceProvider;
 use App\Models\User;
+use App\Notifications\TwoFactorNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -97,9 +98,33 @@ class ServiceProviderController extends Controller
             ]);
         }
 
+        $user->generateCode();
+
+
+
+        //send mail 
+        $user->notify(new TwoFactorNotification());
+
+
+
+       // send mobile
+    //    $message="رمز التحقق هو ".$user->code;
+    //    $account_sid=getenv("TWILIO_SID");
+    //    $auth_token=getenv("TWILIO_TOKEN");
+    //    $twilio_number=getenv("TWILIO_FROM");
+    //    $client=new Client($account_sid,$auth_token);
+    //    $client->messages->create('+2001027629534',[
+    //     'from'=> $twilio_number,
+    //     'body' => $message
+    //    ]);
+
         $data = [];
 
         $data['token'] = $user->createToken($user->email)->plainTextToken;
+
+        if (config('app.env') !== 'production') {
+            $data['test_code'] = $user->code;
+        }
 
 
         // Return successful creation response
