@@ -14,7 +14,7 @@ class ServiceCategoryController extends Controller
     use APIResponses;
     public function index()
     {
-        $categories = ServiceCategory::where('is_active', true)->get(['id', 'name']);
+        $categories = ServiceCategory::where('is_active', true)->get(['id', 'name','image_path']);
         return $this->okResponse($categories, 'Service categories retrieved successfully');
     }
 
@@ -32,6 +32,7 @@ class ServiceCategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'image_path' => 'required|string',
             'is_active' => 'boolean',
         ]);
 
@@ -48,6 +49,7 @@ class ServiceCategoryController extends Controller
 
         $validated = $request->validate([
             'name' => 'string|max:255',
+            'image_path' => 'required|string',
             'is_active' => 'boolean',
         ]);
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Models\User;
+use App\Notifications\TwoFactorNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,8 +73,37 @@ class ClientController extends Controller
         $data['token'] = $user->createToken($user->email)->plainTextToken;
 
 
+        $user=Auth::user();
+       \Log::info('Authenticated User:', ['user' => $user]);
+        $user->generateCode();
+
+
+
+        //send mail 
+        $user->notify(new TwoFactorNotification());
+
+
+
+       // send mobile
+    //    $message="رمز التحقق هو ".$user->code;
+    //    $account_sid=getenv("TWILIO_SID");
+    //    $auth_token=getenv("TWILIO_TOKEN");
+    //    $twilio_number=getenv("TWILIO_FROM");
+    //    $client=new Client($account_sid,$auth_token);
+    //    $client->messages->create('+2001027629534',[
+    //     'from'=> $twilio_number,
+    //     'body' => $message
+    //    ]);
+   
+
+ 
         // Return successful creation response
-        return $this->createdResponse($data, 'Created Client Successfully');
+        return response()->json([
+            'message' => 'Created Client Successfully',
+            'data' => $data,
+            'code' => $user->code,  // Remove this in production
+        ]);
+      
     }
 
     /**

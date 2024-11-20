@@ -10,6 +10,7 @@ class ServiceCategory extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'image_path',
         'is_active',
     ];
 

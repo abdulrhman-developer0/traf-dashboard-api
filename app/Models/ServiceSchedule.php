@@ -13,10 +13,11 @@ class ServiceSchedule extends Model
       protected $fillable = [
         'partner_service_provider_id',
         'service_id',
-        'date',
-        'time',
+        'schedule_pattern',
+        'dates',
         'status',
     ];
+    
 
     /**
      * Get the service associated with this schedule.
