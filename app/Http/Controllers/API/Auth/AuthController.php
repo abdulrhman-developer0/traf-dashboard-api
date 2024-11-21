@@ -28,17 +28,33 @@ class AuthController extends Controller
             return $this->badResponse([], 'Invalid email or password');
         }
 
-        $user->generateCode();
+     
+        $isVerified=$user->code_verified;
+        if($isVerified){
+            
         $token = $user->createToken('api-user-login')->plainTextToken;
         $data = ['token' => $token];
+            $data['user'] = UserResource::make($user);
+    
+            return $this->createdResponse($data, 'Token created successfuly');
+        }
+        else {
 
-        if (config('app.env') !== 'production') {
-            $data['test_code'] = $user->code;
+
+            $user->generateCode();
+             //send mail 
+             if (config('app.env') !== 'production') {
+                $data['test_code'] = $user->code;
+                return $this->badResponse($data['test_code'],"Please Verify Your Email,Your code will send to your email");
+            }
+            $user->notify(new TwoFactorNotification());
+           return $this->badResponse("not found","Please Verify Your Email,Your code will send to your email");
+
+            
         }
 
 
-        //send mail 
-        $user->notify(new TwoFactorNotification());
+       
 
         // send mobile
         //    $message="رمز التحقق هو ".$user->code;
@@ -55,13 +71,7 @@ class AuthController extends Controller
         //      'code' => $user->code,  // Remove this in production
         //  ]);
 
-        if (config('app.env') !== 'production') {
-            $data['test_code'] = $user->code;
-        }
-
-        $data['user'] = UserResource::make($user);
-
-        return $this->createdResponse($data, 'Token created successfuly');
+      
     }
 
     public function logout(Request $request)
