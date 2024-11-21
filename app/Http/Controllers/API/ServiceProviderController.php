@@ -35,10 +35,14 @@ class ServiceProviderController extends Controller
             );
         }
 
+        if ( $request->has('category_id') ) {
+            $query->whereHas('services.category', fn ($q) => $q->whereId($request->category_id));
+        }
 
 
 
-        $serviceProviders = $query->paginate(10);
+
+        $serviceProviders = $query->get(['id', 'user_id', 'rating']);
 
         // Return response with serviceProviders data
         return $this->okResponse(

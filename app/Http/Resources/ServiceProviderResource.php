@@ -16,13 +16,9 @@ class ServiceProviderResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'user_id'       => $this->user->id,
+            'photo'         => $this->getFirstMediaUrl('photo'),
             'name'          => $this->user->name,
-            'email'         => $this->user->email,
-            'phone'         => $this->phone,
-            'address'       => $this->address,
             'rating'        => $this->rating,
-            'created_at'    => $this->created_at->format('Y-m-d'),
         ];
     }
 }

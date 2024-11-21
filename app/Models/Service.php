@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Service extends Model
+class Service extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
+
       // Define the fillable fields for mass assignment
       protected $fillable = [
         'service_category_id',
@@ -20,6 +23,11 @@ class Service extends Model
         'price_before',
         'is_offer',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('photo')->singleFile();
+    }
 
     /**
      * Get the category that the service belongs to.

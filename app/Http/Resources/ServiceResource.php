@@ -21,6 +21,7 @@ class ServiceResource extends JsonResource
             'category_name'                     => $this->category?->name,
             'partner_service_provider_id'       => $this->partner_service_provider_id,
             'name'                              => $this->name,
+            'photo'                             => $this->getFirstMediaUrl('photo'),
             'duration'                          => $this->duration,
             'description'                       => $this->description,
             'rating'                            => $this->rating,
