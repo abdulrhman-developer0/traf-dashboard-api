@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -22,12 +23,6 @@ class ServiceCollection extends ResourceCollection
             'next_page_url'     => $this->nextPageUrl(),
             'per_page'          => $this->perPage(),
             'items'             => ServiceResource::collection($this->collection),
-            'filters'           => $this->generateSearchFilters(),
         ];
-    }
-
-    private function generateSearchFilters()
-    {
-        return [];
     }
 }
