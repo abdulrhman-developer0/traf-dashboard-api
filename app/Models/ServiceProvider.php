@@ -28,7 +28,9 @@ class ServiceProvider extends Model implements HasMedia
         $this->addMediaCollection('photo')->singleFile()
             ->useFallbackUrl(
                 asset('/logos/person-244.svg')
-            );;
+            );
+
+            $this->addMediaCollection('maroof_document')->singleFile();
     }
 
     public function syncPartners(array $partnerServiceProviderIds)

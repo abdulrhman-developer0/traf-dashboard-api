@@ -21,11 +21,17 @@ class UserResource extends JsonResource
             'type'          => (bool) $this->client ? 'client' : 'service-provider',
         ];
 
+
         $model = $this->client ?? $this->serviceProvider;
 
         $array = $model ? $model->toArray() : [];
         $data = array_merge($data, $array);
         $data['photo'] = $model->getFirstMediaUrl('photo');
+
+        if ( $model->is_personal ) {
+            $data['maroof_document'] = $model->getFirstMediaUrl('maroof_document');
+        }
+
         return $data;
     }
 }
