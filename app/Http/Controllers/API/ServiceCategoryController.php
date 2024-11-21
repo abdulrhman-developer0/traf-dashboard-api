@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\ServiceCategoryResource;
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use App\Traits\APIResponses;
@@ -15,7 +15,7 @@ class ServiceCategoryController extends Controller
     public function index()
     {
         $categories = ServiceCategory::where('is_active', true)->get(['id', 'name','image_path']);
-        return $this->okResponse($categories, 'Service categories retrieved successfully');
+        return $this->okResponse(ServiceCategoryResource::collection($categories), 'Service categories retrieved successfully');
     }
 
     public function show($id)
