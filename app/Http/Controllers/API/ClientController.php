@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClientResource;
+use App\Http\Resources\UserResource;
 use App\Models\Client;
 use App\Models\User;
 use App\Notifications\TwoFactorNotification;
@@ -82,26 +83,26 @@ class ClientController extends Controller
 
 
 
-       // send mobile
-    //    $message="رمز التحقق هو ".$user->code;
-    //    $account_sid=getenv("TWILIO_SID");
-    //    $auth_token=getenv("TWILIO_TOKEN");
-    //    $twilio_number=getenv("TWILIO_FROM");
-    //    $client=new Client($account_sid,$auth_token);
-    //    $client->messages->create('+2001027629534',[
-    //     'from'=> $twilio_number,
-    //     'body' => $message
-    //    ]);
+        // send mobile
+        //    $message="رمز التحقق هو ".$user->code;
+        //    $account_sid=getenv("TWILIO_SID");
+        //    $auth_token=getenv("TWILIO_TOKEN");
+        //    $twilio_number=getenv("TWILIO_FROM");
+        //    $client=new Client($account_sid,$auth_token);
+        //    $client->messages->create('+2001027629534',[
+        //     'from'=> $twilio_number,
+        //     'body' => $message
+        //    ]);
 
-    if (config('app.env') !== 'production') {
-        $data['test_code'] = $user->code;
-    }
-   
+        if (config('app.env') !== 'production') {
+            $data['test_code'] = $user->code;
+        }
 
- 
+
+        $data['user'] = UserResource::make($user);
+        
         // Return successful creation response
-        return $this->createdResponse($data,'Created Client Successfully');
-      
+        return $this->createdResponse($data, 'Created Client Successfully');
     }
 
     /**
