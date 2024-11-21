@@ -21,7 +21,10 @@ class Client extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('photo')->singleFile();
+        $this->addMediaCollection('photo')->singleFile()
+            ->useFallbackUrl(
+                asset('/logos/person-244.svg')
+            );
     }
 
     public function user()
@@ -36,6 +39,6 @@ class Client extends Model implements HasMedia
 
     public function reviews()
     {
-        return $this->morphMany(Review::class,'reviewable');
+        return $this->morphMany(Review::class, 'reviewable');
     }
 }
