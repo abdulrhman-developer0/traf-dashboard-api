@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceProviderResource;
+use App\Http\Resources\UserResource;
 use App\Models\ServiceProvider;
 use App\Models\User;
 use App\Notifications\TwoFactorNotification;
@@ -125,6 +126,8 @@ class ServiceProviderController extends Controller
         if (config('app.env') !== 'production') {
             $data['test_code'] = $user->code;
         }
+
+        $data['user'] = UserResource::make($user);
 
 
         // Return successful creation response

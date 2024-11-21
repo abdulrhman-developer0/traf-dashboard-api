@@ -16,7 +16,6 @@ class UserResource extends JsonResource
     {
 
         $data = [
-            'id'            => $this->id,
             'name'          => $this->name,
             'is_verfied'    => $this->code_verified,
             'type'          => (bool) $this->client ? 'client' : 'service-provider',
@@ -25,8 +24,8 @@ class UserResource extends JsonResource
         $model = $this->client ?? $this->serviceProvider;
 
         $array = $model ? $model->toArray() : [];
-        unset($array['id']);
         $data = array_merge($data, $array);
+        $data['photo'] = $model->getFirstMediaUrl('photo');
         return $data;
     }
 }
