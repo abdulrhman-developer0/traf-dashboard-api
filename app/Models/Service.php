@@ -31,9 +31,10 @@ class Service extends Model
     /**
      * Get the partner service provider that owns the service.
      */
-    public function partnerServiceProvider()
-    {
-        return $this->belongsTo(ServiceProviderPartner::class);
-    }
+    
+    public function serviceProviders()
+{
+    return $this->belongsToMany(ServiceProviderPartner::class, 'partner_service_pivots', 'service_id', 'partner_service_provider_id');
+}
    
 }

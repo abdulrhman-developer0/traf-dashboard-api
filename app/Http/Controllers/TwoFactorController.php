@@ -45,8 +45,6 @@ class TwoFactorController extends Controller
     public function show(Request $request)
     {
      
-     
-
        $request->validate([
         'code'=>'required|numeric'
        ]);
@@ -55,10 +53,10 @@ class TwoFactorController extends Controller
        if ($user->code !== $request->code || Carbon::parse($user->expire_at)->isPast()) {
         return response()->json(['message' => 'Invalid or expired code'], 403);
     }
-    $user->code_verified = true;
-    $user->save();
+      $user->code_verified = true;
+      $user->save();
 
-    return response()->json(['message' => 'Two-factor authentication successful']);
+      return response()->json(['message' => 'Two-factor authentication successful']);
 
 
     }

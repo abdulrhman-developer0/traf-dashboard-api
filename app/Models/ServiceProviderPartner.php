@@ -23,4 +23,8 @@ class ServiceProviderPartner extends Model
     {
         return $this->belongsTo(ServiceProvider::class, 'partner_service_provider_id');
     }
+    public function services()
+{
+    return $this->belongsToMany(Service::class, 'partner_service_pivots', 'partner_service_provider_id', 'service_id');
+}
 }

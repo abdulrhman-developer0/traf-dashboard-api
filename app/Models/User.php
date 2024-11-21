@@ -80,7 +80,7 @@ class User extends Authenticatable implements HasMedia
         $this->timestamps = false;
 
         do {
-            $this->code = rand(1000, 9999);
+            $this->code = random_int(10000, 99999);
         } while (User::where('code', $this->code)->exists()); // Ensure the code is unique
         $this->expire_at = now()->addMinutes(20);
         

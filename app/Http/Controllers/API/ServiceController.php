@@ -42,7 +42,8 @@ class ServiceController extends Controller
     {
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
-            'partner_service_provider_id' => 'required',
+            'partner_service_provider_id' => 'required|array',
+            'partner_service_provider_id.*' => 'exists:service_provider_partners,id', 
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
             'description' => 'nullable|string',
@@ -50,8 +51,15 @@ class ServiceController extends Controller
             'price_before' => 'required|numeric',
             'is_offer' => 'boolean',
         ]);
-
-        $service = Service::create($validated);
+    
+        $serviceData = $validated;
+        unset($serviceData['partner_service_provider_id']); 
+    
+        $service = Service::create($serviceData);
+    
+       
+        $service->serviceProviders()->attach($validated['partner_service_provider_id']);
+    
         return $this->createdResponse($service, 'Service created successfully');
     }
 
