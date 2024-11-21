@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\TwoFactorNotification;
 use App\Traits\APIResponses;
@@ -57,6 +58,8 @@ class AuthController extends Controller
         if (config('app.env') !== 'production') {
             $data['test_code'] = $user->code;
         }
+
+        $data['user'] = UserResource::make($user);
 
         return $this->createdResponse($data, 'Token created successfuly');
     }

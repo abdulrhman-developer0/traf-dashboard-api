@@ -53,6 +53,7 @@ class TwoFactorController extends Controller
        if ($user->code !== $request->code || Carbon::parse($user->expire_at)->isPast()) {
         return response()->json(['message' => 'Invalid or expired code'], 403);
     }
+
       $user->code_verified = true;
       $user->save();
 
