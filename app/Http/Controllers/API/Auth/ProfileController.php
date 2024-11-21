@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,9 @@ class ProfileController extends Controller
         $user = $request->user();
 
 
-        return $this->okResponse($user, 'Retrieved Profile Successfuly');
+        return $this->okResponse([
+            'user' => UserResource::make($user)
+        ], 'Retrieved Profile Successfuly');
     }
 
 

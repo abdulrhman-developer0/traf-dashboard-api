@@ -44,13 +44,16 @@ class TwoFactorController extends Controller
     }
     public function show(Request $request)
     {
-       $user=Auth::user();
-       $request->validate([
-        'code'=>'required|numeric'
-       ]);
+        $request->validate([
+            'code'=>'required|numeric'
+        ]);
+
+        $user= User::whereCode($request->code);
+
        if ($user->code !== $request->code || Carbon::parse($user->expire_at)->isPast()) {
         return response()->json(['message' => 'Invalid or expired code'], 403);
     }
+
     $user->code_verified = true;
     $user->save();
 
