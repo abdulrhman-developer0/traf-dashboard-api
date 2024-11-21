@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Service extends Model
 {
@@ -26,6 +27,11 @@ class Service extends Model
     public function category()
     {
         return $this->belongsTo(ServiceCategory::class, 'service_category_id');
+    }
+
+    public function provider(): BelongsTo
+    {
+        return $this->belongsTo(ServiceProvider::class, 'partner_service_provider_id');
     }
 
     /**

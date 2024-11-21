@@ -4,30 +4,37 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ServiceCollection;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Traits\APIResponses;
 
 class ServiceController extends Controller
 {
-    //
     use APIResponses;
+
     public function index(Request $request)
     {
         $query    =  Service::query();
 
-        if ($request->has('categoryId')) {
-            $query->whereCategoryId($request->categoryId);
+        if ($request->has('search')) {
+            $s = $request->search;
+            $query->where('name', 'like', "%$s%")
+                ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%$s%"));
         }
 
-        if ($request->has('providerId')) {
-            $query->where('partner_service_provider_id', $request->providerId);
+        if ($request->has('category_id')) {
+            $query->whereServiceCategoryId($request->category_id);
         }
 
-        $services =  $query->pagnate(10);
+        if ($request->has('provider_id')) {
+            $query->where('partner_service_provider_id', $request->provider_id);
+        }
+
+        $services =  $query->paginate($request->page_size ?? 10);
 
 
-        return $this->okResponse($services, 'Services retrieved successfully');
+        return $this->okResponse(ServiceCollection::make($services), 'Services retrieved successfully');
     }
 
     public function show($id)
@@ -43,7 +50,7 @@ class ServiceController extends Controller
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
             'partner_service_provider_id' => 'required|array',
-            'partner_service_provider_id.*' => 'exists:service_provider_partners,id', 
+            'partner_service_provider_id.*' => 'exists:service_provider_partners,id',
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
             'description' => 'nullable|string',
@@ -51,15 +58,15 @@ class ServiceController extends Controller
             'price_before' => 'required|numeric',
             'is_offer' => 'boolean',
         ]);
-    
+
         $serviceData = $validated;
-        unset($serviceData['partner_service_provider_id']); 
-    
+        unset($serviceData['partner_service_provider_id']);
+
         $service = Service::create($serviceData);
-    
-       
+
+
         $service->serviceProviders()->attach($validated['partner_service_provider_id']);
-    
+
         return $this->createdResponse($service, 'Service created successfully');
     }
 
