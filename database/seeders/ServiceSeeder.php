@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Service;
+use App\Models\ServiceCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +57,12 @@ class ServiceSeeder extends Seeder
 
         foreach ($services as $service) {
             DB::table('services')->insert($service);
+        }
+
+        foreach ( ServiceCategory::get(['id'])->pluck(['id']) as $serviceCategoryId) {
+            Service::factory(10)->create([
+                'service_category_id' => $serviceCategoryId
+            ]);
         }
     
     }
