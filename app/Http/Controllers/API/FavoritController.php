@@ -21,7 +21,10 @@ class FavoritController extends Controller
             return $this->badResponse([], 'Plese login by client account to access favorits');
         }
 
-        $services = $client->favoritServices ?? [];
+        $services = $client->favoritServices()->get();
+        $services->each(function($service) {
+            $service['is_favorite'] = 1;
+        });
 
         return $this->okResponse(
             ServiceResource::collection($services),

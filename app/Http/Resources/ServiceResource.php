@@ -27,6 +27,7 @@ class ServiceResource extends JsonResource
             'rating'                            => $this->rating,
             'price_before'                      => $this->price_before,
             'is_offer'                          => (bool) $this->is_offer,
+            'is_favorite'                       => $this->is_favorite? true : false,
             'created_at'                        => $this->created_at->diffForHumans(),
             'updated_at'                        => $this->updated_at->diffForHumans(),
         ];
