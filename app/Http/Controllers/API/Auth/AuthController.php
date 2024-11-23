@@ -43,6 +43,7 @@ class AuthController extends Controller
              //send mail 
              if (config('app.env') !== 'production') {
                 $data['test_code'] = $user->code;
+                $data['is_verified']=false;
                 return $this->badResponse($data,"Please Verify Your Email,Your code will send to your email");
             }
             $user->notify(new TwoFactorNotification());
