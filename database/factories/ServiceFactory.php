@@ -10,12 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ServiceFactory extends Factory
 {
-    protected $idsOfProviders;
-
-    public function __construct() {
-        
-        $this->idsOfProviders = ServiceProvider::pluck('id')->toArray();
-    }
+    protected $idsOfProviders = null;
 
     /**
      * Define the model's default state.
@@ -24,13 +19,18 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
+        if (! $this->idsOfProviders ) {
+            $this->idsOfProviders = ServiceProvider::pluck('id')->toArray();
+        }
+
         return [
-            'partner_service_provider_id'        => $this->faker->randomElement($this->idsOfProviders),
+            'service_provider_id'        => $this->faker->randomElement($this->idsOfProviders),
             'name'                               => $this->faker->name(),
             'duration'                           => random_int(10, 100),
             'description'                        => $this->faker->text(),
             'rating'                             => random_int(1, 5),
             'price_before'                       => $this->faker->randomElement([100, 150, 200, 250, 300]),
+            'price_after'                        => null,
             'is_offer'                           => false,
         ];
     }

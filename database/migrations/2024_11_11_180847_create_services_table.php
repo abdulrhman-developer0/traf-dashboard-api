@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('service_category_id')->unsigned();
+            $table->foreignId('service_category_id')->unsigned()->references('id')->on('service_categories')->onDelete('cascade');
+            $table->foreignId('service_provider_id')->unsigned()->references('id')->on('service_providers')->onDelete('cascade');
             $table->string('name');
             $table->integer('duration');
             $table->longText('description')->nullable();
             $table->float('rating')->nullable();
             $table->decimal('price_before', 10, 2);
-            $table->decimal('price_after', 10, 2); 
+            $table->decimal('price_after', 10, 2)->nullable(); 
             $table->text('address')->default('');
-            // $table->boolean('is_offer')->default(false);
+            $table->boolean('is_offer')->default(false);
             $table->timestamps();
-            $table->foreign('service_category_id')->references('id')->on('service_categories')->onDelete('cascade');
         
         });
     }

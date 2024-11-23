@@ -19,7 +19,7 @@ class ServiceSeeder extends Seeder
         $services = [
             [
                 'service_category_id' => 1,
-                'partner_service_provider_id' => 1,
+                'service_provider_id' => 1,
                 'name' => 'جلسة تنظيف بشرة',
                 'duration' => 60,
                 'description' => 'جلسة متخصصة لتنظيف البشرة بعمق باستخدام أفضل المنتجات.',
@@ -31,7 +31,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'service_category_id' => 2,
-                'partner_service_provider_id' => 2,
+                'service_provider_id' => 2,
                 'name' => 'جلسة مكياج سوارية',
                 'duration' => 90,
                 'description' => 'جلسة مكياج سوارية باستخدام أحدث التقنيات لإطلالة رائعة.',
@@ -43,7 +43,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'service_category_id' => 3,
-                'partner_service_provider_id' => 3,
+                'service_provider_id' => 3,
                 'name' => 'جلسة مساج',
                 'duration' => 75,
                 'description' => 'جلسة مساج تساعد على الاسترخاء وتحسين الدورة الدموية.',
@@ -55,15 +55,12 @@ class ServiceSeeder extends Seeder
             ],
         ];
 
-        foreach ($services as $service) {
-            DB::table('services')->insert($service);
-        }
+        foreach ($services as $service) DB::table('services')->insert($service);
 
-        foreach ( ServiceCategory::get(['id'])->pluck(['id']) as $serviceCategoryId) {
+        foreach (ServiceCategory::get(['id'])->pluck(['id']) as $serviceCategoryId) {
             Service::factory(10)->create([
                 'service_category_id' => $serviceCategoryId
             ]);
         }
-    
     }
 }
