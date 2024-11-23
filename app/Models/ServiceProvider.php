@@ -59,4 +59,9 @@ class ServiceProvider extends Model implements HasMedia
     {
         return $this->morphMany(Review::class,'reviewable');
     }
+    public function services()
+{
+    return $this->belongsToMany(Service::class, 'service_provider_pivots');
+}
+
 }

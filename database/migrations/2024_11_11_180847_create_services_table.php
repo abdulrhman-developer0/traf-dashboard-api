@@ -14,16 +14,17 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('service_category_id')->unsigned();
-            $table->bigInteger('partner_service_provider_id')->unsigned();
             $table->string('name');
             $table->integer('duration');
             $table->longText('description')->nullable();
             $table->float('rating')->nullable();
             $table->decimal('price_before', 10, 2);
-            $table->boolean('is_offer')->default(false);
+            $table->decimal('price_after', 10, 2); 
+            $table->text('address')->default('');
+            // $table->boolean('is_offer')->default(false);
             $table->timestamps();
             $table->foreign('service_category_id')->references('id')->on('service_categories')->onDelete('cascade');
-            $table->foreign('partner_service_provider_id')->references('id')->on('service_provider_partners')->onDelete('cascade');
+        
         });
     }
 

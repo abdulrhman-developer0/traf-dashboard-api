@@ -39,8 +39,6 @@ class AuthController extends Controller
             return $this->createdResponse($data, 'Token created successfuly');
         }
         else {
-
-
             $user->generateCode();
              //send mail 
              if (config('app.env') !== 'production') {

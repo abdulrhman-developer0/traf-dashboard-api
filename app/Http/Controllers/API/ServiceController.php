@@ -39,29 +39,26 @@ class ServiceController extends Controller
         return $this->okResponse($service, 'Service retrieved successfully');
     }
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'service_category_id' => 'required|exists:service_categories,id',
-            'partner_service_provider_id' => 'required|array',
-            'partner_service_provider_id.*' => 'exists:service_provider_partners,id', 
-            'name' => 'required|string|max:255',
-            'duration' => 'required|integer',
-            'description' => 'nullable|string',
-            'rating' => 'nullable|numeric',
-            'price_before' => 'required|numeric',
-            'is_offer' => 'boolean',
-        ]);
-    
-        $serviceData = $validated;
-        unset($serviceData['partner_service_provider_id']); 
-    
-        $service = Service::create($serviceData);
-    
-       
-        $service->serviceProviders()->attach($validated['partner_service_provider_id']);
-    
-        return $this->createdResponse($service, 'Service created successfully');
-    }
+{
+    $validated = $request->validate([
+        'service_category_id' => 'required|exists:service_categories,id',
+        'service_provider_ids' => 'required|array',
+        'service_provider_ids.*' => 'exists:service_providers,id',
+        'name' => 'required|string|max:255',
+        'duration' => 'required|integer',
+        'description' => 'nullable|string',
+        'rating' => 'nullable|numeric',
+        'price_before' => 'required|numeric',
+        'price_after' => 'required|numeric',
+        'address' => 'nullable|string',
+    ]);
+
+    $validated['service_provider_ids'] = json_encode($validated['service_provider_ids']);
+
+    $service = Service::create($validated);
+
+    return $this->createdResponse($service, 'Service created successfully');
+}
 
     public function update(Request $request, $id)
     {
