@@ -17,7 +17,7 @@ class UserResource extends JsonResource
 
         $data = [
             'name'          => $this->name,
-            'is_verfied'    => $this->code_verified,
+            'is_verfied'    => (bool) $this->code_verified,
             'type'          => (bool) $this->client ? 'client' : 'service-provider',
         ];
 
