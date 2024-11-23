@@ -40,7 +40,7 @@ class Service extends Model implements HasMedia
 
     public function provider(): BelongsTo
     {
-        return $this->belongsTo(ServiceProvider::class, 'partner_service_provider_id');
+        return $this->belongsTo(ServiceProvider::class, 'service_provider_id');
     }
 
     /**
@@ -52,5 +52,8 @@ class Service extends Model implements HasMedia
          return $this->belongsToMany(ServiceProvider::class, 'service_provider_pivots');
      }
      
-   
+     public function clientFavorites()
+     {
+        return $this->belongsToMany(Client::class, 'favorits');
+     }
 }

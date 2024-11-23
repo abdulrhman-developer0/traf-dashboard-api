@@ -8,6 +8,7 @@ use App\Http\Resources\ServiceCollection;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Traits\APIResponses;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -15,7 +16,10 @@ class ServiceController extends Controller
 
     public function index(Request $request)
     {
-        $query    =  Service::query();
+        $query    =  Service::query()
+        ->withCount([
+            'clientFavorites as is_favorite' => fn ($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
+        ]);
 
         if ($request->has('search')) {
             $s = $request->search;
@@ -59,10 +63,17 @@ class ServiceController extends Controller
             'address' => 'nullable|string',
         ]);
 
+        $serviceProvider = Auth::user()?->serviceProvider;
+
+        if (! $serviceProvider ) {
+            return $this->badResponse([], 'Plese login by service provider account');
+        }
+
         $is_offer = $request->price_after? true : false;
 
         $service = Service::create([
             'service_category_id' => $validated['service_category_id'],
+            'service_provider_id' => $serviceProvider->id,
             'name' => $validated['name'],
             'duration' => $validated['duration'],
             'description' => $validated['description'] ?? null,
