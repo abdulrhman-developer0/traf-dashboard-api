@@ -15,12 +15,13 @@ class Service extends Model implements HasMedia
       // Define the fillable fields for mass assignment
       protected $fillable = [
         'service_category_id',
-        'partner_service_provider_id',
+        'service_provider_id',
         'name',
         'duration',
         'description',
         'rating',
         'price_before',
+        'price_after',
         'is_offer',
     ];
 

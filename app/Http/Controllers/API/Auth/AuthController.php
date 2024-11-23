@@ -28,32 +28,22 @@ class AuthController extends Controller
             return $this->badResponse([], 'Invalid email or password');
         }
 
-        $token = $user->createToken('api-user-login')->plainTextToken;
-        $data = ['token' => $token];
+        $data = [];
 
-        $isVerified=$user->code_verified;
-        if($isVerified){
+        if (! $user->code_verified) {
             
-            $data['user'] = UserResource::make($user);
-    
-            return $this->createdResponse($data, 'Token created successfuly');
-        }
-        else {
             $user->generateCode();
-             //send mail 
-             if (config('app.env') !== 'production') {
-                $data['test_code'] = $user->code;
-                $data['is_verified']=false;
-                return $this->badResponse($data,"Please Verify Your Email,Your code will send to your email");
-            }
-            $user->notify(new TwoFactorNotification());
-           return $this->badResponse("not found","Please Verify Your Email,Your code will send to your email");
 
-            
+            //send mail 
+            $user->notify(new TwoFactorNotification());
+
+            if (config('app.env') !== 'production') {
+                $data['test_code'] = $user->code;
+            }
         }
 
 
-       
+
 
         // send mobile
         //    $message="رمز التحقق هو ".$user->code;
@@ -70,7 +60,10 @@ class AuthController extends Controller
         //      'code' => $user->code,  // Remove this in production
         //  ]);
 
-      
+        $data['token'] = $user->createToken('api-user-login')->plainTextToken;
+        $data['user'] = UserResource::make($user);
+
+        return $this->createdResponse($data, 'Token created successfuly');
     }
 
     public function logout(Request $request)
