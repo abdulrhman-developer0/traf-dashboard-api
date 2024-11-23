@@ -30,7 +30,7 @@ class ServiceProvider extends Model implements HasMedia
                 asset('/logos/person-244.svg')
             );
 
-            $this->addMediaCollection('maroof_document')->singleFile();
+        $this->addMediaCollection('maroof_document')->singleFile();
     }
 
     public function syncPartners(array $partnerServiceProviderIds)
@@ -67,9 +67,4 @@ class ServiceProvider extends Model implements HasMedia
     {
         return $this->morphMany(Review::class, 'reviewable');
     }
-    public function services()
-{
-    return $this->belongsToMany(Service::class, 'service_provider_pivots');
-}
-
 }
