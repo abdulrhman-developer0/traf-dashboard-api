@@ -35,10 +35,14 @@ class ServiceProviderController extends Controller
             );
         }
 
+        if ($request->has('category_id')) {
+            $query->whereHas('services.category', fn($q) => $q->whereId($request->category_id));
+        }
 
 
 
-        $serviceProviders = $query->paginate(10);
+
+        $serviceProviders = $query->get(['id', 'user_id', 'rating']);
 
         // Return response with serviceProviders data
         return $this->okResponse(
@@ -75,7 +79,8 @@ class ServiceProviderController extends Controller
             'password'                  => 'required|string|min:8|max:255|confirmed',
             'phone'                     => 'required|string|min:9|max:20',
             'is_personal'               => 'required|boolean',
-            'tax_registeration_number'  => 'required_if:is_personal,false|string|min:1|max:255'
+            'maroof_document'           => 'required_if:is_personal,true|file|mimes:jpg,png,pdf|max:4096',
+            'tax_registeration_number'  => 'required_if:is_personal,false|string|min:1|max:255',
         ]);
 
         // Create the user first (since the serviceProvider depends on the user)
@@ -93,7 +98,10 @@ class ServiceProviderController extends Controller
             'tax_registeration_number'      => $request->tax_registeration_number,
         ]);
 
-        if (! $request->is_personal) {
+        if ( $request->is_personal && $request->hasFile('maroof_document') ) {
+            $serviceProvider->addMedia($request->maroof_document)
+                ->toMediaCollection('maroof_document');
+        } else {
             $serviceProvider->serviceProviderPartners()->create([
                 'partner_service_provider_id' => $serviceProvider->id,
             ]);
@@ -108,16 +116,16 @@ class ServiceProviderController extends Controller
 
 
 
-       // send mobile
-    //    $message="رمز التحقق هو ".$user->code;
-    //    $account_sid=getenv("TWILIO_SID");
-    //    $auth_token=getenv("TWILIO_TOKEN");
-    //    $twilio_number=getenv("TWILIO_FROM");
-    //    $client=new Client($account_sid,$auth_token);
-    //    $client->messages->create('+2001027629534',[
-    //     'from'=> $twilio_number,
-    //     'body' => $message
-    //    ]);
+        // send mobile
+        //    $message="رمز التحقق هو ".$user->code;
+        //    $account_sid=getenv("TWILIO_SID");
+        //    $auth_token=getenv("TWILIO_TOKEN");
+        //    $twilio_number=getenv("TWILIO_FROM");
+        //    $client=new Client($account_sid,$auth_token);
+        //    $client->messages->create('+2001027629534',[
+        //     'from'=> $twilio_number,
+        //     'body' => $message
+        //    ]);
 
         $data = [];
 

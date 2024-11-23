@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -27,7 +28,9 @@ class ServiceProvider extends Model implements HasMedia
         $this->addMediaCollection('photo')->singleFile()
             ->useFallbackUrl(
                 asset('/logos/person-244.svg')
-            );;
+            );
+
+            $this->addMediaCollection('maroof_document')->singleFile();
     }
 
     public function syncPartners(array $partnerServiceProviderIds)
@@ -55,9 +58,14 @@ class ServiceProvider extends Model implements HasMedia
         return $this->belongsToMany(ServiceProvider::class, 'service_provider_partners', 'service_provider_id', 'partner_service_provider_id');
     }
 
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class, 'partner_service_provider_id');
+    }
+
     public function reviews()
     {
-        return $this->morphMany(Review::class,'reviewable');
+        return $this->morphMany(Review::class, 'reviewable');
     }
     public function services()
 {

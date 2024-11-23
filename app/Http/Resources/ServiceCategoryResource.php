@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ServiceProviderResource extends JsonResource
+class ServiceCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,9 @@ class ServiceProviderResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'photo'         => $this->getFirstMediaUrl('photo'),
-            'name'          => $this->user->name,
-            'rating'        => $this->rating,
+            'name'          => $this->name,
+            'image_path'    => $this->image_path,
+            'image_url'     => asset($this->image_path),
         ];
     }
 }
