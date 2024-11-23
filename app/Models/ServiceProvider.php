@@ -58,6 +58,8 @@ class ServiceProvider extends Model implements HasMedia
         return $this->belongsToMany(ServiceProvider::class, 'service_provider_partners', 'service_provider_id', 'partner_service_provider_id');
     }
 
+
+
     public function services(): HasMany
     {
         return $this->hasMany(Service::class, 'partner_service_provider_id');
@@ -67,4 +69,9 @@ class ServiceProvider extends Model implements HasMedia
     {
         return $this->morphMany(Review::class, 'reviewable');
     }
+    public function Servicess()
+{
+    return $this->belongsToMany(Service::class, 'service_provider_pivots');
+}
+
 }

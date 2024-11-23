@@ -51,5 +51,6 @@ class Service extends Model implements HasMedia
      {
          return $this->belongsToMany(ServiceProvider::class, 'service_provider_pivots');
      }
+     
    
 }

@@ -46,26 +46,42 @@ class ServiceController extends Controller
         return $this->okResponse($service, 'Service retrieved successfully');
     }
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'service_category_id' => 'required|exists:service_categories,id',
-        'service_provider_ids' => 'required|array',
-        'service_provider_ids.*' => 'exists:service_providers,id',
-        'name' => 'required|string|max:255',
-        'duration' => 'required|integer',
-        'description' => 'nullable|string',
-        'rating' => 'nullable|numeric',
-        'price_before' => 'required|numeric',
-        'price_after' => 'required|numeric',
-        'address' => 'nullable|string',
-    ]);
+    {
+        $validated = $request->validate([
+            'service_category_id' => 'required|exists:service_categories,id',
+            'service_provider_ids' => 'required|array',
+            'service_provider_ids.*' => 'exists:service_providers,id',
+            'name' => 'required|string|max:255',
+            'duration' => 'required|integer',
+            'description' => 'nullable|string',
+            'rating' => 'nullable|numeric|min:0|max:5',
+            'price_before' => 'required|numeric',
+            'price_after' => 'nullable|numeric',
+            'address' => 'nullable|string',
+            'is_offer' => 'boolean',
+        ]);
+        $service = Service::create([
+            'service_category_id' => $validated['service_category_id'],
+            'name' => $validated['name'],
+            'duration' => $validated['duration'],
+            'description' => $validated['description'] ?? null,
+            'rating' => $validated['rating'] ?? null,
+            'price_before' => $validated['price_before'],
+            'price_after' => $validated['price_after'] ?? null,
+            'address' => $validated['address'] ?? '',
+            'is_offer' => $validated['is_offer'] ?? false,
+        ]);
+    
+        $service->serviceProviders()->attach($validated['service_provider_ids']);
 
-    $validated['service_provider_ids'] = json_encode($validated['service_provider_ids']);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Service created successfully',
+            'data' => $service->load('serviceProviders'), 
+        ], 201);
+    }
+    
 
-    $service = Service::create($validated);
-
-    return $this->createdResponse($service, 'Service created successfully');
-}
 
     public function update(Request $request, $id)
     {
