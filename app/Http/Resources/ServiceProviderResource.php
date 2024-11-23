@@ -18,6 +18,7 @@ class ServiceProviderResource extends JsonResource
             'id'            => $this->id,
             'photo'         => $this->getFirstMediaUrl('photo'),
             'name'          => $this->user->name,
+            'address'       => $this->address,
             'rating'        => $this->rating,
         ];
     }

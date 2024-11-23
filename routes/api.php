@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ChatMemberController;
 use App\Http\Controllers\API\ChatMessagesController;
 use App\Http\Controllers\API\CityController;
 use App\Http\Controllers\API\ClientController;
+use App\Http\Controllers\API\FavoritController;
 use App\Http\Controllers\API\ReviewsController;
 use App\Http\Controllers\API\ServiceCategoryController;
 use App\Http\Controllers\API\ServiceController;
@@ -68,6 +69,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     // services 
+    Route::get('/services/favorits', [FavoritController::class, 'index']);
+    Route::post('/services/{id}/favorits', [FavoritController::class, 'taggle']);
     Route::apiResource('services', ServiceController::class);
 
     //Serivce Categories 

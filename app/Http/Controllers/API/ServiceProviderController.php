@@ -67,6 +67,18 @@ class ServiceProviderController extends Controller
         );
     }
 
+    public function indexForAddresses(string $id)
+    {
+        $addresses =  ServiceProvider::whereHas('serviceProviderPartners', fn($q) => $q->whereServiceProviderId($id))
+            ->whereNotNull('address')
+            ->pluck('address');
+
+        return $this->okResponse(
+            $addresses,
+            'Retrieve service provider addresses successfuly'
+        );
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -98,7 +110,7 @@ class ServiceProviderController extends Controller
             'tax_registeration_number'      => $request->tax_registeration_number,
         ]);
 
-        if ( $request->is_personal && $request->hasFile('maroof_document') ) {
+        if ($request->is_personal && $request->hasFile('maroof_document')) {
             $serviceProvider->addMedia($request->maroof_document)
                 ->toMediaCollection('maroof_document');
         } else {
