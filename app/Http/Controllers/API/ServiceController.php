@@ -32,7 +32,7 @@ class ServiceController extends Controller
         }
 
         if ($request->has('provider_id')) {
-            $query->where('partner_service_provider_id', $request->provider_id);
+            $query->where('service_provider_id', $request->provider_id);
         }
 
         $services =  $query->paginate($request->page_size ?? 10);
