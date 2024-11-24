@@ -57,8 +57,10 @@ class ServiceSeeder extends Seeder
 
         foreach ($services as $service) DB::table('services')->insert($service);
 
-        foreach (collect($services)->only(['service_category_id']) as $serviceCategoryData) {
-            Service::factory(random_int(2, 4))->create($serviceCategoryData);
+        foreach ($services as $service) {
+            Service::factory(random_int(2, 4))->create([
+                'service_provider_id' => $service['service_provider_id']
+            ]);
         }
     }
 }
