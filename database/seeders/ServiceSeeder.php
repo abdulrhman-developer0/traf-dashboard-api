@@ -59,6 +59,7 @@ class ServiceSeeder extends Seeder
 
         foreach ($services as $service) {
             Service::factory(random_int(2, 4))->create([
+                'service_category_id' => $service['service_category_id'],
                 'service_provider_id' => $service['service_provider_id']
             ]);
         }
