@@ -70,7 +70,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // services 
     Route::get('/services/favorits', [FavoritController::class, 'index']);
-    Route::post('/services/{id}/favorits', [FavoritController::class, 'taggle']);
+    Route::post('/services/favorits', [FavoritController::class, 'taggle']);
     Route::apiResource('services', ServiceController::class);
 
     //Serivce Categories 

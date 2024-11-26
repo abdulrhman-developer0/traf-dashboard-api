@@ -55,78 +55,20 @@ class ServiceScheduleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'partner_service_provider_id' => 'required|integer',
-            'service_id' => 'required|integer|exists:services,id',
-            'schedule_pattern' => 'required|in:daily,every_two_days,weekly,manual',
-            'dates' => 'required|array',
-            'dates.*.date' => 'required|date',
-            'dates.*.times' => 'required|array|min:1',
-            'dates.*.from_time' => 'required_if:schedule_pattern,manual|string',
-            'dates.*.to_time' => 'required_if:schedule_pattern,manual|string',
-            'status' => 'required|in:available,off,booked',
+            'service_worker_id' => 'required|integer|exists:users,id',
+            'pattern'           => 'required|in:daily,weekly,repetition,manual',
+            'start_date'        => 'required|date',
+            'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
+            'repeat_every_days' => 'required_if:pattern,repetition|integer|min:1',
+            'excluded_dates'    => 'nullable|array',
+            'excluded_dates.*'  => 'required|date',
+            'times'             => 'required|array|min:1',
+            'times.*'           => 'date_format:H:i',
         ]);
+
+        $startDate = Carbon::create($request->start_date);
     
-        $schedules = [];
-        $schedulePattern = $validated['schedule_pattern'];
-    
-        foreach ($validated['dates'] as $dateEntry) {
-            $date = Carbon::parse($dateEntry['date']);
-            $times = $dateEntry['times'];
-            $from_time = $dateEntry['from_time'] ?? null;
-            $to_time = $dateEntry['to_time'] ?? null;
-    
-            if ($schedulePattern === "manual") {
-                $manualDates = [
-                    'date' => $date->toDateString(),
-                    'times' => $times,
-                    'from_time' => $from_time,
-                    'to_time' => $to_time,
-                ];
-    
-                $schedule = ServiceSchedule::create([
-                    'partner_service_provider_id' => $validated['partner_service_provider_id'],
-                    'service_id' => $validated['service_id'],
-                    'schedule_pattern' => $schedulePattern,
-                    'dates' => json_encode([$manualDates]),
-                    'status' => $validated['status'],
-                ]);
-    
-                $schedules[] = $schedule;
-            } else {
-                $incrementDays = match ($schedulePattern) {
-                    'daily' => 1,
-                    'every_two_days' => 2,
-                    'weekly' => 7,
-                };
-    
-                $currentDate = $date;
-                $monthlyDates = [];
-                while ($currentDate->month === $date->month) {
-                    foreach ($times as $time) {
-                        $monthlyDates[] = [
-                            'date' => $currentDate->toDateString(),
-                            'time' => $time,
-                        ];
-                    }
-                    $currentDate->addDays($incrementDays);
-                }
-    
-                $schedule = ServiceSchedule::create([
-                    'partner_service_provider_id' => $validated['partner_service_provider_id'],
-                    'service_id' => $validated['service_id'],
-                    'schedule_pattern' => $schedulePattern,
-                    'dates' => json_encode($monthlyDates),
-                    'status' => $validated['status'],
-                ]);
-    
-                $schedules[] = $schedule;
-            }
-        }
-    
-        return response()->json([
-            'message' => 'Service schedules created successfully',
-            'schedules' => $schedules,
-        ], 201);
+        $schedule =
     }
     
 
