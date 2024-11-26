@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-    
-        Schema::create('service_schedules', function (Blueprint $table) {
+        Schema::create('schedule_excluded_dates', function (Blueprint $table) {
             $table->id();
-        $table->foreignId('worker')->references('id')->on('workers')->onDelete('cascade'); 
-            $table->foreignId('service_id')->references('id')->on('services')->onDelete('cascade'); 
+            $table->foreignId('service_schedule_id')->references('id')->on('service_schedules')->onDelete('cascade');
             $table->datetime('start_date');
             $table->datetime('end_date');
-            $table->timestamps(); 
-            $table->softDeletes();
+            $table->timestamps();
         });
-        
     }
 
     /**
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service_schedules');
+        Schema::dropIfExists('schedule_excluded_dates');
     }
 };

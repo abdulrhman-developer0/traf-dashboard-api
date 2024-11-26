@@ -10,16 +10,16 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Worker extends Model implements HasMedia
 {
-    use HasFactory,InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
 
-    protected $fillable=['name','phone','address'];
+    protected $fillable = ['name', 'phone', 'address'];
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('thumb')
-        ->width(368)
-        ->height(232)
-        ->sharpen(10);
+        $this->addMediaConversion('photo')
+            ->width(368)
+            ->height(232)
+            ->sharpen(10);
     }
     public function registerMediaCollections(): void
     {
@@ -29,5 +29,4 @@ class Worker extends Model implements HasMedia
     {
         return $this->belongsToMany(Service::class, 'service_workers', 'worker_id', 'service_id');
     }
-    
 }

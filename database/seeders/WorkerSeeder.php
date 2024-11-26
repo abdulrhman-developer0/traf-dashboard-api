@@ -45,17 +45,18 @@ class WorkerSeeder extends Seeder
                 "image" => 'public/images/imgs/noraAbdallah.jpg',
             ],
         ];
-    
+
         foreach ($workerData as $workerDetails) {
             $worker = Worker::create([
                 'name' => $workerDetails['name'],
                 'phone' => $workerDetails['phone'],
                 'address' => $workerDetails['address'],
             ]);
-    
+
             // Add image to media collection
-            $worker->addMedia(storage_path('app/' . $workerDetails['image']))->toMediaCollection();
+            $worker->addMedia(base_path($workerDetails['image']))
+                ->preservingOriginal()
+                ->toMediaCollection('photo');
         }
     }
-    
 }

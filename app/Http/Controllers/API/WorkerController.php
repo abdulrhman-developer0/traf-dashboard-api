@@ -17,7 +17,7 @@ class WorkerController extends Controller
             'name' => $worker->name,
             'phone' => $worker->phone,
             'address' => $worker->address,
-            'image_url' => $worker->getFirstMediaUrl('worker'), // Directly get the image URL
+            'photo' => $worker->getFirstMediaUrl('photo'), // Directly get the image URL
         ];
     });
 

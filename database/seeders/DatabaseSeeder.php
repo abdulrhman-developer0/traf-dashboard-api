@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CitySeeder::class);
         $this->call(ClientSeeder::class);
         $this->call(ServiceProviderSeeder::class);
+        $this->call(WorkerSeeder::class);
         $this->call(ServiceCategorySeeder::class);
         $this->call(ServiceSeeder::class);
         // $this->call(ServiceScheduleSeeder::class);
