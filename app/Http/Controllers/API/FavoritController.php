@@ -21,7 +21,10 @@ class FavoritController extends Controller
             return $this->badResponse([], 'Plese login by client account to access favorits');
         }
 
-        $services = $client->favoritServices ?? [];
+        $services = $client->favoritServices()->get();
+        $services->each(function($service) {
+            $service['is_favorite'] = 1;
+        });
 
         return $this->okResponse(
             ServiceResource::collection($services),
@@ -29,8 +32,12 @@ class FavoritController extends Controller
         );
     }
 
-    public function taggle($serviceId)
+    public function taggle(Request $request)
     {
+        $request->validate([
+            'service_id'  => 'required|integer'
+        ]);
+
         $client = Auth::user()?->client;
 
         if (! $client) {
@@ -39,12 +46,12 @@ class FavoritController extends Controller
 
         $idsOfServices = $client->favoritServices()->pluck('service_id')->toArray();
 
-        if ( in_array($serviceId, $idsOfServices) ) {
-            $client->favoritServices()->detach($serviceId);
+        if ( in_array($request->service_id, $idsOfServices) ) {
+            $client->favoritServices()->detach($request->service_id);
             return $this->okResponse([], 'Service removed from favorits successfuly');
         }
 
-        $client->favoritServices()->attach($serviceId);
+        $client->favoritServices()->attach($request->service_id);
 
         return $this->okResponse([], 'Service added to favorits successfuly');
     }

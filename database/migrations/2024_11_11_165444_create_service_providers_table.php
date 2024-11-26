@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('service_providers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('is_personal')->default(true);
             $table->string('tax_registeration_number')->nullable();
             $table->unsignedInteger('city_id')->nullable();
@@ -22,8 +22,6 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->float('rating', 2, 1)->default(0.0);
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

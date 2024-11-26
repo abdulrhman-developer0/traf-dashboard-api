@@ -62,7 +62,7 @@ class ServiceProvider extends Model implements HasMedia
 
     public function services(): HasMany
     {
-        return $this->hasMany(Service::class, 'partner_service_provider_id');
+        return $this->hasMany(Service::class);
     }
 
     public function reviews()

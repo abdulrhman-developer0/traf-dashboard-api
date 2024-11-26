@@ -93,7 +93,12 @@ class ServiceProviderController extends Controller
             'is_personal'               => 'required|boolean',
             'maroof_document'           => 'required_if:is_personal,true|file|mimes:jpg,png,pdf|max:4096',
             'tax_registeration_number'  => 'required_if:is_personal,false|string|min:1|max:255',
+            'accept_policy'             => 'required|boolean',
         ]);
+
+        if (! $request->accept_policy) {
+            return $this->badResponse([], 'Plese accept policy to create an account');
+        }
 
         // Create the user first (since the serviceProvider depends on the user)
         $user = User::create([
