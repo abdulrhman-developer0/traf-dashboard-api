@@ -53,8 +53,8 @@ class ServiceController extends Controller
     {
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
-            'service_provider_ids' => 'required|array',
-            'service_provider_ids.*' => 'exists:service_providers,id',
+            'service_workers' => 'required|array',
+            'service_workers.*' => 'exists:workers,id',  // Ensure worker IDs exist in the workers table
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
             'description' => 'nullable|string',
@@ -62,18 +62,12 @@ class ServiceController extends Controller
             'price_after' => 'nullable|numeric',
             'address' => 'nullable|string',
         ]);
-
-        $serviceProvider = Auth::user()?->serviceProvider;
-
-        if (! $serviceProvider ) {
-            return $this->badResponse([], 'Plese login by service provider account');
-        }
-
-        $is_offer = $request->price_after? true : false;
-
+    
+        $is_offer = $request->price_after ? true : false;
+    
+        // Create the service
         $service = Service::create([
             'service_category_id' => $validated['service_category_id'],
-            'service_provider_id' => $serviceProvider->id,
             'name' => $validated['name'],
             'duration' => $validated['duration'],
             'description' => $validated['description'] ?? null,
@@ -82,11 +76,13 @@ class ServiceController extends Controller
             'address' => $validated['address'] ?? '',
             'is_offer' => $is_offer,
         ]);
-
-        $service->serviceProviders()->attach($validated['service_provider_ids']);
-
-        return $this->createdResponse([], 'Service created successfully');
+    
+        // Attach workers to the service (this will create the pivot records in service_workers)
+        $service->workers()->attach($validated['service_workers']);
+    
+        return response()->json(['message' => 'Service created successfully']);
     }
+    
 
 
 

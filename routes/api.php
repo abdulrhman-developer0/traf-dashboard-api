@@ -17,8 +17,10 @@ use App\Http\Controllers\API\ServiceOfferController;
 use App\Http\Controllers\API\ServiceProviderController;
 use App\Http\Controllers\API\ServiceProviderPortfolioController;
 use App\Http\Controllers\API\ServiceScheduleController;
+use App\Http\Controllers\API\WorkerController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\UsersController;
+
 use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -88,6 +90,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // portfolio
     Route::apiResource('/service-provider-portfolios', ServiceProviderPortfolioController::class);
+
+    //worker 
+    Route::apiResource('/workers', WorkerController::class);
 });
 
 // user 
