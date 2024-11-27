@@ -13,7 +13,7 @@ class ServiceProviderSeeder extends Seeder
      */
     public function run(): void
     {
-        
+
         $serviceProviders = [
             [
                 'user_id' => 1,
@@ -46,7 +46,7 @@ class ServiceProviderSeeder extends Seeder
                 'rating' => 4.7,
             ],
         ];
-        
+
         foreach ($serviceProviders as $provider) {
             // Insert service provider and get the ID of the inserted record
             $providerId = DB::table('service_providers')->insertGetId([
@@ -61,13 +61,6 @@ class ServiceProviderSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        
-            // Insert into service_provider_partners table with the correct provider ID
-            DB::table('service_provider_partners')->insert([
-                'partner_service_provider_id' => $providerId, 
-                'service_provider_id'=>$providerId
-                // Corrected field name
-            ]);
-}
-}
+        }
+    }
 }

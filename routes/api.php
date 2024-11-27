@@ -45,7 +45,7 @@ Route::prefix('auth')->group(function () {
 Route::apiResource('/clients', ClientController::class);
 
 Route::apiResource('/service-providers', ServiceProviderController::class);
-Route::get('/service-providers/{id}/partners', [ServiceProviderController::class, 'indexForPartners']);
+Route::apiResource('/service-providers/{id}/workers', WorkerController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
 
 
@@ -91,8 +91,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // portfolio
     Route::apiResource('/service-provider-portfolios', ServiceProviderPortfolioController::class);
 
-    //worker 
-    Route::apiResource('/workers', WorkerController::class);
 });
 
 // user 
@@ -103,6 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('verify/code', [TwoFactorController::class, 'store']);
     Route::post('verify', [TwoFactorController::class, 'show']);
 });
+
 // two factor Auth middleware use alias two-factor 
 Route::get('/user', function (Request $request) {
     return $request->user();

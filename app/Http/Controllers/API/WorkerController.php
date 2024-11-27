@@ -4,62 +4,84 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Worker;
+use App\Traits\APIResponses;
 use Illuminate\Http\Request;
+use App\Http\Resources\WorkerResource;
+use App\Models\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class WorkerController extends Controller
 {
-    //
-    public function index()
-{
-    $workers = Worker::all()->map(function ($worker) {
-        return [
-            'id' => $worker->id,
-            'name' => $worker->name,
-            'phone' => $worker->phone,
-            'address' => $worker->address,
-            'photo' => $worker->getFirstMediaUrl('photo'), // Directly get the image URL
-        ];
-    });
+    use APIResponses;
 
-    return response()->json([
-        'message' => 'Workers retrieved successfully',
-        'data' => $workers,
-    ], 200);
-}
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum']);
+    }
+
+    public function index(Request $request, $serviceProviderId)
+    {
+        $query = Worker::query()
+            ->where('service_provider_id', $serviceProviderId);
+
+        if ($request->has('service_id')) {
+            $query->whereHas('services', fn($q) => $q->where('service_id', $request->service_id));
+        }
+
+
+        $workers = $query->get();
+
+        return $this->okResponse(WorkerResource::collection($workers), 'Workers retrieved successfuly');
+    }
+
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|regex:/^\+?[0-9]{7,15}$/',
             'address' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'photo' => 'nullable|photo|mimes:jpeg,jpg,png|max:2048',
         ]);
-    
-        $worker = Worker::create($request->only('name', 'phone', 'address'));
-    
-        if ($request->hasFile('image')) {
-            try {
-                $worker->addMedia($request->file('image'))->toMediaCollection('worker');
-            } catch (\Exception $e) {
-                \Log::error('Media Upload Error', ['Error' => $e->getMessage()]);
-                return response()->json([
-                    'message' => 'Image upload failed.',
-                    'error' => $e->getMessage(),
-                ], 500);
-            }
+
+        $serviceProvider = Auth::user()?->serviceProvider;
+
+        $creationData                        = $request->only('name', 'phone', 'address');
+        $creationData['service_provider_id'] = $serviceProvider?->id;
+
+        $worker = $serviceProvider->workers()->create($creationData);
+
+        if ($request->hasFile('photo')) {
+            $worker->addMedia($request->photo)
+                ->toMediaCollection('photo');
         }
-        $worker->load('media');
-        return response()->json([
-            'message' => 'Worker created successfully',
-            'worker' => [
-                'id' => $worker->id,
-                'name' => $worker->name,
-                'phone' => $worker->phone,
-                'address' => $worker->address,
-                'image_url' => $worker->getFirstMediaUrl('worker'), 
-            ],
-        ]);
+
+        return $this->createdResponse([], 'Worker created successfully');
     }
-    
+
+    public function update(Request $request, $workerId)
+    {
+        $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'phone' => 'nullable|string|regex:/^\+?[0-9]{7,15}$/',
+            'address' => 'nullable|string|max:255',
+            'photo' => 'nullable|photo|mimes:jpeg,jpg,png|max:2048',
+        ]);
+
+        $serviceProvider = Auth::user()?->serviceProvider;
+        $worker          = $serviceProvider->workers()->find($workerId);
+
+        if (! $worker) {
+            return $this->badResponse([], "You not have a worker with id $workerId");
+        }
+
+        $worker->update($request->only('name', 'phone', 'address'));
+
+        if ($request->hasFile('photo')) {
+            $worker->addMedia($request->photo)
+                ->toMediaCollection('photo');
+        }
+
+        return $this->okResponse([], 'Worker updated successfully');
+    }
 }

@@ -15,6 +15,7 @@ class Service extends Model implements HasMedia
       // Define the fillable fields for mass assignment
       protected $fillable = [
         'service_category_id',
+        'service_provider_id',
         'name',
         'duration',
         'description',
@@ -37,24 +38,17 @@ class Service extends Model implements HasMedia
         return $this->belongsTo(ServiceCategory::class, 'service_category_id');
     }
 
-    public function provider(): BelongsTo
+    public function serviceProvider(): BelongsTo
     {
         return $this->belongsTo(ServiceProvider::class);
     }
 
-    /**
-     * Get the partner service provider that owns the service.
-     */
-    
-    //  public function serviceProviders()
-    //  {
-    //      return $this->belongsToMany(ServiceProvider::class, 'service_provider_pivots');
-    //  }
      
      public function clientFavorites()
      {
         return $this->belongsToMany(Client::class, 'favorits');
      }
+     
      public function workers()
      {
          return $this->belongsToMany(Worker::class, 'service_workers', 'service_id', 'worker_id');
