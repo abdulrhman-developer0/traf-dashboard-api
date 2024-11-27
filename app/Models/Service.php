@@ -25,6 +25,10 @@ class Service extends Model implements HasMedia
         'is_offer',
     ];
 
+    protected $casts = [
+        'rating' => 'float'
+    ];
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('photo')->singleFile();
