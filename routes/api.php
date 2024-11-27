@@ -45,7 +45,7 @@ Route::prefix('auth')->group(function () {
 Route::apiResource('/clients', ClientController::class);
 
 Route::apiResource('/service-providers', ServiceProviderController::class);
-Route::apiResource('/service-providers/{id}/workers', WorkerController::class);
+Route::apiResource('/workers', WorkerController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
 
 

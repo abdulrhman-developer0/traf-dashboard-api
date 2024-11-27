@@ -19,10 +19,13 @@ class WorkerController extends Controller
         $this->middleware(['auth:sanctum']);
     }
 
-    public function index(Request $request, $serviceProviderId)
+    public function index(Request $request)
     {
-        $query = Worker::query()
-            ->where('service_provider_id', $serviceProviderId);
+        $query = Worker::query();
+
+        if ($request->has('provider_id')) {
+            $query->where('service_provider_id', $request->provider_id);
+        }
 
         if ($request->has('service_id')) {
             $query->whereHas('services', fn($q) => $q->where('service_id', $request->service_id));
