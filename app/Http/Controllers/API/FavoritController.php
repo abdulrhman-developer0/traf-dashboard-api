@@ -54,6 +54,11 @@ class FavoritController extends Controller
             $message = 'Service added to favorits successfuly';
         }
 
-        return $this->okResponse(ServiceResource::collection($client->favoritServices), $message);
+        $services = $client->favoritServices()->get();
+        $services->each(function($service) {
+            $service['is_favorite'] = 1;
+        });
+
+        return $this->okResponse(ServiceResource::collection($services), $message);
     }
 }
