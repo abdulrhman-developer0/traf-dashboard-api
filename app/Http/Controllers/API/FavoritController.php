@@ -51,7 +51,7 @@ class FavoritController extends Controller
             $message = 'Service removed from favorits successfuly';
         } else {
             $client->favoritServices()->attach($request->service_id);
-            $message = 'Service added to favorits successfuly'
+            $message = 'Service added to favorits successfuly';
         }
 
         return $this->okResponse(ServiceResource::collection($client->favoritServices), $message);
