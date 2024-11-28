@@ -105,3 +105,11 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware(['auth:sanctum']);
+
+Route::get('/test', function() {
+
+    $user = auth()->user();
+
+    dd($user->isAccount('service-provider'));
+
+})->middleware(['auth:sanctum']);
