@@ -7,7 +7,6 @@ use App\Http\Resources\WorkerResource;
 use App\Models\Worker;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
-use App\Http\Resources\WorkerResource;
 use App\Models\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
