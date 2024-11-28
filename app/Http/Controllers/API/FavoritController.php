@@ -48,11 +48,17 @@ class FavoritController extends Controller
 
         if ( in_array($request->service_id, $idsOfServices) ) {
             $client->favoritServices()->detach($request->service_id);
-            return $this->okResponse([], 'Service removed from favorits successfuly');
+            $message = 'Service removed from favorits successfuly';
+        } else {
+            $client->favoritServices()->attach($request->service_id);
+            $message = 'Service added to favorits successfuly';
         }
 
-        $client->favoritServices()->attach($request->service_id);
+        $services = $client->favoritServices()->get();
+        $services->each(function($service) {
+            $service['is_favorite'] = 1;
+        });
 
-        return $this->okResponse([], 'Service added to favorits successfuly');
+        return $this->okResponse(ServiceResource::collection($services), $message);
     }
 }

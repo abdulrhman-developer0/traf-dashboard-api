@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->dateTime('expire_at')->nullable();
             $table->boolean('code_verified')->default(false);
+            $table->string('account_type')->default('');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

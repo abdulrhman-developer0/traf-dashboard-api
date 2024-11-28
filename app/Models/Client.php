@@ -20,6 +20,10 @@ class Client extends Model implements HasMedia
         'rating',
     ];
 
+    protected $casts = [
+        'rating' => 'float'
+    ];
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('photo')->singleFile()

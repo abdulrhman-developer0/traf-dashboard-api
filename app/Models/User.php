@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Contracts\HasAccounts;
+use App\Traits\IntractsWithAccount;
 use App\Traits\UserTypes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,14 +18,14 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia, HasAccounts
 {
     use HasFactory, Notifiable, SoftDeletes;
     use InteractsWithMedia;
     use LogsActivity;
     use HasRoles;
     use HasApiTokens;
-    use UserTypes;
+    use IntractsWithAccount, UserTypes;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +37,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'last_activity',
+        'account_type',
         'code',
         'expire_at'
 

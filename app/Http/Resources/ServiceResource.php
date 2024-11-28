@@ -19,17 +19,27 @@ class ServiceResource extends JsonResource
             'id'                                => $this->id,
             'service_category_id'               => $this->service_category_id,
             'category_name'                     => $this->category?->name,
-            'service_provider_id'       => $this->service_provider_id,
+            'service_provider_id'               => $this->service_provider_id,
+            'provider_name'                     => $this->serviceProvider?->user?->name,
             'name'                              => $this->name,
             'photo'                             => $this->getFirstMediaUrl('photo'),
             'duration'                          => $this->duration,
             'description'                       => $this->description,
-            'rating'                            => $this->rating,
             'price_before'                      => $this->price_before,
+            'price_after'                       => $this->price_after,
             'is_offer'                          => (bool) $this->is_offer,
-            'is_favorite'                       => $this->is_favorite? true : false,
-            'created_at'                        => $this->created_at->diffForHumans(),
-            'updated_at'                        => $this->updated_at->diffForHumans(),
+            'is_personal'                       => (bool) $this->serviceProvider?->is_personal,
+            'is_favorite'                       => $this->is_favorite ? true : false,
+            'created_at'                        => $this->created_at?->diffForHumans(),
+            'updated_at'                        => $this->updated_at?->diffForHumans(),
+            'rating'                            => $this->rating,
+            'rating_stats'  =>  [
+                'excellent'     => 40,
+                'very_good'     => 30,
+                'good'          => 20,
+                'bad'           => 7,
+                'very_bad'      => 3
+            ]
         ];
     }
 }

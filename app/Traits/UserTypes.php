@@ -8,6 +8,19 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 trait UserTypes
 {
+    /**
+     * Used to define available account types with models
+     * 
+     * @static
+     * @return array the acount types with models ['admin' => Admin::clas, ...]
+     */
+    public static function accountTypes(): array
+    {
+        return [
+            'client'            => Client::class,
+            'service-provider'  => ServiceProvider::class,
+        ];
+    }
     
     public function client(): HasOne
     {

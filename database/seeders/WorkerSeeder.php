@@ -48,6 +48,7 @@ class WorkerSeeder extends Seeder
 
         foreach ($workerData as $workerDetails) {
             $worker = Worker::create([
+                'service_provider_id' => 1,
                 'name' => $workerDetails['name'],
                 'phone' => $workerDetails['phone'],
                 'address' => $workerDetails['address'],

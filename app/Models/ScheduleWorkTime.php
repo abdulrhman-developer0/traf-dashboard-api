@@ -13,4 +13,8 @@ class ScheduleWorkTime extends Model
         'service_schedule_id',
         'time'
     ];
+
+    protected $casts = [
+        'time' => 'datetime'
+    ];
 }

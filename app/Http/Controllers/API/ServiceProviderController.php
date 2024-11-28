@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceProviderResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\WorkerResource;
 use App\Models\ServiceProvider;
 use App\Models\User;
+use App\Models\Worker;
 use App\Notifications\TwoFactorNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
@@ -54,22 +56,19 @@ class ServiceProviderController extends Controller
     /**
      *  Get Partner Service Providers
      */
-    public function indexForPartners(string $id)
+    public function indexForWorkers(string $id)
     {
-        $partnerServiceProviders =  ServiceProvider::whereHas(
-            'serviceProviderPartners',
-            fn($q) => $q->whereServiceProviderId($id)
-        )->get();
+        $Workers =  Worker::whereServiceProviderId($id)->get();
 
         return $this->okResponse(
-            ServiceProviderResource::collection($partnerServiceProviders),
+            WorkerResource::collection($Workers),
             'Retrieve Partner Service provider'
         );
     }
 
     public function indexForAddresses(string $id)
     {
-        $addresses =  ServiceProvider::whereHas('serviceProviderPartners', fn($q) => $q->whereServiceProviderId($id))
+        $addresses =  ServiceProvider::whereHas('workers', fn($q) => $q->whereServiceProviderId($id))
             ->whereNotNull('address')
             ->pluck('address');
 
@@ -118,10 +117,6 @@ class ServiceProviderController extends Controller
         if ($request->is_personal && $request->hasFile('maroof_document')) {
             $serviceProvider->addMedia($request->maroof_document)
                 ->toMediaCollection('maroof_document');
-        } else {
-            $serviceProvider->serviceProviderPartners()->create([
-                'partner_service_provider_id' => $serviceProvider->id,
-            ]);
         }
 
         $user->generateCode();

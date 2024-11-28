@@ -13,8 +13,8 @@ class ServiceSchedule extends Model
     use HasFactory, SoftDeletes;
 
       protected $fillable = [
-        'service_worker_id',
-        'uservice_id',
+        'reference_id',
+        'service_id',
         'start_date',
         'end_date',
     ];

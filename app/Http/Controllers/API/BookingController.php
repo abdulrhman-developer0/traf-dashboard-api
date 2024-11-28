@@ -3,35 +3,59 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\BookingResource;
 use App\Models\Booking;
-use Illuminate\Http\Request;
 use App\Traits\APIResponses;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    //
     use APIResponses;
-    public function index()
+
+    public function index(Request $request)
     {
-        $bookings = Booking::with('serviceSchedule')->get();
-        return $this->okResponse($bookings, 'Retrieved all bookings successfully');
+        $query = Booking::query()
+            ->with(['client', 'service']);
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('client_id')) {
+            $query->where('client_id', $request->client_id);
+        }
+
+        if ($request->has('service_id')) {
+            $query->where('service_id', $request->service_id);
+        }
+
+        if ($request->has('reference_id')) {
+            $query->where('reference_id', $request->reference_id);
+        }
+
+        $bookings = $query->get();
+
+        return $this->okResponse(BookingResource::collection($bookings), 'Retrieved all bookings successfully');
     }
 
     public function show($id)
     {
-        $booking = Booking::with('serviceSchedule')->find($id);
+        $booking = Booking::find($id);
+
         if (!$booking) {
             return $this->notFoundResponse('Booking not found');
         }
-        return $this->okResponse($booking, 'Retrieved booking successfully');
+
+        return $this->okResponse(BookingResource::make($booking), 'Retrieved booking successfully');
     }
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'service_schedule_id' => 'required|integer|exists:service_schedules,id',
-            'status' => 'in:pending,paid,canceled,done',
+        $bookingData = $validated = $request->validate([
+            'service_id'   => 'required|integer|exists:services,id',
+            'reference_id' => 'required|integer',
+            'date'         => 'required|date'
         ]);
 
         // inject client id.
@@ -42,28 +66,26 @@ class BookingController extends Controller
 
         $booking = Booking::create($validated);
 
-        $booking->serviceSchedule->update([
-            'status'  => 'booked'
-        ]);
 
-        return $this->createdResponse(['booking' => $booking], 'Booking created successfully');
+        return $this->createdResponse([], 'Booking created successfully');
     }
 
     public function update(Request $request, $id)
     {
         $booking = Booking::find($id);
-        if (!$booking) {
-            return $this->notFoundResponse('Booking not found');
+
+        if (! $booking ) {
+            return $this->badResponse('Booking not found');
         }
 
-        $validated = $request->validate([
-            'service_schedule_id' => 'integer|exists:service_schedules,id',
-            'client_id'=>'required|exists:clients,id',
-            // 'status' => 'in:pending,paid,canceled,done',
+        $request->validate([
+            'status' => 'in:canceled,done',
         ]);
 
-        $booking->update($validated);
-        return $this->okResponse(['booking' => $booking], 'Booking updated successfully');
+        $booking->status = $request->status;
+        $booking->save();
+
+        return $this->okResponse([], 'Booking updated successfully');
     }
 
     public function destroy($id)

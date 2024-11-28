@@ -23,6 +23,11 @@ class ServiceProvider extends Model implements HasMedia
         'rating',
     ];
 
+    protected $casts = [
+        'is_personal'  => 'boolean',
+        'rating' => 'float'
+    ];
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('photo')->singleFile()
@@ -33,10 +38,6 @@ class ServiceProvider extends Model implements HasMedia
         $this->addMediaCollection('maroof_document')->singleFile();
     }
 
-    public function syncPartners(array $partnerServiceProviderIds)
-    {
-        return $this->serviceProviderPartners()->sync([$this->id, ...$partnerServiceProviderIds]);
-    }
 
     public function user()
     {
@@ -48,30 +49,18 @@ class ServiceProvider extends Model implements HasMedia
         return $this->belongsTo(City::class);
     }
 
-    public function serviceProviderPartners()
-    {
-        return $this->hasMany(ServiceProviderPartner::class);
-    }
-
-    public function serviceProviders()
-    {
-        return $this->belongsToMany(ServiceProvider::class, 'service_provider_partners', 'service_provider_id', 'partner_service_provider_id');
-    }
-
-
-
     public function services(): HasMany
     {
         return $this->hasMany(Service::class);
     }
 
-    public function reviews()
-    {
-        return $this->morphMany(Review::class, 'reviewable');
-    }
     public function Servicess()
-{
-    return $this->belongsToMany(Service::class, 'service_provider_pivots');
-}
+    {
+        return $this->belongsToMany(Service::class, 'service_provider_pivots');
+    }
 
+    public function workers(): HasMany
+    {
+        return $this->hasMany(Worker::class);
+    }
 }

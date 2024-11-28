@@ -4,11 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Filters\Schedules\ProviderFilter;
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\ServiceScheduleResource;
+use App\Models\ScheduleWorkTime;
 use App\Models\ServiceSchedule;
 use App\Traits\APIResponses;
 use Carbon\Carbon;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -18,47 +21,58 @@ class ServiceScheduleController extends Controller
 
     public function index(Request $request)
     {
-        $query = ServiceSchedule::query();
-
-        if ($request->has('serviceId')) {
-            $query->whereServiceId($request->serviceId);
+        if (! $request->has('service_id')) {
+            return $this->badResponse([], 'The service_id filter is required to select schedules');
         }
 
-        if ($request->has('providerId')) {
-            $query->where('partner_service_provider_id', $request->providerId);
+        if (! $request->has('reference_id')) {
+            return $this->badResponse([], 'The reference_id filter is required to select schedules');
         }
+
+
 
         if ($request->has('date')) {
-            $query->whereDate('date', $request->date);
+            $date = Carbon::create($request->date);
+        } else {
+            $date = now();
         }
 
-        if ($request->has('time')) {
-            $query->whereDate('time', $request->time);
-        }
+        $query = ServiceSchedule::query()
+            ->where('service_id', $request->service_id)
+            ->where('reference_id', $request->reference_id)
+            ->where('start_Date', '<', $date)
+            ->where('end_date', '>', $date);
 
+        $schedule = $query->first();
+        
+        $times = $schedule
+            ? $schedule->workTimes
+            :    [];
 
-        $schedules = $query->get();
-
-        return response()->json($schedules);
+        return $this->okResponse(ServiceScheduleResource::make($schedule), 'Retrieve times successfuly');
     }
 
 
     public function show($id)
     {
         $schedule = ServiceSchedule::find($id);
+        
         if (!$schedule) {
             return response()->json(['message' => 'Service schedule not found'], 404);
         }
-        return response()->json($schedule);
+
+        return $this->okResponse(ServiceScheduleResource::make($schedule), 'Schedule retrieved successfuly');
     }
 
 
     public function store(Request $request)
     {
+        $serviceProvider = FacadesAuth::user()->serviceProvider;
+
         $validated = $request->validate([
-            'service_worker_id' => 'required|integer',
+            'reference_id'      => $serviceProvider->is_personal ? 'nullable|integer' : 'required|integer',
             'service_id'        => 'required|integer|exists:services,id',
-            'pattern'           => 'required|in:daily,repetition,manual',
+            'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
             'exclude_limt' => 'required_if:pattern,repetition|integer|min:1',
@@ -68,8 +82,6 @@ class ServiceScheduleController extends Controller
             'times.*'           => 'date_format:H:i',
         ]);
 
-        $serviceWorkerId  = $request->serive_worker_id;
-        $serviceId        = $request->service_id;
         $pattern   = $request->pattern;
 
         $startDate = Carbon::create($request->start_date);
@@ -94,15 +106,15 @@ class ServiceScheduleController extends Controller
 
         $planDays = 90;
         $endDate = match ($pattern) {
+            "one-time"      => $startDate->copy()->addDay(),
             "daily"         => $startDate->copy()->addDays($planDays),
             'repetition'    => $startDate->copy()->addDays($planDays),
             'manual'        => $endDate
         };
 
-
         $schedule = ServiceSchedule::create([
-            'service_worker_id'  => $serviceWorkerId,
-            'service_id'         => $serviceId,
+            'reference_id'       => $serviceProvider->is_personal ? $serviceProvider->id : $request->reference_id,
+            'service_id'         => $request->service_id,
             'start_date'         => $startDate,
             'end_date'           => $endDate
         ]);
@@ -143,7 +155,7 @@ class ServiceScheduleController extends Controller
         }
 
         $validated = $request->validate([
-            'pattern'           => 'required|in:daily,repetition,manual',
+            'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
             'exclude_limt' => 'required_if:pattern,repetition|integer|min:1',
@@ -177,6 +189,7 @@ class ServiceScheduleController extends Controller
 
         $planDays = 90;
         $endDate = match ($pattern) {
+            "one-time"      => $startDate->copy()->addDay(),
             "daily"         => $startDate->copy()->addDays($planDays),
             'repetition'    => $startDate->copy()->addDays($planDays),
             'manual'        => $endDate

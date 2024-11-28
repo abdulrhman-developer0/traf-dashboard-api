@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('workers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('service_provider_id')->references('id')->on('service_providers')->onDelete('cascade');
             $table->string('name')->default('');
             $table->string('phone')->nullable();
             $table->string('address')->nullable();

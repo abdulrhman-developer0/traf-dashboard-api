@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_category_id')->unsigned()->references('id')->on('service_categories')->onDelete('cascade');
-            // $table->foreignId('service_provider_id')->unsigned()->references('id')->on('service_providers')->onDelete('cascade');
-          
+            $table->foreignId('service_provider_id')->unsigned()->references('id')->on('service_providers')->onDelete('cascade');
             $table->string('name');
             $table->integer('duration');
             $table->longText('description')->nullable();
-            $table->float('rating')->nullable();
+            $table->decimal('rating', 1, 1)->default(0.00);
             $table->decimal('price_before', 10, 2);
             $table->decimal('price_after', 10, 2)->nullable(); 
             $table->text('address')->default('');
