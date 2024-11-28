@@ -72,7 +72,7 @@ class ServiceScheduleController extends Controller
         $validated = $request->validate([
             'reference_id'      => $serviceProvider->is_personal ? 'nullable|integer' : 'required|integer',
             'service_id'        => 'required|integer|exists:services,id',
-            'pattern'           => 'required|in:daily,repetition,manual',
+            'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
             'exclude_limt' => 'required_if:pattern,repetition|integer|min:1',
@@ -106,6 +106,7 @@ class ServiceScheduleController extends Controller
 
         $planDays = 90;
         $endDate = match ($pattern) {
+            "one-time"      => $startDate->copy()->addDay(),
             "daily"         => $startDate->copy()->addDays($planDays),
             'repetition'    => $startDate->copy()->addDays($planDays),
             'manual'        => $endDate
@@ -154,7 +155,7 @@ class ServiceScheduleController extends Controller
         }
 
         $validated = $request->validate([
-            'pattern'           => 'required|in:daily,repetition,manual',
+            'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
             'exclude_limt' => 'required_if:pattern,repetition|integer|min:1',
@@ -188,6 +189,7 @@ class ServiceScheduleController extends Controller
 
         $planDays = 90;
         $endDate = match ($pattern) {
+            "one-time"      => $startDate->copy()->addDay(),
             "daily"         => $startDate->copy()->addDays($planDays),
             'repetition'    => $startDate->copy()->addDays($planDays),
             'manual'        => $endDate
