@@ -13,10 +13,17 @@ trait IntractsWithAccount
      */
     public function account(): ?Model
     {
-        return new Model();
+        $accountTypes = $this->accountTypes();
+
+
+        if (! $this->account_type || !in_array($this->account_type, array_keys($accountTypes) )) {
+            return null;
+        }
+
+        return $this->hasOne($accountTypes[$this->account_type])->first();
     }
 
-    
+
 
     /**
      * Used to check if account is of spcified type
@@ -26,6 +33,11 @@ trait IntractsWithAccount
      */
     public function isAccount(string $type): bool
     {
-        return false;
+        
+        if (! in_array($type, array_keys($this->accountTypes()) ) ) {
+            throw new \Exception("No account type $type");
+        }
+
+        return $this->account_type == $type;
     }
 }

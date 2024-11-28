@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\UpdateUserLastActivity;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CheckAccountType;
 use App\Http\Middleware\TwoFactor;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -23,7 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'admin' => AdminMiddleware::class
+            'admin'     => AdminMiddleware::class,
+            'account'   => CheckAccountType::class
 
         ]);
         

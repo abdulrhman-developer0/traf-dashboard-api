@@ -25,7 +25,7 @@ class User extends Authenticatable implements HasMedia, HasAccounts
     use LogsActivity;
     use HasRoles;
     use HasApiTokens;
-    use UserTypes, IntractsWithAccount;
+    use IntractsWithAccount, UserTypes;
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +37,7 @@ class User extends Authenticatable implements HasMedia, HasAccounts
         'email',
         'password',
         'last_activity',
+        'account_type',
         'code',
         'expire_at'
 

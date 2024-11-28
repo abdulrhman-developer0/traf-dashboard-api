@@ -14,9 +14,12 @@ trait UserTypes
      * @static
      * @return array the acount types with models ['admin' => Admin::clas, ...]
      */
-    public static function acountTypes(): array
+    public static function accountTypes(): array
     {
-        return [];
+        return [
+            'client'            => Client::class,
+            'service-provider'  => ServiceProvider::class,
+        ];
     }
     
     public function client(): HasOne

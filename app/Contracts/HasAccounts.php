@@ -12,14 +12,14 @@ interface HasAccounts
      * @static
      * @return array the acount types with models ['admin' => Admin::clas, ...]
      */
-    public static function acountTypes(): array;
+    public static function accountTypes(): array;
 
     /**
      * used to retrieve the current account of authenticated user
      * 
      * @return Model The model of account
      */
-    public function account(): ?Model;
+    public function account(): ?    Model;
 
     /**
      * Used to check if account is of spcified type
