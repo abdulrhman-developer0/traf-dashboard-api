@@ -45,7 +45,6 @@ Route::prefix('auth')->group(function () {
 Route::apiResource('/clients', ClientController::class);
 
 Route::apiResource('/service-providers', ServiceProviderController::class);
-Route::apiResource('/workers', WorkerController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
 
 
@@ -53,6 +52,9 @@ Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderControl
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
 
+    Route::apiResource('/workers', WorkerController::class);
+
+    Route::apiResource('/bookings', BookingController::class);
 
 
     Route::apiResource('/reviews', ReviewsController::class);
@@ -81,8 +83,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // ServiceSchedule
     Route::apiResource('/service-schedules', ServiceScheduleController::class);
 
-    // booking 
-    Route::apiResource('/bookings', BookingController::class);
 
     // service-offers
     Route::apiResource('/service-offers', ServiceOfferController::class);
@@ -90,7 +90,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // portfolio
     Route::apiResource('/service-provider-portfolios', ServiceProviderPortfolioController::class);
-
 });
 
 // user 

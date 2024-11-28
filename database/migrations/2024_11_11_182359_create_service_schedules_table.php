@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-    
+
         Schema::create('service_schedules', function (Blueprint $table) {
             $table->id();
-        $table->foreignId('worker')->references('id')->on('workers')->onDelete('cascade'); 
-            $table->foreignId('service_id')->references('id')->on('services')->onDelete('cascade'); 
+            $table->unsignedInteger('reference_id');
+            $table->foreignId('service_id')->references('id')->on('services')->onDelete('cascade');
             $table->datetime('start_date');
             $table->datetime('end_date');
-            $table->timestamps(); 
+            $table->timestamps();
             $table->softDeletes();
         });
-        
     }
 
     /**

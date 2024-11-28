@@ -23,6 +23,11 @@ class ServiceProvider extends Model implements HasMedia
         'rating',
     ];
 
+    protected $casts = [
+        'is_personal'  => 'boolean',
+        'rating' => 'float'
+    ];
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('photo')->singleFile()
