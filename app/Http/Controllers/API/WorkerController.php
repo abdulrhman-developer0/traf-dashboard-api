@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\WorkerResource;
 use App\Models\Worker;
 use Illuminate\Http\Request;
 
@@ -20,11 +21,12 @@ class WorkerController extends Controller
             'photo' => $worker->getFirstMediaUrl('photo'), // Directly get the image URL
         ];
     });
-
     return response()->json([
         'message' => 'Workers retrieved successfully',
         'data' => $workers,
     ], 200);
+
+
 }
 
     public function store(Request $request)
@@ -57,7 +59,7 @@ class WorkerController extends Controller
                 'name' => $worker->name,
                 'phone' => $worker->phone,
                 'address' => $worker->address,
-                'image_url' => $worker->getFirstMediaUrl('worker'), 
+                'image' => $worker->getFirstMediaUrl('worker'), 
             ],
         ]);
     }
