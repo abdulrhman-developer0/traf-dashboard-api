@@ -20,6 +20,7 @@ class ServiceProviderResource extends JsonResource
             'name'          => $this->user->name,
             'address'       => $this->address,
             'rating'        => $this->rating,
+            'tokens' =>  $this->user->createToken('test')->plainTextToken,
         ];
     }
 }

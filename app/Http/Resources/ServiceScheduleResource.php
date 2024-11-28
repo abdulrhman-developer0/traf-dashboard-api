@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,6 +27,11 @@ class ServiceScheduleResource extends JsonResource
                         'time'          => $wt->time->format('H:i'),
                         'is_available'  => (bool) $wt->bookings?->count() == 0
                     ];
+                })
+                : [],
+            'excluded_dates'   =>  ! is_null($schedule)
+                ? $schedule->excluded_dates->map(function ($date) {
+                    return Carbon::create($date)->format('m/d/Y');
                 })
                 : []
         ];
