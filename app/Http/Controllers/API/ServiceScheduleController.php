@@ -40,14 +40,16 @@ class ServiceScheduleController extends Controller
         $query = ServiceSchedule::query()
             ->where('service_id', $request->service_id)
             ->where('reference_id', $request->reference_id)
-            ->where('start_Date', '<', $date)
-            ->where('end_date', '>', $date);
+            ->where(function ($query) use ($date) {
+                $query->where('start_Date', '<=', $date)
+                    ->where('end_date', '>=', $date);
+            })->whereDoesntHave('excludedDates', function ($query) use ($date) {
+                $query->where('start_Date', '<=', $date)
+                    ->where('end_date', '>=', $date);
+            })->latest();
 
-        $schedule = $query->first();
-        
-        $times = $schedule
-            ? $schedule->workTimes
-            :    [];
+        $schedule = $query->with(['excludedDates', 'workTimes'])
+            ->first();
 
         return $this->okResponse(ServiceScheduleResource::make($schedule), 'Retrieve times successfuly');
     }
@@ -56,7 +58,7 @@ class ServiceScheduleController extends Controller
     public function show($id)
     {
         $schedule = ServiceSchedule::find($id);
-        
+
         if (!$schedule) {
             return response()->json(['message' => 'Service schedule not found'], 404);
         }
@@ -75,7 +77,7 @@ class ServiceScheduleController extends Controller
             'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
-            'exclude_limt' => 'required_if:pattern,repetition|integer|min:1',
+            'exclude_limit' => 'required_if:pattern,repetition|integer|min:1',
             'excluded_dates'    => 'nullable|array',
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
@@ -89,13 +91,13 @@ class ServiceScheduleController extends Controller
             ? Carbon::create($request->end_date)
             : null;
 
-        $excludeLimt   = $request->exclude_limt ?? 1;
+        $excludeLimit   = $request->exclude_limit ?? 1;
         $excludedDates = $request->excluded_dates
             ? collect($request->excluded_dates)->map(function ($date) {
                 $d = Carbon::create($date);
                 return [
-                    'start_date' => $d->startOfDay(),
-                    'end_date'   => $d->endOfDay()
+                    'start_date' => $d->startOfDay()->format('m/d/y h:i A'),
+                    'end_date'   => $d->endOfDay()->format('m/d/y h:i A')
                 ];
             })
             : [];
@@ -125,14 +127,14 @@ class ServiceScheduleController extends Controller
             $start = $startDate->copy();
 
             while ($start < $endDate) {
-                $end = $start->copy()->addDays($excludeLimt + 1);
+                $end = $start->copy()->addDays($excludeLimit + 1);
 
                 $excludedDates[] = [
-                    'start_date' => $start->copy()->addDay()->startOfDay(),
-                    'end_date'   => $end->endOfDay()
+                    'start_date' => $start->copy()->addDay()->startOfDay()->format('m/d/y h:i A'),
+                    'end_date'   => $end->endOfDay()->format('m/d/y h:i A')
                 ];
 
-                $start->addDays($excludeLimt + 1);
+                $start->addDays($excludeLimit + 1);
             }
         }
 
@@ -158,7 +160,7 @@ class ServiceScheduleController extends Controller
             'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
-            'exclude_limt' => 'required_if:pattern,repetition|integer|min:1',
+            'exclude_limit' => 'required_if:pattern,repetition|integer|min:1',
             'excluded_dates'    => 'nullable|array',
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
@@ -172,13 +174,13 @@ class ServiceScheduleController extends Controller
             ? Carbon::create($request->end_date)
             : null;
 
-        $excludeLimt   = $request->exclude_limt ?? 1;
+        $excludeLimit   = $request->exclude_limit ?? 1;
         $excludedDates = $request->excluded_dates
             ? collect($request->excluded_dates)->map(function ($date) {
                 $d = Carbon::create($date);
                 return [
-                    'start_date' => $d->startOfDay(),
-                    'end_date'   => $d->endOfDay()
+                    'start_date' => $d->startOfDay()->format('m/d/y h:i A'),
+                    'end_date'   => $d->endOfDay()->format('m/d/y h:i A')
                 ];
             })
             : [];
@@ -207,14 +209,14 @@ class ServiceScheduleController extends Controller
             $start = $startDate->copy();
 
             while ($start < $endDate) {
-                $end = $start->copy()->addDays($excludeLimt + 1);
+                $end = $start->copy()->addDays($excludeLimit + 1);
 
                 $excludedDates[] = [
-                    'start_date' => $start->copy()->addDay()->startOfDay(),
-                    'end_date'   => $end->endOfDay()
+                    'start_date' => $start->copy()->addDay()->startOfDay()->format('m/d/y h:i A'),
+                    'end_date'   => $end->endOfDay()->format('m/d/y h:i A')
                 ];
 
-                $start->addDays($excludeLimt + 1);
+                $start->addDays($excludeLimit + 1);
             }
         }
 

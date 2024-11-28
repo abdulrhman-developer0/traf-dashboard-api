@@ -26,7 +26,7 @@ class ServiceSchedule extends Model
 
     public function worker(): BelongsTo
     {
-        return $this->belongsTo(ServiceWorker::class);
+        return $this->belongsTo(Worker::class);
     }
 
     public function service(): BelongsTo
