@@ -53,9 +53,11 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
+        $serviceProvider = Auth::user()?->account();
+
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
-            'service_workers' => 'required|array|min:1',
+            'service_workers' => $serviceProvider->is_personal ? 'nullable' : 'required|array|min:1',
             'service_workers.*' => 'exists:workers,id',  // Ensure worker IDs exist in the workers table
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
@@ -66,7 +68,7 @@ class ServiceController extends Controller
             "photo"   => 'nullable|image|max:4096',
         ]);
 
-        $serviceProvider = Auth::user()->serviceProvider;
+        
         $is_offer = $request->price_after ? true : false;
 
         // Create the service
@@ -101,7 +103,7 @@ class ServiceController extends Controller
     {
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
-            'service_workers' => 'required|array',
+            'nullable|array|min:1',
             'service_workers.*' => 'exists:workers,id',  // Ensure worker IDs exist in the workers table
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
@@ -112,7 +114,7 @@ class ServiceController extends Controller
             "photo"   => 'nullable|image|max:4096',
         ]);
 
-        $serviceProvider = Auth::user()->serviceProvider;
+        $serviceProvider = Auth::user()?->account();
         $service         = $serviceProvider->services()->find($id);
 
         if (! $service) {
