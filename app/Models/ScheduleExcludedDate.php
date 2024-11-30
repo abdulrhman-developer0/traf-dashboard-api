@@ -11,10 +11,11 @@ class ScheduleExcludedDate extends Model
 
     protected $fillable = [
         'service_schedule_id',
-        'date'
+        'start_date',
+        'end_date'
     ];
 
     protected $casts = [
-        'date' => 'datetime'
-    ];
-}
+        'start_date'    => 'datetime',
+        'end_date'      => 'datetime',
+    ];}

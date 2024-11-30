@@ -30,8 +30,11 @@ class ServiceScheduleResource extends JsonResource
                 })
                 : [],
             'excluded_dates'   =>  ! is_null($schedule)
-                ? $schedule->excluded_dates->map(function ($date) {
-                    return Carbon::create($date)->format('m/d/Y');
+                ? $schedule->excludedDates->map(function ($excludedDate) {
+                    return [
+                        'start_date' => $excludedDate->start_date->format('m/d/Y h:i A'),
+                        'end_date'   => $excludedDate->end_date->format('m/d/Y h:i A')
+                    ];
                 })
                 : []
         ];
