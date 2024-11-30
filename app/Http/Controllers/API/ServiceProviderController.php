@@ -104,6 +104,7 @@ class ServiceProviderController extends Controller
             'name'          => $request->name,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
+            'account_type'  => 'service-provider',
         ]);
 
         // Create the serviceProvider associated with the user
