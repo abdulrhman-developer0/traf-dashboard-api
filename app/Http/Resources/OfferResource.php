@@ -14,24 +14,21 @@ class OfferResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $mediaUrl = null;
-
-        if ($this->type === 'poster') {
-            $mediaUrl = $this->getFirstMediaUrl('posters');
-        } elseif ($this->type === 'short_video') {
-            $mediaUrl = $this->getFirstMediaUrl('videos');
-        }
-
         return [
-            'id' => $this->id,
-            'service_id' => $this->service_id,
-            'service_provider_id' => $this->service_provider_id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'type' => $this->type,
-            'media_url' => $mediaUrl,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'id'                    => $this->id,
+            'service_id'            => $this->service_id,
+            'service_name'          => optional($this->service)->name,
+            'service_description'   => optional($this->service)->description,
+            'service_price'         => $this->service->is_offer
+                ? $this->service->price_after
+                : $this->service->price_before,
+
+            'title'                 => $this->title,
+            'description'           => $this->description,
+            'type'                  => $this->type,
+            'media_url'             => $this->getFirstMediaUrl('media_file'),
+            'created_at'            => $this->created_at?->format('m/d/Y h:i A'),
+            'updated_at'            => $this->updated_at?->format('m/d/Y h:i A'),
         ];
     }
 }

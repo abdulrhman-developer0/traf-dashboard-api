@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->foreignId('service_provider_id')->constrained('service_providers')->onDelete('cascade');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->enum('type',['poster','short_video'])->default('poster');

@@ -11,47 +11,57 @@ use Illuminate\Http\Request;
 class OfferController extends Controller
 {
     use APIResponses;
-    // get all offer
-    public function index(Request $request) {
-        $serviceId=$request->query('service_id');
-        $providerId=$request->query('serviceProviderId');
-        $offers=Offer::with('media')
-        ->when($serviceId,function($query,$serviceId) {
-            return $query->where('service_id',$serviceId);
-        })
-        ->when($providerId,function($query,$providerId) {
-             return $query->where('service_provider_id',$providerId);
-        })
-        ->get();
-        return OfferResource::collection($offers);
-    }
-    // get one 
-    public function show($Id) {
-   $offer= Offer::find($Id);
-   if(!$offer) {
-    return $this->badResponse([], 'Offer Not Found');
-   }
-   return new OfferResource($offer);
 
+    /**
+     * Retrieve all offers with optional filters.
+     */
+    public function index(Request $request)
+    {
+        $offers = Offer::with('media')
+            ->when($request->has('service_id'), function ($query) use ($request) {
+                $query->where('service_id', $request->query('service_id'));
+            })
+            ->when($request->has('provider_id'), function ($query) use ($request) {
+                $query->whereHas('service', fn ($q) => $q->where('service_provider_id', $request->query('provider_id')));
+            })
+            ->get();
+
+        return $this->okResponse(OfferResource::collection($offers), 'Offers retrieved successfully');
     }
 
-    // create offer
-    public function store(Request $request) {
-        $request->validate([
-        'service_id'=> 'required|exists:services,id',
-        'service_provider_id' => 'required|exists:service_providers,id',
-        'title' => 'nullable|string|max:255',
-        'description'=>'nullable|string',
-        'type' => 'required|in:poster,short_video',
-        'media' => 'required|file|mimes:jpg,jpeg,png,mp4,mov,avi|max:4500'
-        ]);
-        $offer=Offer::create($request->only(['service_id','service_provider_id','title','description','type']));
-        if($request->type === 'poster'){
-          $offer->addMedia($request->file('media'))->toMediaCollection('posters');
+    /**
+     * Retrieve a specific offer by ID.
+     */
+    public function show($id)
+    {
+        $offer = Offer::find($id);
+
+        if (!$offer) {
+            return $this->badResponse([], 'Offer Not Found');
         }
-        else if($request->type ==='short_video'){
-            $offer->addMedia($request->file('media'))->toMediaCollection('videos');
-          }
-        return new OfferResource($offer);
+
+        return $this->okResponse(OfferResource::make($offer), 'Offer retrieved successfully');
+    }
+
+    /**
+     * Create a new offer.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'service_id'    => 'required|exists:services,id',
+            'title'         => 'nullable|string|max:255',
+            'description'   => 'nullable|string',
+            'type'          => 'required|in:poster,short_video',
+            'media_file'    => 'required|file|mimes:jpg,jpeg,png,mp4,mov,avi|max:4500',
+        ]);
+
+        $offer = Offer::create(
+            $request->only(['service_id', 'title', 'description', 'type'])
+        );
+
+        $offer->addMedia($request->file('media_file'))->toMediaCollection('media_file');
+
+        return $this->createdResponse([], 'Offer created successfully', 201);
     }
 }

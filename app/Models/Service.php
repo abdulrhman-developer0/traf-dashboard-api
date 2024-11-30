@@ -26,7 +26,9 @@ class Service extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'rating' => 'float'
+        'rating'        => 'float',
+        'price_before'  => 'float',
+        'price_after'  => 'float',
     ];
 
     public function registerMediaCollections(): void

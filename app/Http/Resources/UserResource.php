@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'name'          => $this->name,
             'email'          => $this->email,
             'is_verfied'    => (bool) $this->code_verified,
-            'type'          => (bool) $this->client ? 'client' : 'service-provider',
+            'type'          => $this->account_type,
         ];
 
 
