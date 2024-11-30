@@ -54,6 +54,7 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $serviceProvider = Auth::user()?->account();
+        // dd($serviceProvider);
 
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
