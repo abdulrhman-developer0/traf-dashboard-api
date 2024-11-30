@@ -59,11 +59,11 @@ class ServiceSeeder extends Seeder
         }
     
         // // Creating additional services linked to service categories
-        foreach (ServiceCategory::get(['id'])->pluck('id') as $serviceCategoryId) {
-            Service::factory(30)->create([
-                'service_category_id' => $serviceCategoryId
-            ]);
-        }
+        // foreach (ServiceCategory::get(['id'])->pluck('id') as $serviceCategoryId) {
+        //     Service::factory(30)->create([
+        //         'service_category_id' => $serviceCategoryId
+        //     ]);
+        // }
     }
     
 }

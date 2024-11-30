@@ -67,6 +67,7 @@ class ServiceScheduleController extends Controller
 
     public function store(Request $request)
     {
+    
         $serviceProvider = FacadesAuth::user()->serviceProvider;
 
         $validated = $request->validate([
@@ -75,8 +76,8 @@ class ServiceScheduleController extends Controller
             'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
-            'exclude_limt' => 'required_if:pattern,repetition|integer|min:1',
-            'excluded_dates'    => 'nullable|array',
+            'exclude_limt' => 'required_if:pattern,repetition|integer|min:1', //if repetition
+            'excluded_dates'    => 'nullable|array',  //ma3da 
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
             'times.*'           => 'date_format:H:i',
@@ -97,12 +98,12 @@ class ServiceScheduleController extends Controller
                     'start_date' => $d->startOfDay(),
                     'end_date'   => $d->endOfDay()
                 ];
-            })
+            }) 
             : [];
 
         $times  = $times = collect($request->times)->map(
             fn($time) => ['time' => $time]
-        )->toArray();
+        )->toArray(); // convert time 
 
         $planDays = 90;
         $endDate = match ($pattern) {
@@ -123,15 +124,18 @@ class ServiceScheduleController extends Controller
 
         if ($pattern == 'repetition') {
             $start = $startDate->copy();
-
+            // Exclude Limit ==> every day,2days,week 
             while ($start < $endDate) {
+                // end of chunk 
                 $end = $start->copy()->addDays($excludeLimt + 1);
 
                 $excludedDates[] = [
+
+                    // if i start from 1 for every 2 days it will start from 2 and end at 3 day 
                     'start_date' => $start->copy()->addDay()->startOfDay(),
                     'end_date'   => $end->endOfDay()
                 ];
-
+                // start again from 4 day 
                 $start->addDays($excludeLimt + 1);
             }
         }

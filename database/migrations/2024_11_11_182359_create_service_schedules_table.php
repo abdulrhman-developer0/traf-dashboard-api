@@ -14,7 +14,7 @@ return new class extends Migration
 
         Schema::create('service_schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('reference_id');
+            $table->unsignedInteger('reference_id'); // worker or ma45l 
             $table->foreignId('service_id')->references('id')->on('services')->onDelete('cascade');
             $table->datetime('start_date');
             $table->datetime('end_date');
