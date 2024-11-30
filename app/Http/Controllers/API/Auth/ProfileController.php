@@ -15,7 +15,7 @@ class ProfileController extends Controller
     public function data(Request $request)
     {
         $user = $request->user();
-        dd($user->account());
+        dd($user->account(), $user->account_type);
 
 
         return $this->okResponse([
