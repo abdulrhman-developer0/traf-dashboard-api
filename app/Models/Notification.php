@@ -25,7 +25,7 @@ class Notification extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly($this->fillable);
+            ->logOnly($this->fillable);
     }
 
     public function user()

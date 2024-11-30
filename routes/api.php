@@ -10,6 +10,7 @@ use App\Http\Controllers\API\ChatMessagesController;
 use App\Http\Controllers\API\CityController;
 use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\FavoritController;
+use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\OfferController;
 use App\Http\Controllers\API\ReviewsController;
 use App\Http\Controllers\API\ServiceCategoryController;
@@ -53,6 +54,9 @@ Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderControl
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
 
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+
     Route::apiResource('/workers', WorkerController::class);
 
     Route::apiResource('/bookings', BookingController::class);
@@ -84,8 +88,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // ServiceSchedule
     Route::apiResource('/service-schedules', ServiceScheduleController::class);
 
-   //offers 
-   Route::apiResource('/offers',OfferController::class);
+    //offers 
+    Route::apiResource('/offers', OfferController::class);
 
     // service-offers
     Route::apiResource('/service-offers', ServiceOfferController::class);
