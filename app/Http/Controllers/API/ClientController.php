@@ -60,6 +60,7 @@ class ClientController extends Controller
             'name'          => $request->name,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
+            'account_type'  => 'client',
         ]);
 
         // Create the client associated with the user
