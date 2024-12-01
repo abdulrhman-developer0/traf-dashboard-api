@@ -18,6 +18,7 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $query    =  Service::query()
+            ->latest()
             ->withCount([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             ]);
@@ -65,11 +66,12 @@ class ServiceController extends Controller
             'description' => 'nullable|string',
             'price_before' => 'required|numeric',
             'price_after' => 'nullable|numeric',
-            'address' => 'nullable|string',
+            'is_home_service' => 'required|boolean',
+            'address' => 'required_if:is_home_service,false|string|max:500',
             "photo"   => 'nullable|image|max:4096',
         ]);
 
-        
+        $is_home_service = $request->has('is_home_service') ? true : false;
         $is_offer = $request->price_after ? true : false;
 
         // Create the service
@@ -82,6 +84,7 @@ class ServiceController extends Controller
             'price_before' => $validated['price_before'],
             'price_after' => $validated['price_after'] ?? null,
             'address' => $validated['address'] ?? '',
+            'is_home_service' => $is_home_service,
             'is_offer' => $is_offer,
             'photo'     => 'nullable|image|max:4096',
         ]);
@@ -111,6 +114,7 @@ class ServiceController extends Controller
             'description' => 'nullable|string',
             'price_before' => 'required|numeric',
             'price_after' => 'nullable|numeric',
+            'is_home_service' => 'boolean',
             'address' => 'nullable|string',
             "photo"   => 'nullable|image|max:4096',
         ]);
@@ -122,6 +126,7 @@ class ServiceController extends Controller
             return $this->badResponse([], "You not have a service with id $id");
         }
 
+        $is_home_service = $request->has('is_home_service') ? true : $service->is_home_service;
         $is_offer = $request->price_after ? true : false;
 
         $service->update([
@@ -131,6 +136,7 @@ class ServiceController extends Controller
             'description' => $validated['description'] ?? null,
             'price_before' => $validated['price_before'],
             'price_after' => $validated['price_after'] ?? null,
+            'is_home_service'   => $is_home_service,
             'address' => $validated['address'] ?? '',
             'is_offer' => $is_offer,
             'photo'     => 'nullable|image|max:4096',

@@ -21,7 +21,8 @@ return new class extends Migration
             $table->decimal('rating', 1, 1)->default(0.00);
             $table->decimal('price_before', 10, 2);
             $table->decimal('price_after', 10, 2)->nullable(); 
-            $table->text('address')->default('');
+            $table->text('address')->nullable();
+            $table->boolean('is_home_service')->default(false);
             $table->boolean('is_offer')->default(false);
             $table->timestamps();
         

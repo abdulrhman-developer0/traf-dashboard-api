@@ -22,13 +22,17 @@ class Service extends Model implements HasMedia
         'rating',
         'price_before',
         'price_after',
+        'address',
+        'is_home_service',
         'is_offer',
     ];
 
     protected $casts = [
-        'rating'        => 'float',
-        'price_before'  => 'float',
-        'price_after'  => 'float',
+        'rating'            => 'float',
+        'price_before'      => 'float',
+        'price_after'       => 'float',
+        'is_home_service'   => 'boolean',
+        'is_offer'          => 'boolean',
     ];
 
     public function registerMediaCollections(): void
