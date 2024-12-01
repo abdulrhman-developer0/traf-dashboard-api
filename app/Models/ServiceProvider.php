@@ -30,10 +30,7 @@ class ServiceProvider extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('photo')->singleFile()
-            ->useFallbackUrl(
-                asset('/logos/person-244.svg')
-            );
+        $this->addMediaCollection('photo')->singleFile();
 
         $this->addMediaCollection('maroof_document')->singleFile();
     }
