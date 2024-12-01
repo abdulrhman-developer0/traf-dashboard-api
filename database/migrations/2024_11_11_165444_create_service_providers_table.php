@@ -17,7 +17,7 @@ return new class extends Migration
             $table->boolean('is_personal')->default(true);
             $table->string('tax_registeration_number')->nullable();
             $table->unsignedInteger('city_id')->nullable();
-            $table->integer('years_of_experience')->default(0);
+            $table->string('job_title')->default('');
             $table->string('phone');
             $table->string('address')->nullable();
             $table->float('rating', 2, 1)->default(0.0);

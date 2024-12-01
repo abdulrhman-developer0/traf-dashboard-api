@@ -17,7 +17,7 @@ class ServiceProvider extends Model implements HasMedia
         'is_personal',
         'tax_registeration_number',
         'city_id',
-        'years_of_experience',
+        'job_title',
         'phone',
         'address',
         'rating',

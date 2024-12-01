@@ -34,7 +34,7 @@ class ProfileController extends Controller
             'service-provider'  => [
                 'phone'     => 'required|string|min:9|max:20',
                 'address'   => 'nullable|string|min:1|max:255',
-                'years_of_experience' => 'nullable|integer|between:1,100',
+                'job_title' => 'nullable|string|max:255',
             ],
             default             => []
         };
