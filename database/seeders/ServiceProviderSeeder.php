@@ -55,7 +55,7 @@ class ServiceProviderSeeder extends Seeder
                 'is_personal' => $provider['is_personal'],
                 'tax_registeration_number' => $provider['tax_registeration_number'],
                 'city_id' => $provider['city_id'],
-                'years_of_experience' => $provider['years_of_experience'],
+                'job_title' => $provider['job_title'],
                 'phone' => $provider['phone'],
                 'address' => $provider['address'],
                 'rating' => $provider['rating'],
