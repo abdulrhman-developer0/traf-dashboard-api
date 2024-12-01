@@ -20,7 +20,7 @@ class ServiceProviderSeeder extends Seeder
                 'is_personal' => true,
                 'tax_registeration_number' => '1234567890',
                 'city_id' => 301,
-                'years_of_experience' => 10,
+                'job_title' => 'فنان مكياج',
                 'phone' => '0501234567',
                 'address' => 'الرياض، حي الروضة',
                 'rating' => 4.9,
@@ -30,7 +30,7 @@ class ServiceProviderSeeder extends Seeder
                 'is_personal' => false,
                 'tax_registeration_number' => '1122334455',
                 'city_id' => 302,
-                'years_of_experience' => 8,
+                'job_title' => 'مصفف شعر',
                 'phone' => '0509876543',
                 'address' => 'جدة، حي الصفا',
                 'rating' => 4.6,
@@ -40,12 +40,13 @@ class ServiceProviderSeeder extends Seeder
                 'is_personal' => true,
                 'tax_registeration_number' => null,
                 'city_id' => 303,
-                'years_of_experience' => 12,
+                'job_title' => 'فني أظافر',
                 'phone' => '0561234321',
                 'address' => 'الدمام، حي الشاطئ',
                 'rating' => 4.7,
             ],
         ];
+        
 
         foreach ($serviceProviders as $provider) {
             // Insert service provider and get the ID of the inserted record
