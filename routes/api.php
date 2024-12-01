@@ -38,9 +38,11 @@ Route::prefix('auth')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
 
-        Route::post('/change-password', [ProfileController::class, 'changePassword']);
-
         Route::get('/profile', [ProfileController::class, 'data']);
+
+        Route::put('/profile/update', [ProfileController::class, 'data']);
+
+        Route::patch('/change-password', [ProfileController::class, 'changePassword']);
     });
 });
 
@@ -55,7 +57,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::patch('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
 
     Route::apiResource('/workers', WorkerController::class);
 

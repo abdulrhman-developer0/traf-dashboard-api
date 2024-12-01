@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
@@ -20,6 +21,17 @@ class ProfileController extends Controller
         return $this->okResponse([
             'user' => UserResource::make($user)
         ], 'Retrieved Profile Successfuly');
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate(
+            
+        );
+
+        $user    = Auth::user();
+        $account = $user->account();
+        dd($account->fillable);
     }
 
 

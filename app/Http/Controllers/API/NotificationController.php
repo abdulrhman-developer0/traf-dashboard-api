@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
+use App\Notifications\ReminderNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -13,9 +14,12 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        $notifications = Notification::where('user_id', $request->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $user = Auth::user();
+
+        $user->notifications()->delete();
+        for ($i = 0; $i < 20; $i += 1) {
+            $user->notify(new ReminderNotification);
+        }
 
         return response()->json(['data' => $notifications], 200);
     }

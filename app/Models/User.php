@@ -69,14 +69,14 @@ class User extends Authenticatable implements HasMedia, HasAccounts
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['name', 'email']);
+            ->logOnly(['name', 'email']);
     }
 
 
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
+    // public function notifications()
+    // {
+    //     return $this->hasMany(Notification::class);
+    // }
 
     public function generateCode()
     {
@@ -86,7 +86,7 @@ class User extends Authenticatable implements HasMedia, HasAccounts
             $this->code = random_int(10000, 99999);
         } while (User::where('code', $this->code)->exists()); // Ensure the code is unique
         $this->expire_at = now()->addMinutes(20);
-        
+
         $this->save();
     }
 }
