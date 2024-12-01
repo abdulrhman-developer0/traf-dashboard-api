@@ -42,7 +42,7 @@ Route::prefix('auth')->group(function () {
         Route::put('/profile', [ProfileController::class, 'update']);
         Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
 
-        Route::patch('/change-password', [ProfileController::class, 'changePassword']);
+        Route::patch('/profile/change-password', [ProfileController::class, 'changePassword']);
     });
 });
 
