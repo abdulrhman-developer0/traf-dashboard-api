@@ -97,7 +97,9 @@ class ServiceController extends Controller
                 ->toMediaCollection('photo');
         }
 
-        return $this->createdResponse([], 'Service created successfully');
+        return $this->createdResponse([
+            'service_id' => $service->id,
+        ], 'Service created successfully');
     }
 
 
