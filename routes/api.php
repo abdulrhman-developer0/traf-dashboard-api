@@ -39,8 +39,8 @@ Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
 
         Route::get('/profile', [ProfileController::class, 'data']);
-
-        Route::put('/profile/update', [ProfileController::class, 'data']);
+        Route::put('/profile', [ProfileController::class, 'update']);
+        Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
 
         Route::patch('/change-password', [ProfileController::class, 'changePassword']);
     });

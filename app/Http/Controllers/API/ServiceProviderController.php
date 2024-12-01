@@ -179,6 +179,8 @@ class ServiceProviderController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        return; // disabled this action.
+
         $serviceProvider = ServiceProvider::find($id);
 
         if (! $serviceProvider) {

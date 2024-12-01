@@ -129,6 +129,8 @@ class ClientController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        return; // disabled this action.
+        
         $client = Client::find($id);
 
         if (! $client) {

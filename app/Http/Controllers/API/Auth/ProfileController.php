@@ -8,6 +8,7 @@ use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class ProfileController extends Controller
 {
@@ -18,20 +19,58 @@ class ProfileController extends Controller
         $user = $request->user();
 
 
-        return $this->okResponse([
-            'user' => UserResource::make($user)
-        ], 'Retrieved Profile Successfuly');
+        return $this->okResponse(UserResource::make($user), 'Retrieved Profile Successfuly');
     }
 
     public function update(Request $request)
     {
-        $request->validate(
-            
-        );
-
         $user    = Auth::user();
+
+        $dynmicRules = match ($user->account_type) {
+            'client'            => [
+                'phone'     => 'required|string|min:9|max:20',
+                'address'   => 'nullable|string|min:1|max:255',
+            ],
+            'service-provider'  => [
+                'phone'     => 'required|string|min:9|max:20',
+                'address'   => 'nullable|string|min:1|max:255',
+                'years_of_experience' => 'nullable|integer|between:1,100',
+            ],
+            default             => []
+        };
+
+        $validated = $request->validate([
+            'name'      => 'required|string|min:1|max:255',
+            'city_id'   => 'required|integer|exists:cities,id',
+            ...$dynmicRules
+        ]);
+
+        $user->fill($request->only(['name']));
+
         $account = $user->account();
-        dd($account->fillable);
+        $accountData = collect($validated)
+            ->except(['name'])
+            ->only($account?->getFillable() ?? [])
+            ->toArray();
+
+
+        $account?->fill($accountData)->save();
+
+        return $this->okResponse(UserResource::make($user), 'Updated profile data successfuly');
+    }
+
+    public function changePhoto(Request $request)
+    {
+        $request->validate([
+            'photo'     => 'required|image|max:4096',
+        ]);
+
+        $account = Auth::user()?->account();
+
+        $account?->addMedia($request->file('photo'))
+            ->toMediaCollection('photo');
+
+        return $this->okResponse([], 'Profile photo changed successfuly');
     }
 
 
