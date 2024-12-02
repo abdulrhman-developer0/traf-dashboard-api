@@ -15,7 +15,7 @@ trait IntractsWithAccount
     {
         $accountTypes = $this->accountTypes();
 
-
+        
         if (! $this->account_type || !in_array($this->account_type, array_keys($accountTypes) )) {
             return null;
         }

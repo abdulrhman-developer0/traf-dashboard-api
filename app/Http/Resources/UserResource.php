@@ -15,25 +15,18 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
 
-        $data = [
-            'name'          => $this->name,
-            'email'          => $this->email,
-            'is_verfied'    => (bool) $this->code_verified,
-            'type'          => $this->account_type,
-        ];
-
-
         $account = $this->account();
-        dd($account, $this->resource->toArray());
+        $data    = $account->toArray() ?? [];
 
-        $array = $account ? $account->toArray() : [];
-        $data = array_merge($data, $array);
-        $data['photo'] = $account->getFirstMediaUrl('photo');
 
-        if ( $account->is_personal ) {
-            $data['maroof_document'] = $account->getFirstMediaUrl('maroof_document');
-        }
-
-        return $data;
+        return [
+            'name'              => $this->name,
+            'email'             => $this->email,
+            'is_verfied'        => (bool) $this->code_verified,
+            'type'              => $this->account_type,
+            'photo'             => $account->getFirstMediaUrl('photo'),
+            ...$data,
+            'maroof_document'   => $account->getFirstMediaUrl('maroof_document'),
+        ];
     }
 }
