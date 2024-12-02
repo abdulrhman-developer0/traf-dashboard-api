@@ -78,7 +78,7 @@ class ServiceScheduleController extends Controller
             'pattern'           => 'required|in:one-time,daily,repetition,manual',
             'start_date'        => 'required|date',
             'end_date'          => 'required_if:pattern,manual|date|after_or_equal:start_date',
-            'exclude_limt' => 'required_if:pattern,repetition|integer|min:1', //if repetition
+            'exclude_limit' => 'required_if:pattern,repetition|integer|min:1', //if repetition
             'excluded_dates'    => 'nullable|array',  //ma3da 
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
