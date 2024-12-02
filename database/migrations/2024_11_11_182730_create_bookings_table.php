@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('service_id')->references('id')->on('services')->onDelete('cascade');
             $table->unsignedInteger('reference_id');
             $table->datetime('date');
-            $table->enum('status', ['pending', 'paid', 'canceled', 'done'])->default('pending');  
+            $table->enum('status',['pending', 'canceled', 'confirmed', 'done'])->default('pending');  
             $table->timestamps();  
         });
     }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReviewResource;
+use App\Models\Booking;
 use App\Models\Review;
 use App\Models\User;
 use App\Traits\APIResponses;
+use Illuminate\Container\Attributes\Auth as AttributesAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,21 +19,32 @@ class ReviewsController extends Controller
     public function store(Request $request)
     {
         $reviewData = $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
+            'booking_id' => 'required|integer|exists:bookings,id',
             'rating'  => 'required|integer|between:1,5',
-            'comment' => 'required|string|min:1|max:500',
+            'comment' => 'nullable|string|min:1|max:500',
         ]);
 
-        $user = User::find($request->user_id);
-        if (! $user ) {
-            return $this->badResponse([], "No User With id '{$id}'");
+        $booking    = Booking::find($request->booking_id);
+
+
+        $user       = Auth::user();
+        $account    = $user->account();
+
+        if (
+            $booking->client_id != $account?->id || $booking->service->service_provider_id != $account?->id
+        ) {
+            return $this->badResponse([], "You not have a booking with id {$request->booking_id}");
         }
 
-        $reviewable = $user->client ?? $user->serviceProvider;
-        $reviewable->reviews()->create($reviewData);
+        $booking->reviews()->create($reviewData);
 
-        $reviewable->rating = $reviewable->reviews()->avg('rating');
-        $reviewable->save();
+        $account->update([
+            'rating'  => $account->reviews()->avg('rating')
+        ]);
+
+        $booking->service->update([
+            'rating'  => $booking->service->reviews()->avg('rating')
+        ]);
 
 
         return $this->createdResponse([], 'Review created successfuly');;

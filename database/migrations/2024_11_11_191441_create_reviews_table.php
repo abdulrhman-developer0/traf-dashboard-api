@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->morphs('reviewable'); // -- reviewable_type, reviewable_id
-            $table->text('comment')->nullable();
             $table->integer('rating')->default(0);
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

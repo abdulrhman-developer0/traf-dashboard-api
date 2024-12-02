@@ -23,14 +23,15 @@ class UserResource extends JsonResource
         ];
 
 
-        $model = $this->client ?? $this->serviceProvider;
+        $account = $this->account();
+        dd($account, $this->resource->toArray());
 
-        $array = $model ? $model->toArray() : [];
+        $array = $account ? $account->toArray() : [];
         $data = array_merge($data, $array);
-        $data['photo'] = $model->getFirstMediaUrl('photo');
+        $data['photo'] = $account->getFirstMediaUrl('photo');
 
-        if ( $model->is_personal ) {
-            $data['maroof_document'] = $model->getFirstMediaUrl('maroof_document');
+        if ( $account->is_personal ) {
+            $data['maroof_document'] = $account->getFirstMediaUrl('maroof_document');
         }
 
         return $data;
