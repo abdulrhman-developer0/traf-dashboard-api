@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,6 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(PermissionsGroupsSeeder::class);
         $this->call(UsersSeeder::class);
+
+
+        // production seeders
+        $this->call(PackagesSeeder::class);
 
         $this->call(CitySeeder::class);
         $this->call(ClientSeeder::class);

@@ -12,6 +12,7 @@ use App\Http\Controllers\API\ClientController;
 use App\Http\Controllers\API\FavoritController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\OfferController;
+use App\Http\Controllers\API\PackageController;
 use App\Http\Controllers\API\ReviewsController;
 use App\Http\Controllers\API\ServiceCategoryController;
 use App\Http\Controllers\API\ServiceController;
@@ -48,6 +49,7 @@ Route::prefix('auth')->group(function () {
 
 Route::apiResource('/clients', ClientController::class);
 
+
 Route::apiResource('/service-providers', ServiceProviderController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
 
@@ -55,6 +57,8 @@ Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderControl
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
+
+    Route::get('/packages', PackageController::class)->middleware(['account:service-provider']);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::patch('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);

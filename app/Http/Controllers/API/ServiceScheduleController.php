@@ -129,7 +129,7 @@ class ServiceScheduleController extends Controller
             // Exclude Limit ==> every day,2days,week 
             while ($start < $endDate) {
                 // end of chunk 
-                $end = $start->copy()->addDays($excludeLimهt + 1);
+                $end = $start->copy()->addDays($excludeLimit + 1);
 
                 $excludedDates[] = [
 
@@ -138,7 +138,7 @@ class ServiceScheduleController extends Controller
                     'end_date'   => $end->endOfDay()
                 ];
                 // start again from 4 day 
-                $start->addDays($excludeLimهt + 1);
+                $start->addDays($excludeLimit + 1);
             }
         }
 
