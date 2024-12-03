@@ -67,7 +67,9 @@ class BookingController extends Controller
         $booking = Booking::create($validated);
 
 
-        return $this->createdResponse([], 'Booking created successfully');
+        return $this->createdResponse([
+            'booking_id' => $booking->id,
+        ], 'Booking created successfully');
     }
 
     public function update(Request $request, $id)

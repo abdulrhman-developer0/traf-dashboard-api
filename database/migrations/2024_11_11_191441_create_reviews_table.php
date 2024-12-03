@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('booking_id')->references('id')->on('bookings')->onDelete('cascade');
             $table->morphs('reviewable'); // -- reviewable_type, reviewable_id
             $table->integer('rating')->default(0);
             $table->text('comment')->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Booking extends Model
 {
@@ -36,11 +37,5 @@ class Booking extends Model
     public function worker(): BelongsTo
     {
         return $this->belongsTo(Worker::class);
-    }
-
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
     }
 }

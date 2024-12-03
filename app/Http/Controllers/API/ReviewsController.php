@@ -8,13 +8,43 @@ use App\Models\Booking;
 use App\Models\Review;
 use App\Models\User;
 use App\Traits\APIResponses;
-use Illuminate\Container\Attributes\Auth as AttributesAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ReviewsController extends Controller
 {
     use APIResponses;
+
+    public function index(Request $request)
+    {
+        $query = Review::query()
+            ->latest()
+            ->when($request->has('limit'), function ($q) use ($request) {
+                $q->limit(
+                    $request->query('limit', 20)
+                );
+            })->when($request->has('booking_id'), function ($q) use ($request) {
+                $q->where('booking_id', $request->query('booking_id'));
+            })->when($request->has('service_id'), function ($q) use ($request) {
+                $q->whereHas(
+                    'booking',
+                    fn($q) => $q->where('service_id', $request->query('service_id'))
+                );
+            })->when($request->has('provider_id'), function ($q) use ($request) {
+                $q->whereHas(
+                    'booking.service',
+                    fn($q) => $q->where('service_provider_id', $request->query('provider_id'))
+                );
+            });
+
+
+
+
+        $reviews = $query->get();
+
+
+        return $this->okResponse(ReviewResource::collection($reviews), 'Reviews retrieved successfuly');
+    }
 
     public function store(Request $request)
     {
@@ -31,19 +61,29 @@ class ReviewsController extends Controller
         $account    = $user->account();
 
         if (
-            $booking->client_id != $account?->id || $booking->service->service_provider_id != $account?->id
+            $booking->client_id != $account?->id && $booking->service->service_provider_id != $account?->id
         ) {
             return $this->badResponse([], "You not have a booking with id {$request->booking_id}");
         }
 
-        $booking->reviews()->create($reviewData);
 
-        $account->update([
+        $ratable = match ($user->account_type) {
+            'client'            => $booking->service->serviceProvider,
+            'service-provider'  => $booking->client,
+            default             => null
+        };
+
+        $ratable->reviews()->create($reviewData);
+
+        $ratable->update([
             'rating'  => $account->reviews()->avg('rating')
         ]);
 
         $booking->service->update([
-            'rating'  => $booking->service->reviews()->avg('rating')
+            'rating'  => Review::whereHas(
+                'booking',
+                fn($q) => $q->where('service_id', $booking->service_id)
+            )->avg('rating')
         ]);
 
 
@@ -66,6 +106,7 @@ class ReviewsController extends Controller
 
     public function update(Request $request, string $id)
     {
+        return; // disabled this action
         $review = Review::find($id);
 
         if (! $review) {
