@@ -33,7 +33,6 @@ class ClientSeeder extends Seeder
         foreach ($clients as $client) {
             DB::table('clients')->insert([
                 'user_id' => $client['user_id'],
-                'city_id' => $client['city_id'],
                 'phone' => $client['phone'],
                 'address' => $client['address'],
                 'rating' => $client['rating'],
