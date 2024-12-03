@@ -17,7 +17,6 @@ class ServiceProvider extends Model implements HasMedia
         'user_id',
         'is_personal',
         'tax_registeration_number',
-        'city_id',
         'job_title',
         'phone',
         'address',
@@ -40,11 +39,6 @@ class ServiceProvider extends Model implements HasMedia
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
     }
 
     public function services(): HasMany

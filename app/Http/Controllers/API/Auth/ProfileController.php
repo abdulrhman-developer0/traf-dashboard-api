@@ -41,7 +41,6 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'name'      => 'required|string|min:1|max:255',
-            'city_id'   => 'required|integer|exists:cities,id',
             ...$dynmicRules
         ]);
 

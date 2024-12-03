@@ -15,7 +15,6 @@ class Client extends Model implements HasMedia
 
     protected $fillable = [
         'user_id',
-        'city_id',
         'phone',
         'address',
         'rating',
@@ -34,12 +33,6 @@ class Client extends Model implements HasMedia
     {
         return $this->belongsTo(User::class);
     }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
-
 
     public function favoritServices(): BelongsToMany
     {

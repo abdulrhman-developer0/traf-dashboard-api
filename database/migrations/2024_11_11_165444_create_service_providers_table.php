@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('is_personal')->default(true);
             $table->string('tax_registeration_number')->nullable();
-            $table->unsignedInteger('city_id')->nullable();
             $table->string('job_title')->default('');
             $table->string('phone');
             $table->string('address')->nullable();
