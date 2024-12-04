@@ -44,7 +44,7 @@ class ProfileController extends Controller
             ...$dynmicRules
         ]);
 
-        $user->fill($request->only(['name']));
+        $user->fill($request->only(['name']))->save();
 
         $account = $user->account();
         $accountData = collect($validated)
