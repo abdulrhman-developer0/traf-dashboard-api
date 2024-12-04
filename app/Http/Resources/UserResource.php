@@ -32,6 +32,7 @@ class UserResource extends JsonResource
             'city'              => $account->city,
             'tax_registeration_number'  => $account->tax_registeration_number,
             'maroof_document'   => $account->getFirstMediaUrl('maroof_document'),
+            'rating'            => $account->rating,
         ];
     }
 }
