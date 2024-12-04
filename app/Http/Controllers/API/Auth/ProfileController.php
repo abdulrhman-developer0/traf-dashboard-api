@@ -41,7 +41,7 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'name'      => 'required|string|min:1|max:255',
-            'photo'     => 'required|image|max:4096',
+            'photo'     => 'nullable|image|max:4096',
             'area'      => 'nullable|string|min:1|max:255',
             'city' => 'nullable|string|min:1|max:255',
             ...$dynmicRules
