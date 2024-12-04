@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->float('rating', 2, 1)->default(0.0);
             $table->string('area')->nullable();
-            $table->string('governorate')->nullable();
+            $table->string('city')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -34,15 +34,16 @@ class ProfileController extends Controller
             'service-provider'  => [
                 'phone'     => 'required|string|min:9|max:20',
                 'address'   => 'nullable|string|min:1|max:255',
-                'job_title' => 'nullable|string|max:255',
+                'job' => 'nullable|string|max:255',
             ],
             default             => []
         };
 
         $validated = $request->validate([
             'name'      => 'required|string|min:1|max:255',
+            'photo'     => 'required|image|max:4096',
             'area'      => 'nullable|string|min:1|max:255',
-            'governorate' => 'nullable|string|min:1|max:255',
+            'city' => 'nullable|string|min:1|max:255',
             ...$dynmicRules
         ]);
 
@@ -55,6 +56,11 @@ class ProfileController extends Controller
             ->toArray();
 
         $account?->fill($accountData)->save();
+
+        if ($request->hasFile('photo')) {
+            $account?->addMedia($request->file('photo'))
+                ->toMediaCollection('photo');
+        }
 
         return $this->okResponse(UserResource::make($user), 'Updated profile data successfuly');
     }

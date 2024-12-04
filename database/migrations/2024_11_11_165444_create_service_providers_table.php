@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('is_personal')->default(true);
             $table->string('tax_registeration_number')->nullable();
-            $table->string('job_title')->default('');
+            $table->string('job')->default('');
             $table->string('phone');
             $table->string('address')->nullable();
             $table->float('rating', 2, 1)->default(0.0);
             $table->string('area')->nullable();
-            $table->string('governorate')->nullable();
+            $table->string('city')->nullable();
             $table->timestamps();
         });
     }

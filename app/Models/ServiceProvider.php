@@ -17,12 +17,12 @@ class ServiceProvider extends Model implements HasMedia
         'user_id',
         'is_personal',
         'tax_registeration_number',
-        'job_title',
+        'job',
         'phone',
         'address',
         'rating',
         'area',
-        'governorate',
+        'city',
     ];
 
     protected $casts = [

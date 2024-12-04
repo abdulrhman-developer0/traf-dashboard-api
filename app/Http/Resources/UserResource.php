@@ -16,16 +16,21 @@ class UserResource extends JsonResource
     {
 
         $account = $this->account();
-        $data    = $account->toArray() ?? [];
 
 
         return [
+            'is_verfied'        => (bool) $this->code_verified,
+            'is_personal'       => (bool) $account->is_personal,
+            'account_id'        => $account->id,
+            'type'              => $this->account_type,
             'name'              => $this->name,
             'email'             => $this->email,
-            'is_verfied'        => (bool) $this->code_verified,
-            'type'              => $this->account_type,
             'photo'             => $account->getFirstMediaUrl('photo'),
-            ...$data,
+            'phone'             => $account->phone,
+            'address'           => $account->address,
+            'area'              => $account->area,
+            'city'              => $account->city,
+            'tax_registeration_number'  => $account->tax_registeration_number,
             'maroof_document'   => $account->getFirstMediaUrl('maroof_document'),
         ];
     }

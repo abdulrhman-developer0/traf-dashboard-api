@@ -19,7 +19,7 @@ class Client extends Model implements HasMedia
         'address',
         'rating',
         'area',
-        'governorate',
+        'city',
     ];
 
     protected $casts = [
