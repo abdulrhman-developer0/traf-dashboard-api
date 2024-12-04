@@ -23,6 +23,7 @@ use App\Http\Controllers\API\ServiceScheduleController;
 use App\Http\Controllers\API\WorkerController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\API\SubscriptionController;
 
 use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
@@ -52,7 +53,6 @@ Route::apiResource('/clients', ClientController::class);
 
 Route::apiResource('/service-providers', ServiceProviderController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
-
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -103,7 +103,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // portfolio
     Route::apiResource('/service-provider-portfolios', ServiceProviderPortfolioController::class);
+
+    // Subscription routes
+    Route::post('/subscriptions', [SubscriptionController::class, 'subscribe'])
+        ->middleware(['account:service-provider']);
 });
+
+// PayMob webhook
+Route::post('/webhooks/paymob', [SubscriptionController::class, 'handlePaymentWebhook']);
 
 // user 
 

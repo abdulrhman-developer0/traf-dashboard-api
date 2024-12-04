@@ -41,6 +41,8 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'name'      => 'required|string|min:1|max:255',
+            'area'      => 'nullable|string|min:1|max:255',
+            'governorate' => 'nullable|string|min:1|max:255',
             ...$dynmicRules
         ]);
 
@@ -51,7 +53,6 @@ class ProfileController extends Controller
             ->except(['name'])
             ->only($account?->getFillable() ?? [])
             ->toArray();
-
 
         $account?->fill($accountData)->save();
 
