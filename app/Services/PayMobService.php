@@ -41,11 +41,9 @@ class PayMobService
             $orderResponse = Http::withToken($authToken)
                 ->post($this->baseUrl . '/ecommerce/orders', [
                     'amount_cents' => $data['amount'],
-                    'currency' => $data['currency'],
-                    'delivery_needed' => false,
-                    'merchant_order_id' => $data['order_id'],
-                    'items' => $data['items']
+                    'merchant_order_id' => $data['order_id']
                 ])->throw()->json();
+
 
             // Step 3: Payment Key Request
             $paymentKeyResponse = Http::withToken($authToken)
@@ -55,28 +53,26 @@ class PayMobService
                     'order_id' => $orderResponse['id'],
                     'billing_data' => [
                         'first_name' => $data['customer']['first_name'],
+                        'last_name'   => $data['customer']['first_name'],
                         'email' => $data['customer']['email'],
                         'phone_number' => $data['customer']['phone'],
-                        'apartment' => 'NA',
-                        'floor' => 'NA',
-                        'street' => 'NA',
-                        'building' => 'NA',
-                        'shipping_method' => 'NA',
-                        'postal_code' => 'NA',
-                        'city' => 'NA',
-                        'country' => 'NA',
-                        'state' => 'NA'
+                        'country'   => "NA",
+                        'city'      => "NA",
+                        'floor'     => "NA",
+                        'apartment' => "NA",
+                        'street'    => "NA",
+                        'building'  => "NA"
                     ],
-                    'currency' => $data['currency'],
+                    'currency'      => $data['currency'],
                     'integration_id' => $this->integrationId,
                     'lock_order_when_paid' => true
                 ])->throw()->json();
 
             return [
                 'id' => $orderResponse['id'],
-                'payment_url' => "https://accept.paymob.com/iframe/" . $paymentKeyResponse['token']
+                'payment_url' => "https://accept.paymob.com/iframe/" . $paymentKeyResponse['token'],
+                'token'       => $paymentKeyResponse['token']
             ];
-
         } catch (\Exception $e) {
             Log::error('PayMob API Error: ' . $e->getMessage());
             throw $e;
@@ -99,7 +95,7 @@ class PayMobService
         return [
             'success' => $data['success'] === 'true',
             'order_id' => $data['order'],
-            'transaction_id' => $data['transaction_id'],
+            'transaction_id' => $data['id'],
             'amount_cents' => $data['amount_cents']
         ];
     }
@@ -112,26 +108,26 @@ class PayMobService
      */
     protected function calculateHmac($data)
     {
-        $concatenatedString = $data['amount_cents'] . 
-                            $data['created_at'] . 
-                            $data['currency'] . 
-                            $data['error_occured'] . 
-                            $data['has_parent_transaction'] . 
-                            $data['id'] . 
-                            $data['integration_id'] . 
-                            $data['is_3d_secure'] . 
-                            $data['is_auth'] . 
-                            $data['is_capture'] . 
-                            $data['is_refunded'] . 
-                            $data['is_standalone_payment'] . 
-                            $data['is_voided'] . 
-                            $data['order'] . 
-                            $data['owner'] . 
-                            $data['pending'] . 
-                            $data['source_data_pan'] . 
-                            $data['source_data_sub_type'] . 
-                            $data['source_data_type'] . 
-                            $data['success'];
+        $concatenatedString = $data['amount_cents'] .
+            $data['created_at'] .
+            $data['currency'] .
+            $data['error_occured'] .
+            $data['has_parent_transaction'] .
+            $data['id'] .
+            $data['integration_id'] .
+            $data['is_3d_secure'] .
+            $data['is_auth'] .
+            $data['is_capture'] .
+            $data['is_refunded'] .
+            $data['is_standalone_payment'] .
+            $data['is_voided'] .
+            $data['order'] .
+            $data['owner'] .
+            $data['pending'] .
+            $data['source_data_pan'] .
+            $data['source_data_sub_type'] .
+            $data['source_data_type'] .
+            $data['success'];
 
         return hash_hmac('sha512', $concatenatedString, $this->hmacSecret);
     }

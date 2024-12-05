@@ -55,7 +55,7 @@ class SubscriptionController extends Controller
 
             $paymentResponse = $this->payMobService->createPaymentOrder([
                 'amount' => $package->price * 100, // Amount in cents
-                'currency' => 'SAR',
+                'currency' => 'EGP',
                 'order_id' => $subscription->id,
                 'items' => [[
                     'name' => $package->name,
@@ -105,6 +105,7 @@ class SubscriptionController extends Controller
 
             if ($paymentData['success']) {
                 $package = $subscription->package;
+                return $subscription;
 
                 $subscription->update([
                     'status' => 'active',

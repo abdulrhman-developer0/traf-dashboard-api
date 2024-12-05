@@ -111,6 +111,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // PayMob webhook
 Route::post('/webhooks/paymob', [SubscriptionController::class, 'handlePaymentWebhook']);
+// Paymob callback.
+Route::get('/callbacks/paymob', [SubscriptionController::class, 'handlePaymentWebhook']);
 
 // user 
 
