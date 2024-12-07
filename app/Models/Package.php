@@ -14,4 +14,8 @@ class Package extends Model
         'price',
         'duration_in_days',
     ];
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }
