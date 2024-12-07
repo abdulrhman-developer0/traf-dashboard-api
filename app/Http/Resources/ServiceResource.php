@@ -20,6 +20,7 @@ class ServiceResource extends JsonResource
             'service_category_id'               => $this->service_category_id,
             'category_name'                     => $this->category?->name,
             'service_provider_id'               => $this->service_provider_id,
+            'user_id'                           => $this->serviceProvider?->user?->id,
             'provider_name'                     => $this->serviceProvider?->user?->name,
             'name'                              => $this->name,
             'photo'                             => $this->getFirstMediaUrl('photo'),
