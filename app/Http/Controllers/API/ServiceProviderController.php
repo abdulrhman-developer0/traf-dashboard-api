@@ -21,6 +21,8 @@ class ServiceProviderController extends Controller
     public function __construct()
     {
         $this->middleware(['auth:sanctum'])->except(['store']);
+
+        // $this->middleware('account:admin')->except(['update', 'destroy']);
     }
 
     /**
@@ -33,12 +35,31 @@ class ServiceProviderController extends Controller
         if ($request->has('search')) {
             $query->whereHas(
                 'user',
-                fn($q) => $q->where('name', 'like', "%{$request->search}%")
-            );
+                fn($q) => $q->where('name', 'like', "$request->search%")->orWhere('name', 'regexp', "[$request->search]")
+            )->orWhereHas('services', function ($q) use ($request) {
+                $q->where('name', 'like', "$request->search%")
+                    ->orWhere('name', 'regexp', "[$request->search]")
+                    ->orWhereHas(
+                        'category',
+                        fn($q) => $q->where('name', 'like', "$request->search%")
+                            ->orWhere('name', 'regexp', "[$request->search]")
+                    );
+            });
         }
 
         if ($request->has('category_id')) {
             $query->whereHas('services.category', fn($q) => $q->whereId($request->category_id));
+        }
+
+        if ($request->has('pricing')) {
+
+            //
+            $priceing = explode('-', trim($request->pricing, '-\s'));
+            dd($priceing);
+        }
+
+        if ($request->has('rating')) {
+            $query->where('rating', 'like', "%$request->rating");
         }
 
 
@@ -47,10 +68,13 @@ class ServiceProviderController extends Controller
         $serviceProviders = $query->get(['id', 'user_id', 'rating']);
 
         // Return response with serviceProviders data
-        return $this->okResponse(
-            ServiceProviderResource::collection($serviceProviders),
-            'Retrieved ServiceProviders Data'
-        );
+        return $this->okResponse([
+            'provider_ids'  => match ($request->has('search')) {
+                true    => $serviceProviders->pluck('id')->join(','),
+                false   => "",
+            },
+            'items'         => ServiceProviderResource::collection($serviceProviders),
+        ], 'Retrieved ServiceProviders Data');
     }
 
     /**

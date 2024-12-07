@@ -16,11 +16,12 @@ class ServiceProviderResource extends JsonResource
     {
         return [
             'id'            => $this->id,
+            // 'user_id'       => $this->user->id,
             'photo'         => $this->getFirstMediaUrl('photo'),
             'name'          => $this->user->name,
             'address'       => $this->address,
             'rating'        => $this->rating,
-            
+
         ];
     }
 }
