@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class ChatController extends Controller
 {
     //
+    ////
   
     public function index()
     {
