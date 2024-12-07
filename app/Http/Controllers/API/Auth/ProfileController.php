@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,18 @@ class ProfileController extends Controller
     public function data(Request $request)
     {
         $user = $request->user();
+
+
+        return $this->okResponse(UserResource::make($user), 'Retrieved Profile Successfuly');
+    }
+
+    public function dataFor(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (! $user) {
+            return $this->badResponse([], "No User With id '{$id}'");
+        }
 
 
         return $this->okResponse(UserResource::make($user), 'Retrieved Profile Successfuly');
