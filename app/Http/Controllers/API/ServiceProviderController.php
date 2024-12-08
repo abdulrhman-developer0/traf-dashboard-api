@@ -32,6 +32,12 @@ class ServiceProviderController extends Controller
     {
         $query = ServiceProvider::with('user');
 
+        // filter by category
+        if ($request->has('category_id')) {
+            $query->whereHas('services.category', fn($q) => $q->whereId($request->category_id));
+        }
+
+        // filter by search
         if ($request->has('search')) {
             $query->whereHas(
                 'user',
@@ -47,19 +53,43 @@ class ServiceProviderController extends Controller
             });
         }
 
-        if ($request->has('category_id')) {
-            $query->whereHas('services.category', fn($q) => $q->whereId($request->category_id));
+        // filter by city
+        if ($request->has('city')) {
+            $query->where('city', 'like', "$request->city%")
+                ->orWhere('city', 'regexp', "[$request->city]");
         }
 
+        // filter by area
+        if ($request->has('area')) {
+            $query->where('area', 'like', "$request->area%")
+                ->orWhere('area', 'regexp', "[$request->area]");
+        }
+
+        //filter by pricing
+        // 100-200
         if ($request->has('pricing')) {
 
             //
-            $priceing = explode('-', trim($request->pricing, '-\s'));
-            dd($priceing);
+            $priceing = explode('-', trim($request->pricing, '- '));
+            [$from, $to] = match (count($priceing)) {
+                1 => [trim($priceing[0], ' '), null],
+                2 => [trim($priceing[0], ' '), trim($priceing[1], ' ')],
+                default => [null, null],
+            };
+
+            $query->whereHas('services', function ($q) use ($from, $to) {
+                $q->where(
+                    fn($q) => $q->where('price_before', '>=', $from)->orWhere('price_after', '>=', $from)
+                )->when(
+                    $to,
+                    fn($q) => $q->where('price_before', '<=', $to)->orWhere('price_after', '<=', $to)
+                );
+            });
         }
 
+        //filter by rating
         if ($request->has('rating')) {
-            $query->where('rating', 'like', "%$request->rating");
+            $query->where('rating', 'like', "{$request->rating}%");
         }
 
 
@@ -67,12 +97,8 @@ class ServiceProviderController extends Controller
 
         $serviceProviders = $query->get(['id', 'user_id', 'rating']);
 
-        // Return response with serviceProviders data
         return $this->okResponse([
-            'provider_ids'  => match ($request->has('search')) {
-                true    => $serviceProviders->pluck('id')->join(','),
-                false   => "",
-            },
+            'provider_ids'  => $serviceProviders->pluck('id')->join(','),
             'items'         => ServiceProviderResource::collection($serviceProviders),
         ], 'Retrieved ServiceProviders Data');
     }
