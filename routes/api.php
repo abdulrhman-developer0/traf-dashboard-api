@@ -24,7 +24,7 @@ use App\Http\Controllers\API\WorkerController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\API\SubscriptionController;
-
+use App\Http\Controllers\PaytabsController;
 use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -108,12 +108,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Subscription routes
     Route::post('/subscriptions', [SubscriptionController::class, 'subscribe'])
         ->middleware(['account:service-provider']);
+
+    // Paytabs 
+    Route::post('/payments/initiate', [PaytabsController::class, 'initiatePayment']);
+    Route::post('/payments/verify', [PaytabsController::class, 'verifyPayment']);
 });
 
 // PayMob webhook
 Route::post('/webhooks/paymob', [SubscriptionController::class, 'handlePaymentWebhook']);
 // Paymob callback.
 Route::get('/callbacks/paymob', [SubscriptionController::class, 'handlePaymentWebhook']);
+
+
 
 // user 
 
