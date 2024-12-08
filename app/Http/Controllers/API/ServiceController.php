@@ -23,18 +23,22 @@ class ServiceController extends Controller
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             ]);
 
+        // filter by search
         if ($request->has('search')) {
             $s = $request->search;
             $query->where('name', 'like', "%$s%")
                 ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%$s%"));
         }
 
+        // filter by category
         if ($request->has('category_id')) {
             $query->whereServiceCategoryId($request->category_id);
         }
 
-        if ($request->has('provider_id')) {
-            $query->where('service_provider_id', $request->provider_id);
+        // filter by providers
+        if ($request->has('provider_ids')) {
+            $ids = explode(',', $request->provider_ids);
+            $query->whereIn('service_provider_id', $ids);
         }
 
         $services =  $query->paginate($request->page_size ?? 10);
