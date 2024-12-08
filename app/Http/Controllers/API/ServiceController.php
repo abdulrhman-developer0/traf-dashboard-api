@@ -93,7 +93,7 @@ class ServiceController extends Controller
         $service->workers()->attach($request->service_workers);
 
         if ($request->hasFile('photo')) {
-            return $service->addMedia($request->photo)
+             $service->addMedia($request->photo)
                 ->toMediaCollection('photo');
         }
 
@@ -150,7 +150,7 @@ class ServiceController extends Controller
         }
 
         if ($request->hasFile('photo')) {
-            return $service->addMedia($request->photo)
+             $service->addMedia($request->photo)
                 ->toMediaCollection('photo');
         }
 
