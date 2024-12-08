@@ -15,6 +15,23 @@ class ReviewsController extends Controller
 {
     use APIResponses;
 
+    public function __construct()
+    {
+        // protected methods
+        $this->middleware(['auth:sanctum']);
+
+        // this methods are only for client and service provider
+        $this->middleware('account:client,service-provider')->only([
+            'store'
+        ]);
+
+        // this methods are only for service provider and admin
+        $this->middleware('account:service-provider,admin')->only([
+            'update',
+            'destroy'
+        ]);
+    }
+
     public function index(Request $request)
     {
         $query = Review::query()

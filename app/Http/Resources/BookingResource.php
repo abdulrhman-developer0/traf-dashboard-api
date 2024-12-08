@@ -23,13 +23,14 @@ class BookingResource extends JsonResource
             'is_personal'       => $this->Service->serviceProvider->is_personal,
             'status'            => $this->status,
             'date'              => $this->date,
-            'created_at'        => $this->Created_at?->diffForHumans(),
+            'left_time'         => $this->getLeftTime(),
+            'created_at'        => $this->created_at?->diffForHumans(),
         ];
     }
 
     protected function getHostName()
     {
-        if ( $this->service->serviceProvider->is_personal ) {
+        if ($this->service->serviceProvider->is_personal) {
             return $this->service->serviceProvider->user->name;
         }
 
@@ -38,10 +39,15 @@ class BookingResource extends JsonResource
 
     protected function getHostPhoto()
     {
-        if ( $this->service->serviceProvider->is_personal ) {
+        if ($this->service->serviceProvider->is_personal) {
             return $this->service->serviceProvider->getFirstMediaUrl('photo');
         }
 
         return $this->worker?->getFirstMediaUrl('photo');
+    }
+
+    public function getLeftTime()
+    {
+        return $this->date->diffInMinutes(now());
     }
 }

@@ -19,6 +19,19 @@ class ServiceScheduleController extends Controller
 {
     use APIResponses;
 
+    public function __construct()
+    {
+        // protected methods
+        $this->middleware('auth:sanctum');
+
+        // public methods
+        $this->middleware('account:service-provider')->only([
+            'store',
+            'update',
+            'destroy'
+        ]);
+    }
+
     public function index(Request $request)
     {
         if (! $request->has('service_id')) {
@@ -69,7 +82,7 @@ class ServiceScheduleController extends Controller
 
     public function store(Request $request)
     {
-    
+
         $serviceProvider = FacadesAuth::user()->serviceProvider;
 
         $validated = $request->validate([
@@ -83,6 +96,12 @@ class ServiceScheduleController extends Controller
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
             'times.*'           => 'date_format:H:i',
+
+            // custom dates
+            'custom_dates'          => 'nullable|array',
+            'custom_dates.*.date'   => 'required|date',
+            'custom_dates.*.times' => 'required|array|min:1',
+            'custom_dates.*.times.*' => 'date_format:H:i',
         ]);
 
         $pattern   = $request->pattern;
@@ -100,14 +119,25 @@ class ServiceScheduleController extends Controller
                     'start_date' => $d->startOfDay()->format('m/d/y h:i A'),
                     'end_date'   => $d->endOfDay()->format('m/d/y h:i A')
                 ];
-            }) 
+            })
             : [];
 
         $times  = $times = collect($request->times)->map(
             fn($time) => ['time' => $time]
         )->toArray(); // convert time 
 
+        $customDates = $request->has('custom_dates')
+            ? collect($request->custom_dates)->map(
+                fn($date) => [
+                    'start_date' => Carbon::create($date['date'])->startOfDay()->format('m/d/y h:i A'),
+                    'end_date'   => Carbon::create($date['date'])->endOfDay()->format('m/d/y h:i A'),
+                    'times' => $date['times'],
+                ]
+            )->toArray()
+            : [];
+
         $planDays = 90;
+
         $endDate = match ($pattern) {
             "one-time"      => $startDate->copy()->addDay(),
             "daily"         => $startDate->copy()->addDays($planDays),
@@ -148,7 +178,11 @@ class ServiceScheduleController extends Controller
 
         $schedule->workTimes()->createMany($times);
 
-        return $this->createdResponse([], 'Schedule created successfuly');
+        if (! empty($customDates)) {
+            $schedule->customWorkDates()->createMany($customDates);
+        }
+
+        return $this->createdResponse(ServiceScheduleResource::make($schedule), 'Schedule created successfuly');
     }
 
 
@@ -169,6 +203,12 @@ class ServiceScheduleController extends Controller
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
             'times.*'           => 'date_format:H:i',
+
+            // custom dates
+            'custom_dates'          => 'nullable|array',
+            'custom_dates.*.date'   => 'required|date',
+            'custom_dates.*.times' => 'required|array|min:1',
+            'custom_dates.*.times.*' => 'date_format:H:i',
         ]);
 
         $pattern   = $request->pattern;
@@ -193,7 +233,18 @@ class ServiceScheduleController extends Controller
             fn($time) => ['time' => $time]
         )->toArray();
 
+        $customDates = $request->has('custom_dates')
+            ? collect($request->custom_dates)->map(
+                fn($date) => [
+                    'start_date' => Carbon::create($date['date'])->startOfDay()->format('m/d/y h:i A'),
+                    'end_date'   => Carbon::create($date['date'])->endOfDay()->format('m/d/y h:i A'),
+                    'times' => $date['times'],
+                ]
+            )->toArray()
+            : [];
+
         $planDays = 90;
+
         $endDate = match ($pattern) {
             "one-time"      => $startDate->copy()->addDay(),
             "daily"         => $startDate->copy()->addDays($planDays),
@@ -231,6 +282,11 @@ class ServiceScheduleController extends Controller
 
         $schedule->workTimes()->delete();
         $schedule->workTimes()->createMany($times);
+
+        if (! empty($customDates)) {
+            $schedule->customWorkDates()->delete();
+            $schedule->customWorkDates()->createMany($customDates);
+        }
 
         return $this->okResponse([], 'Schedule updated successfuly');
     }

@@ -12,7 +12,7 @@ class ServiceSchedule extends Model
 {
     use HasFactory, SoftDeletes;
 
-      protected $fillable = [
+    protected $fillable = [
         'reference_id',
         'service_id',
         'start_date',
@@ -42,5 +42,10 @@ class ServiceSchedule extends Model
     public function workTimes(): HasMany
     {
         return $this->hasMany(ScheduleWorkTime::class);
+    }
+
+    public function customWorkDates(): HasMany
+    {
+        return $this->hasMany(CustomWorkDate::class);
     }
 }
