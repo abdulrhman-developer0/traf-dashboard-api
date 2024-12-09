@@ -140,7 +140,9 @@ class ServiceScheduleController extends Controller
                 fn($date) => [
                     'start_date' => Carbon::create($date['date'])->startOfDay()->format('m/d/y h:i A'),
                     'end_date'   => Carbon::create($date['date'])->endOfDay()->format('m/d/y h:i A'),
-                    'times' => $date['times'],
+                    'times' => collect($date['times'])->map(
+                        fn($time) => ['time' => $time]
+                    )->toArray(),
                 ]
             )->toArray()
             : [];
@@ -188,7 +190,12 @@ class ServiceScheduleController extends Controller
         $schedule->workTimes()->createMany($times);
 
         if (! empty($customDates)) {
-            $schedule->customWorkDates()->createMany($customDates);
+            foreach ($customDates as $customDate) {
+                $schedule->customWorkDates()->create([
+                    'start_date' => $customDate['start_date'],
+                    'end_date'   => $customDate['end_date'],
+                ])->times()->createMany($customDate['times']);
+            }
         }
 
         return $this->createdResponse(ServiceScheduleResource::make($schedule), 'Schedule created successfuly');
@@ -247,7 +254,9 @@ class ServiceScheduleController extends Controller
                 fn($date) => [
                     'start_date' => Carbon::create($date['date'])->startOfDay()->format('m/d/y h:i A'),
                     'end_date'   => Carbon::create($date['date'])->endOfDay()->format('m/d/y h:i A'),
-                    'times' => $date['times'],
+                    'times' => collect($date['times'])->map(
+                        fn($time) => ['time' => $time]
+                    )->toArray(),
                 ]
             )->toArray()
             : [];
@@ -294,7 +303,12 @@ class ServiceScheduleController extends Controller
 
         if (! empty($customDates)) {
             $schedule->customWorkDates()->delete();
-            $schedule->customWorkDates()->createMany($customDates);
+            foreach ($customDates as $customDate) {
+                $schedule->customWorkDates()->create([
+                    'start_date' => $customDate['start_date'],
+                    'end_date'   => $customDate['end_date'],
+                ])->times()->createMany($customDate['times']);
+            }
         }
 
         return $this->okResponse([], 'Schedule updated successfuly');

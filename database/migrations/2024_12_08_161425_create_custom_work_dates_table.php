@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('service_schedule_id')->references('id')->on('service_schedules')->onDelete('cascade');
             $table->datetime('start_date');
             $table->datetime('end_date');
-            $table->json('times');
             $table->timestamps();
         });
     }

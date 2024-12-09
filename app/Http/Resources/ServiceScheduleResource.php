@@ -42,20 +42,20 @@ class ServiceScheduleResource extends JsonResource
                     ];
                 })
                 : [],
-            // 'custom_dates'   =>  ! is_null($schedule)
-            //     ? $schedule->customWorkDates->map(function ($customDate) {
-            //         return [
-            //             'start_date' => $customDate->start_date->format('m/d/Y h:i A'),
-            //             'end_date'   => $customDate->end_date->format('m/d/Y h:i A'),
-            //             'times' => $customDate->times->map(function ($wt) {
-            //                 return [
-            //                     'time'          => $wt,
-            //                     'is_available'  => true
-            //                 ];
-            //             })
-            //         ];
-            //     })
-            //     : [],
+            'custom_dates'   =>  ! is_null($schedule)
+                ? $schedule->customWorkDates->map(function ($customDate) {
+                    return [
+                        'start_date' => $customDate->start_date->format('m/d/Y h:i A'),
+                        'end_date'   => $customDate->end_date->format('m/d/Y h:i A'),
+                        'times' => $customDate->times->map(function ($wt) {
+                            return [
+                                'time'          => $wt->time->format('H:i'),
+                                'is_available'  => true
+                            ];
+                        })
+                    ];
+                })
+                : [],
         ];
     }
 
@@ -65,9 +65,9 @@ class ServiceScheduleResource extends JsonResource
             return new Collection;
         }
 
-        // if ($schedule?->is_custom) {
-        //     return $schedule->customDate->times;
-        // }
+        if ($schedule?->is_custom) {
+            return $schedule->customWorkDates->first()->times;
+        }
 
         return $schedule->workTimes;;
     }
