@@ -24,9 +24,12 @@ class BookingController extends Controller
             'store',
         ]);
 
+        $this->middleware('account:client,service-provider')->only([
+            'update'
+        ]);
+
         // this methods are only for service provider and admin
         $this->middleware('account:service-provider,admin')->only([
-            'update',
             'destroy',
         ]);
     }
@@ -114,6 +117,14 @@ class BookingController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
+
+        $allowedStatuses = match ($user->account_type) {
+            'client'            => 'canceled',
+            'service-provider' => 'done,canceled',
+            'admin'             => '',
+        };
+
         $booking = Booking::find($id);
 
         if (! $booking) {
@@ -121,13 +132,13 @@ class BookingController extends Controller
         }
 
         $request->validate([
-            'status' => 'in:canceled,done',
+            'status' => "required|in:$allowedStatuses",
         ]);
 
         $booking->status = $request->status;
         $booking->save();
 
-        return $this->okResponse([], 'Booking updated successfully');
+        return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
     }
 
     public function destroy($id)
@@ -138,6 +149,6 @@ class BookingController extends Controller
         }
 
         $booking->delete();
-        return $this->okResponse([], 'Booking deleted successfully');
+        return $this->okResponse(Serv, 'Booking deleted successfully');
     }
 }

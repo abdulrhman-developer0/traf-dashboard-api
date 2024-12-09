@@ -47,22 +47,31 @@ class ServiceScheduleController extends Controller
         }
 
         $query = ServiceSchedule::query()
-            ->with(['excludedDates', 'workTimes', 'customWorkDates', 'customDate'])
-            ->withCount([
-                'excludedDates as is_excluded' => fn($q) => $q->where('start_date', '<=', $date)
-            ])
-            // ->where('service_id', $request->service_id)
-            // ->when($request->has('reference_id'), function ($query) use ($request) {
-            //     $query->where('reference_id', $request->reference_id);
-            // })
-            // ->where(function ($query) use ($date) {
-            //     $query->where('start_Date', '<=', $date)
-            //         ->where('end_date', '>=', $date);
-            // })
+            ->where('service_id', $request->service_id)
+            ->when($request->has('reference_id'), function ($query) use ($request) {
+                $query->where('reference_id', $request->reference_id);
+            })
+            ->where(function ($query) use ($date) {
+                $query->where('start_date', '<=', $date)
+                    ->where('end_date', '>=', $date);
+            })
             ->latest();
 
-        $schedule = $query->with(['excludedDates', 'workTimes'])
+        $schedule = $query->with(['excludedDates', 'customWorkDates.times'])
             ->first();
+
+
+        if ($schedule) {
+            $schedule['is_excluded'] = $schedule->excludedDates()
+                ->where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date)
+                ->count() > 0;
+
+            $schedule['is_custom'] = $schedule->customWorkDates()
+                ->where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date)
+                ->count() > 0;
+        }
 
         return $this->okResponse(ServiceScheduleResource::make($schedule), 'Retrieve times successfuly');
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,10 +20,14 @@ class ServiceScheduleResource extends JsonResource
 
         return [
             'schedule_id'  => $schedule?->id,
+            'service_id'   => $schedule?->service_id,
+            'reference_id' => $schedule?->reference_id,
             'start_date'   => $schedule?->start_date?->format('m/d/Y'),
             'end_date'     => $schedule?->end_date?->format('m/d/Y'),
+            'is_excluded'  =>  $schedule?->is_excluded,
+            'is_custom'    =>  $schedule?->is_custom,
             'work_times'   =>  ! is_null($schedule)
-                ? $schedule->workTimes->map(function ($wt) {
+                ? $this->getWorkTimes($schedule)->map(function ($wt) {
                     return [
                         'time'          => $wt->time->format('H:i'),
                         'is_available'  => (bool) $wt->bookings?->count() == 0
@@ -37,20 +42,33 @@ class ServiceScheduleResource extends JsonResource
                     ];
                 })
                 : [],
-            'custom_dates'   =>  ! is_null($schedule)
-                ? $schedule->customWorkDates->map(function ($customDate) {
-                    return [
-                        'start_date' => $customDate->start_date->format('m/d/Y h:i A'),
-                        'end_date'   => $customDate->end_date->format('m/d/Y h:i A'),
-                        'times' => $customDate->times->map(function ($wt) {
-                            return [
-                                'time'          => $wt,
-                                'is_available'  => true
-                            ];
-                        })
-                    ];
-                })
-                : [],
+            // 'custom_dates'   =>  ! is_null($schedule)
+            //     ? $schedule->customWorkDates->map(function ($customDate) {
+            //         return [
+            //             'start_date' => $customDate->start_date->format('m/d/Y h:i A'),
+            //             'end_date'   => $customDate->end_date->format('m/d/Y h:i A'),
+            //             'times' => $customDate->times->map(function ($wt) {
+            //                 return [
+            //                     'time'          => $wt,
+            //                     'is_available'  => true
+            //                 ];
+            //             })
+            //         ];
+            //     })
+            //     : [],
         ];
+    }
+
+    private function getWorkTimes($schedule)
+    {
+        if ($schedule?->is_excluded) {
+            return new Collection;
+        }
+
+        // if ($schedule?->is_custom) {
+        //     return $schedule->customDate->times;
+        // }
+
+        return $schedule->workTimes;;
     }
 }

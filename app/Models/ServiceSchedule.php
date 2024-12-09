@@ -45,11 +45,6 @@ class ServiceSchedule extends Model
         return $this->hasMany(ScheduleWorkTime::class);
     }
 
-    public function customDate()
-    {
-        return $this->hasOne(CustomWorkDate::class);
-    }
-
     public function customWorkDates(): HasMany
     {
         return $this->hasMany(CustomWorkDate::class);
