@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Support\Facades\Cache;
 
 class Client extends Model implements HasMedia
 {
@@ -44,5 +45,31 @@ class Client extends Model implements HasMedia
     public function reviews(): MorphMany
     {
         return $this->morphMany(Review::class, 'reviewable');
+    }
+
+    /**
+     * Get the count of reviews for the client.
+     * 
+     * @return int
+     */
+    protected function getReviewsCountAttribute()
+    {
+        // Cache for 30 seconds
+        return Cache::remember("client-reviews-count-{$this->id}", 30, function () {
+            return $this->reviews()->count();
+        });
+    }
+
+    /**
+     * Get rating statistics for the client.
+     * 
+     * @return array
+     */
+    protected function getRatingStatsAttribute()
+    {
+        // Cache for 30 seconds
+        return Cache::remember("client-rating-stats-{$this->id}", 30, function () {
+            return get_rating_stats($this->reviews());
+        });
     }
 }
