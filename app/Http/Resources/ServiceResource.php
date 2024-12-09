@@ -37,6 +37,7 @@ class ServiceResource extends JsonResource
             'created_at'                        => $this->created_at?->diffForHumans(),
             'updated_at'                        => $this->updated_at?->diffForHumans(),
             'rating'                            => $this->rating,
+            'reviews_count'                     => $this->reviews_count ?? 0,
             'rating_stats'  =>  [
                 'excellent'     => 40,
                 'very_good'     => 30,
