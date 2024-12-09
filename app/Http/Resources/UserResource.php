@@ -35,7 +35,8 @@ class UserResource extends JsonResource
             'maroof_document'   => $account->getFirstMediaUrl('maroof_document'),
             'rating'            => $account->rating,
             'reviews_count'     => $account->reviews_count ?? 0,
-            'rating_stats'  => $account->rating_stats,
+            'rating_stats'      => $account->rating_stats,
+            'booking_stats'     => $account->booking_stats,
         ];
     }
 }
