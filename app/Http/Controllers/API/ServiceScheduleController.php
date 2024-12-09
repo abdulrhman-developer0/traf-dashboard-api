@@ -38,10 +38,6 @@ class ServiceScheduleController extends Controller
             return $this->badResponse([], 'The service_id filter is required to select schedules');
         }
 
-        if (! $request->has('reference_id')) {
-            return $this->badResponse([], 'The reference_id filter is required to select schedules');
-        }
-
 
 
         if ($request->has('date')) {
@@ -51,15 +47,19 @@ class ServiceScheduleController extends Controller
         }
 
         $query = ServiceSchedule::query()
-            ->where('service_id', $request->service_id)
-            ->where('reference_id', $request->reference_id)
-            ->where(function ($query) use ($date) {
-                $query->where('start_Date', '<=', $date)
-                    ->where('end_date', '>=', $date);
-            })->whereDoesntHave('excludedDates', function ($query) use ($date) {
-                $query->where('start_Date', '<=', $date)
-                    ->where('end_date', '>=', $date);
-            })->latest();
+            ->with(['excludedDates', 'workTimes', 'customWorkDates', 'customDate'])
+            ->withCount([
+                'excludedDates as is_excluded' => fn($q) => $q->where('start_date', '<=', $date)
+            ])
+            // ->where('service_id', $request->service_id)
+            // ->when($request->has('reference_id'), function ($query) use ($request) {
+            //     $query->where('reference_id', $request->reference_id);
+            // })
+            // ->where(function ($query) use ($date) {
+            //     $query->where('start_Date', '<=', $date)
+            //         ->where('end_date', '>=', $date);
+            // })
+            ->latest();
 
         $schedule = $query->with(['excludedDates', 'workTimes'])
             ->first();
