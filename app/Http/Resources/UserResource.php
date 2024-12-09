@@ -35,6 +35,13 @@ class UserResource extends JsonResource
             'tax_registeration_number'  => $account->tax_registeration_number,
             'maroof_document'   => $account->getFirstMediaUrl('maroof_document'),
             'rating'            => $account->rating,
+            'rating_stats'  =>  [
+                'excellent'     => 40,
+                'very_good'     => 30,
+                'good'          => 20,
+                'bad'           => 7,
+                'very_bad'      => 3
+            ]
         ];
     }
 }
