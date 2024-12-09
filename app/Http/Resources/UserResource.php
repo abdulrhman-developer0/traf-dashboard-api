@@ -17,7 +17,6 @@ class UserResource extends JsonResource
 
         $account = $this->account();
 
-        dd($account);
         return [
             'is_verfied'        => (bool) $this->code_verified,
             'is_personal'       => (bool) $account?->is_personal,
