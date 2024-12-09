@@ -52,6 +52,11 @@ class ReviewsController extends Controller
                     'booking.service',
                     fn($q) => $q->where('service_provider_id', $request->query('provider_id'))
                 );
+            })->when($request->has('client_id'), function ($q) use ($request) {
+                $q->whereHas(
+                    'booking.client',
+                    fn($q) => $q->where('id', $request->query('client_id'))
+                );
             });
 
 
