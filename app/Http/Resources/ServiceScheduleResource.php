@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon as SupportCarbon;
 
 class ServiceScheduleResource extends JsonResource
 {
@@ -27,10 +28,12 @@ class ServiceScheduleResource extends JsonResource
             'is_excluded'  =>  $schedule?->is_excluded,
             'is_custom'    =>  $schedule?->is_custom,
             'work_times'   =>  ! is_null($schedule)
-                ? $this->getWorkTimes($schedule)->map(function ($wt) {
+                ? $this->getWorkTimes($schedule)->map(function ($wt) use ($request, $schedule) {
                     return [
                         'time'          => $wt->time->format('H:i'),
-                        'is_available'  => (bool) $wt->bookings?->count() == 0
+                        'is_available'  => $request->has('date')
+                            ? isTimeAvailable($schedule->service_id, SupportCarbon::create($request->date . '' . $wt->time->format('H:i')))
+                            : false,
                     ];
                 })
                 : [],
