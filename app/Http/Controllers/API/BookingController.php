@@ -47,6 +47,7 @@ class BookingController extends Controller
             ->when(
                 $user->isAccount('client'),
                 fn($q) => $q->where('client_id', $account->id)
+                    ->withCount(['reviews as is_reviewed' => fn($q) => $q->where('client_id', $account->id)])
             )
             ->when(
                 $user->isAccount('service-provider'),
@@ -54,6 +55,7 @@ class BookingController extends Controller
                     'service',
                     fn($q) => $q->where('service_provider_id', $account->id)
                 )
+                    ->withCount(['reviews as is_reviewed' => fn($q) => $q->whereRelation('booking.service', 'service_provider_id', $account->id)])
             )
             ->with(['client', 'service']);
 
