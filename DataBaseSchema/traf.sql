@@ -52,7 +52,7 @@ CREATE TABLE `bookings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `service_schedule_id` bigint(20) UNSIGNED NOT NULL,
   `client_id` bigint(20) UNSIGNED NOT NULL,
-  `status` enum('pending','paid','cancceled','done') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','paid','canceled','done') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
