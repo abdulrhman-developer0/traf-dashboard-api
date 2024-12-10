@@ -40,7 +40,7 @@ class WorkerController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|regex:/^\+?[0-9]{7,15}$/',
             'address' => 'nullable|string|max:255',
-            'photo' => 'nullable|photo|mimes:jpeg,jpg,png|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
         $serviceProvider = Auth::user()?->serviceProvider;
@@ -64,7 +64,7 @@ class WorkerController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'phone' => 'nullable|string|regex:/^\+?[0-9]{7,15}$/',
             'address' => 'nullable|string|max:255',
-            'photo' => 'nullable|photo|mimes:jpeg,jpg,png|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
         $serviceProvider = Auth::user()?->serviceProvider;
@@ -85,20 +85,18 @@ class WorkerController extends Controller
     }
 
     public function destroy($workerId)
-{
-    
-    $worker = Worker::findOrFail($workerId);
-    $worker->delete();
+    {
 
-    return response()->json(['message' => 'Worker deleted successfully'], 200);
-}
-public function restore($workerId)
-{
-    $worker = Worker::withTrashed()->findOrFail($workerId);
-    $worker->restore();
+        $worker = Worker::findOrFail($workerId);
+        $worker->delete();
 
-    return response()->json(['message' => 'Worker restored successfully'], 200);
-}
+        return response()->json(['message' => 'Worker deleted successfully'], 200);
+    }
+    public function restore($workerId)
+    {
+        $worker = Worker::withTrashed()->findOrFail($workerId);
+        $worker->restore();
 
-
+        return response()->json(['message' => 'Worker restored successfully'], 200);
+    }
 }
