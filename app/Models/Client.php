@@ -95,7 +95,7 @@ class Client extends Model implements HasMedia
             ->toArray();
 
         // Ensure only existing statuses in the enum are included
-        $enumStatuses = ['pending', 'canceled', 'confirmed', 'done'];
+        $enumStatuses = ['pending', 'cancceled', 'confirmed', 'done'];
         $statuses = array_intersect_key($statuses, array_flip($enumStatuses));
 
         // Add missing statuses with count 0

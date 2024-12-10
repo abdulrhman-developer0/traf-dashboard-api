@@ -120,7 +120,7 @@ class BookingController extends Controller
         $user = Auth::user();
 
         $allowedStatuses = match ($user->account_type) {
-            'client'            => 'canceled',
+            'client'            => 'cancceled',
             'service-provider' => 'done,canceled',
             'admin'             => '',
         };

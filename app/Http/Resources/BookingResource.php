@@ -50,6 +50,14 @@ class BookingResource extends JsonResource
 
     public function getLeftTime()
     {
-        return now()->diffInMinutes($this->date);
+        // dd(
+        //     now()->format('m/d/Y h:i A'),
+        //     carbon::create(now()->format('m/d/Y h:i A'))->diffInMinutes(
+        //         Carbon::create($this->date->format('m/d/Y h:i A'))
+        //     )
+        // );
+        return carbon::create(now()->format('m/d/Y h:i A'))->diffInMinutes(
+            Carbon::create($this->date->format('m/d/Y h:i A'))
+        );
     }
 }
