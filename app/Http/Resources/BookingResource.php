@@ -48,6 +48,6 @@ class BookingResource extends JsonResource
 
     public function getLeftTime()
     {
-        return now()->diffInMinutes($this->date);
+        return now()->addDay()->diffInMinutes($this->date);
     }
 }
