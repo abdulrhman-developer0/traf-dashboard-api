@@ -17,12 +17,11 @@ class UserResource extends JsonResource
 
         $account = $this->account();
 
-
         return [
             'is_verfied'        => (bool) $this->code_verified,
             'is_personal'       => (bool) $account?->is_personal,
             // 'user_id'           => $this->id,
-            'account_id'        => $account->id,
+            'account_id'        => $account?->id,
             'type'              => $this->account_type,
             'photo'             => $account->getFirstMediaUrl('photo'),
             'name'              => $this->name,
@@ -35,6 +34,9 @@ class UserResource extends JsonResource
             'tax_registeration_number'  => $account->tax_registeration_number,
             'maroof_document'   => $account->getFirstMediaUrl('maroof_document'),
             'rating'            => $account->rating,
+            'reviews_count'     => $account->reviews_count ?? 0,
+            'rating_stats'      => $account->rating_stats,
+            'booking_stats'     => $account->booking_stats,
         ];
     }
 }

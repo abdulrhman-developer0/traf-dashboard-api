@@ -22,14 +22,15 @@ class BookingSeeder extends Seeder
 
         $serviceIds  = Service::whereIn('service_provider_id', $personalIds->toArray())->pluck('id');
 
-        for ($i = 0; $i < 20; $i += 1) {
-            Booking::create([
-                'client_id'    => $clientIds->random(),
-                'service_id'   => $serviceIds->random(),
-                'reference_id' => $personalIds->random(),
-                "date"         => fake()->date('m/d/Y H:i', now()->addDays(90)),
-                'status'        => fake()->randomElement(['pending', 'canceled', 'done']),
-            ]);
+        foreach ($serviceIds as $serviceId) {
+            foreach ($clientIds as $clientId) {
+                Booking::create([
+                    'client_id' => $clientId,
+                    'service_id' => $serviceId,
+                    'date'       => now()->format('m/d/Y'),
+                    'status'     => fake()->randomElement(['pending', 'canceled', 'confirmed', 'done']),
+                ]);
+            }
         }
     }
 }

@@ -13,23 +13,68 @@ class BookingController extends Controller
 {
     use APIResponses;
 
+    public function __construct()
+    {
+        // protected methods
+        $this->middleware('auth:sanctum');
+
+
+        // this methods are only for client
+        $this->middleware('account:client')->only([
+            'store',
+        ]);
+
+        $this->middleware('account:client,service-provider')->only([
+            'update'
+        ]);
+
+        // this methods are only for service provider and admin
+        $this->middleware('account:service-provider,admin')->only([
+            'destroy',
+        ]);
+    }
+
+
     public function index(Request $request)
     {
+
+        $user    = Auth::user();
+        $account = $user->account();
+
         $query = Booking::query()
+            ->latest()
+            ->where('created_at', '>=', now()->subDays(90))
+            ->when(
+                $user->isAccount('client'),
+                fn($q) => $q->where('client_id', $account->id)
+                    ->withCount(['reviews as is_reviewed' => fn($q) => $q->where('client_id', $account->id)])
+            )
+            ->when(
+                $user->isAccount('service-provider'),
+                fn($q) => $q->whereHas(
+                    'service',
+                    fn($q) => $q->where('service_provider_id', $account->id)
+                )
+                    ->withCount(['reviews as is_reviewed' => fn($q) => $q->whereRelation('booking.service', 'service_provider_id', $account->id)])
+            )
             ->with(['client', 'service']);
 
+        // filter by status
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
 
+        // filter by client_id
         if ($request->has('client_id')) {
             $query->where('client_id', $request->client_id);
         }
 
+        // filter by service_id
         if ($request->has('service_id')) {
             $query->where('service_id', $request->service_id);
         }
 
+        // filter by reference_id
         if ($request->has('reference_id')) {
             $query->where('reference_id', $request->reference_id);
         }
@@ -74,20 +119,28 @@ class BookingController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
+
+        $allowedStatuses = match ($user->account_type) {
+            'client'            => 'canceled',
+            'service-provider' => 'done,canceled',
+            'admin'             => '',
+        };
+
         $booking = Booking::find($id);
 
-        if (! $booking ) {
+        if (! $booking) {
             return $this->badResponse('Booking not found');
         }
 
         $request->validate([
-            'status' => 'in:canceled,done',
+            'status' => "required|in:$allowedStatuses",
         ]);
 
         $booking->status = $request->status;
         $booking->save();
 
-        return $this->okResponse([], 'Booking updated successfully');
+        return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
     }
 
     public function destroy($id)
@@ -98,6 +151,6 @@ class BookingController extends Controller
         }
 
         $booking->delete();
-        return $this->okResponse([], 'Booking deleted successfully');
+        return $this->okResponse(Serv, 'Booking deleted successfully');
     }
 }

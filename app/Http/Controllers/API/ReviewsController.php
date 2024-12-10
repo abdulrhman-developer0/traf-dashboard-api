@@ -15,6 +15,23 @@ class ReviewsController extends Controller
 {
     use APIResponses;
 
+    public function __construct()
+    {
+        // protected methods
+        $this->middleware(['auth:sanctum']);
+
+        // this methods are only for client and service provider
+        $this->middleware('account:client,service-provider')->only([
+            'store'
+        ]);
+
+        // this methods are only for service provider and admin
+        $this->middleware('account:service-provider,admin')->only([
+            'update',
+            'destroy'
+        ]);
+    }
+
     public function index(Request $request)
     {
         $query = Review::query()
@@ -34,6 +51,11 @@ class ReviewsController extends Controller
                 $q->whereHas(
                     'booking.service',
                     fn($q) => $q->where('service_provider_id', $request->query('provider_id'))
+                );
+            })->when($request->has('client_id'), function ($q) use ($request) {
+                $q->whereHas(
+                    'booking.client',
+                    fn($q) => $q->where('id', $request->query('client_id'))
                 );
             });
 

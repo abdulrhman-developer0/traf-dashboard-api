@@ -21,6 +21,7 @@ class ServiceResource extends JsonResource
             'category_name'                     => $this->category?->name,
             'service_provider_id'               => $this->service_provider_id,
             'user_id'                           => $this->serviceProvider?->user?->id,
+            'provider_photo'                    => $this->serviceProvider?->getFirstMediaUrl('photo'),
             'provider_name'                     => $this->serviceProvider?->user?->name,
             'name'                              => $this->name,
             'photo'                             => $this->getFirstMediaUrl('photo'),
@@ -36,13 +37,8 @@ class ServiceResource extends JsonResource
             'created_at'                        => $this->created_at?->diffForHumans(),
             'updated_at'                        => $this->updated_at?->diffForHumans(),
             'rating'                            => $this->rating,
-            'rating_stats'  =>  [
-                'excellent'     => 40,
-                'very_good'     => 30,
-                'good'          => 20,
-                'bad'           => 7,
-                'very_bad'      => 3
-            ]
+            'reviews_count'                     => $this->reviews_count ?? 0,
+            'rating_stats'  =>  $this->rating_stats, // ['excellent' => 40, 'good' => 30, 'average' => 20, 'poor' => 10, 'terrible' => 0]
         ];
     }
 }
