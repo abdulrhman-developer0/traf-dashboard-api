@@ -26,7 +26,7 @@ class BookingResource extends JsonResource
             'date'              => $this->date,
             'left_time'         => $this->getLeftTime(),
             // $this->status === 'confirmed' &&
-            'is_now'            =>  Carbon::create($this->Date) >= now()->subDay() && ($this->getLeftTime() <= 0),
+            'is_now'            => $this->getLeftTime() <= 0,
             'is_reviewed'       => $this->status === 'done' && (bool) $this->is_reviewed,
             'created_at'        => $this->created_at?->diffForHumans(),
         ];
