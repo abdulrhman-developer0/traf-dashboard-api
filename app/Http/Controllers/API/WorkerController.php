@@ -83,4 +83,22 @@ class WorkerController extends Controller
 
         return $this->okResponse([], 'Worker updated successfully');
     }
+
+    public function destroy($workerId)
+{
+    
+    $worker = Worker::findOrFail($workerId);
+    $worker->delete();
+
+    return response()->json(['message' => 'Worker deleted successfully'], 200);
+}
+public function restore($workerId)
+{
+    $worker = Worker::withTrashed()->findOrFail($workerId);
+    $worker->restore();
+
+    return response()->json(['message' => 'Worker restored successfully'], 200);
+}
+
+
 }

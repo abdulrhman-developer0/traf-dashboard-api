@@ -65,6 +65,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
 
     Route::apiResource('/workers', WorkerController::class);
+    Route::delete('/workers/{workerId}', [WorkerController::class, 'destroy']);
+
 
     Route::apiResource('/bookings', BookingController::class);
 

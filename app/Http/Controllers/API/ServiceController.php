@@ -64,7 +64,7 @@ class ServiceController extends Controller
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
             'service_workers' => $serviceProvider->is_personal ? 'nullable' : 'required|array|min:1',
-            'service_workers.*' => 'exists:workers,id',  // Ensure worker IDs exist in the workers table
+            'service_workers.*' => 'exists:workers,id', 
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
             'description' => 'nullable|string',
