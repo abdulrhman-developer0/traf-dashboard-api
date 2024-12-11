@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\PushNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
@@ -110,7 +111,7 @@ class BookingController extends Controller
 
 
         $booking = Booking::create($validated);
-
+        broadcast(new PushNotification($booking))->toOthers();
 
         return $this->createdResponse([
             'booking_id' => $booking->id,

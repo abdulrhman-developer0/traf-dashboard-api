@@ -9,6 +9,7 @@ use App\Http\Middleware\UpdateUserLastActivity;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CheckAccountType;
 use App\Http\Middleware\TwoFactor;
+use App\Http\Middleware\ValidSubscription;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -36,6 +37,13 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'two-factor' =>TwoFactor::class,
+        ]);
+    })
+
+    ->withMiddleware(function(Middleware $middleware) {
+
+        $middleware->alias([
+            'valid_subscribtion' =>ValidSubscription::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -21,15 +21,14 @@ class ServiceScheduleController extends Controller
 
     public function __construct()
     {
-        // protected methods
-        $this->middleware('auth:sanctum');
-
+       
         // public methods
-        $this->middleware('account:service-provider')->only([
+        $this->middleware(['auth:sanctum','account:service-provider', 'valid_subscribtion'])->only([
             'store',
             'update',
-            'destroy'
+            'destroy',
         ]);
+       
     }
 
     public function index(Request $request)

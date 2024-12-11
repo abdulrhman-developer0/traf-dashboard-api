@@ -60,6 +60,16 @@ class ServiceProvider extends Model implements HasMedia
         return $this->morphMany(Review::class, 'reviewable');
     }
 
+    public function current_subscriptions()
+    {
+
+        return 
+        $this->hasOne(Subscription::class)
+        ->where('status','active')
+        ->where('start_date','<=',now())
+        ->where('end_date','>=', now());
+    }
+
     /**
      * Get the count of reviews for the service provider.
      * 
@@ -123,4 +133,5 @@ class ServiceProvider extends Model implements HasMedia
 
         return $statuses;
     }
+    
 }

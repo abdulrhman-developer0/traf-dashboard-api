@@ -4,58 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4c1e031f059b0363f5f5952a9233cf5",
+    "content-hash": "a6f766cebb3b46442cfd8433df0904f3",
     "packages": [
-        {
-            "name": "baselrabia/paytabs-with-laravel",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/baselrabia/paytabs-with-laravel.git",
-                "reference": "d4123e3e1320531afab7c24173e94743a1482772"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/baselrabia/paytabs-with-laravel/zipball/d4123e3e1320531afab7c24173e94743a1482772",
-                "reference": "d4123e3e1320531afab7c24173e94743a1482772",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Paytabs": "Basel\\Paytabs\\Facades\\PaytabsFacade"
-                    },
-                    "providers": [
-                        "Basel\\Paytabs\\PaytabsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Basel\\Paytabs\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "baselrabia",
-                    "email": "baselrabia@gmail.com"
-                }
-            ],
-            "description": "integrate paytabs with laravel",
-            "support": {
-                "issues": "https://github.com/baselrabia/paytabs-with-laravel/issues",
-                "source": "https://github.com/baselrabia/paytabs-with-laravel/tree/v1.1.0"
-            },
-            "time": "2021-01-27T22:59:23+00:00"
-        },
         {
             "name": "brick/math",
             "version": "0.12.1",
