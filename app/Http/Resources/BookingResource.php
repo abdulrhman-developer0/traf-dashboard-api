@@ -26,7 +26,7 @@ class BookingResource extends JsonResource
             'date'              => $this->date,
             'left_time'         => $this->getLeftTime(),
             // $this->status === 'confirmed' &&
-            'is_now'            => $this->getLeftTime() <= 0 && (bool) $this->status !== "done",
+            'is_now'            => $this->getLeftTime() <= 0 && $this->status !== 'done',
             'is_reviewed'       => $this->status === 'done' && (bool) $this->is_reviewed,
             'created_at'        => $this->created_at?->diffForHumans(),
         ];
