@@ -10,6 +10,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Traits\APIResponses;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -19,9 +20,13 @@ class ServiceController extends Controller
     {
         $query    =  Service::query()
             ->latest()
-            // ->with('workers.schedules', function ($q) {
-            //     $q->where('service_id', 'services.id');
-            // })
+            // Get only first schedule for each worker where service_id = service.id
+            ->with('workers.schedules', function ($q) {
+                $q->whereHas(
+                    'service',
+                    fn($q) => $q->whereRaw('service_id = services.id')
+                );
+            })
             ->withCount([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             ]);
