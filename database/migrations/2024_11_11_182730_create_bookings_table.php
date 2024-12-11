@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('reference_id');
             $table->datetime('date');
             $table->enum('status', ['pending', 'canceled', 'confirmed', 'done'])->default('pending');
+            
             $table->timestamps();
         });
     }
