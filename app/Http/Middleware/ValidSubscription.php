@@ -16,11 +16,13 @@ class ValidSubscription
      */
     public function handle(Request $request, Closure $next): Response
     {
-   
-       $account= Auth::user()->account();
-       if (!$account->current_subscriptions) {
-        return response()->json(['message' => 'Access denied. No valid subscription found.'], 403);
-    }
+
+        $account = Auth::user()->account();
+
+        // if (!$account->current_subscriptions) {
+        //     return response()->json(['message' => 'Access denied. No valid subscription found.'], 403);
+        // }
+
         return $next($request);
     }
 }

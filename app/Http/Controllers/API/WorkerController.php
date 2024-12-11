@@ -87,20 +87,20 @@ class WorkerController extends Controller
     public function destroy($workerId)
     {
         $serviceProvider = Auth::user()?->serviceProvider;
-      
+
         // Check if the worker exists and belongs to the authenticated service provider
         $worker = $serviceProvider?->workers()->find($workerId);
-       
+
         if (!$worker) {
             return response()->json(['message' => 'Worker not found or not authorized to delete'], 404);
         }
-    
+
         // Perform the soft delete
         $worker->delete();
-    
+
         return response()->json(['message' => 'Worker deleted successfully'], 200);
     }
-    
+
     public function restore($workerId)
     {
         $worker = Worker::withTrashed()->findOrFail($workerId);

@@ -19,6 +19,9 @@ class ServiceController extends Controller
     {
         $query    =  Service::query()
             ->latest()
+            // ->with('workers.schedules', function ($q) {
+            //     $q->where('service_id', 'services.id');
+            // })
             ->withCount([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             ]);
