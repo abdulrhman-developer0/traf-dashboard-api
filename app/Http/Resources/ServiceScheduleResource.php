@@ -48,13 +48,9 @@ class ServiceScheduleResource extends JsonResource
             'custom_dates'   =>  ! is_null($schedule)
                 ? $schedule->customWorkDates->map(function ($customDate) {
                     return [
-                        'start_date' => $customDate->start_date->format('m/d/Y h:i A'),
-                        'end_date'   => $customDate->end_date->format('m/d/Y h:i A'),
+                        'date' => $customDate->start_date->format('m/d/Y'),
                         'times' => $customDate->times->map(function ($wt) {
-                            return [
-                                'time'          => $wt->time->format('H:i'),
-                                'is_available'  => true
-                            ];
+                            return $wt->time->format('h:i');
                         })
                     ];
                 })
