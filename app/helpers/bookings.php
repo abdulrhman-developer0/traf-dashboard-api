@@ -30,7 +30,7 @@ if (!function_exists('isTimeAvailable')) {
                 ->where('service_id', $serviceId)
                 ->where('date', $datetime)
                 ->whereNotIn('id', $ignoredIds)
-                ->exists();
+                ->first();
 
             if (!$existingBooking) {
                 return true; // Time is not available
