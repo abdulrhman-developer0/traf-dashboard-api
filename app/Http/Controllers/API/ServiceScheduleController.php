@@ -198,7 +198,7 @@ class ServiceScheduleController extends Controller
             }
         }
 
-        return $this->createdResponse(ServiceScheduleResource::make($schedule), 'Schedule created successfuly');
+        return $this->createdResponse([], 'Schedule created successfuly');
     }
 
 
