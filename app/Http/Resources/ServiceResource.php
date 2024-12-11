@@ -38,7 +38,8 @@ class ServiceResource extends JsonResource
             'updated_at'                        => $this->updated_at?->diffForHumans(),
             'rating'                            => $this->rating,
             'reviews_count'                     => $this->reviews_count ?? 0,
-            'rating_stats'  =>  $this->rating_stats, // ['excellent' => 40, 'good' => 30, 'average' => 20, 'poor' => 10, 'terrible' => 0]
+            'rating_stats'                      =>  $this->rating_stats, // ['excellent' => 40, 'good' => 30, 'average' => 20, 'poor' => 10, 'terrible' => 0]
+            // 'workers'                           => WorkerResource::collection($this->workers),
         ];
     }
 }

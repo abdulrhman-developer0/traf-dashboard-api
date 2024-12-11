@@ -63,8 +63,7 @@ class ServiceController extends Controller
 
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
-            'service_workers' => $serviceProvider->is_personal ? 'nullable' : 'required|array|min:1',
-            'service_workers.*' => 'exists:workers,id', 
+            'service_workers' => $serviceProvider->is_personal ? 'nullable' : 'required|سtring|min:1',
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
             'description' => 'nullable|string',
@@ -74,6 +73,12 @@ class ServiceController extends Controller
             'address' => 'required_if:is_home_service,false|string|max:500',
             "photo"   => 'nullable|image|max:4096',
         ]);
+
+        $serviceWorkers = collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
+            return [
+                'worker_id' => trim($workerId, ' ,'),
+            ];
+        })->toArray();
 
         $is_home_service = $request->has('is_home_service') ? true : false;
         $is_offer = $request->price_after ? true : false;
@@ -94,10 +99,10 @@ class ServiceController extends Controller
         ]);
 
         // Attach workers to the service (this will create the pivot records in service_workers)
-        $service->workers()->attach($request->service_workers);
+        $service->workers()->attach($serviceWorkers);
 
         if ($request->hasFile('photo')) {
-             $service->addMedia($request->photo)
+            $service->addMedia($request->photo)
                 ->toMediaCollection('photo');
         }
 
@@ -113,8 +118,7 @@ class ServiceController extends Controller
     {
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
-            'nullable|array|min:1',
-            'service_workers.*' => 'exists:workers,id',  // Ensure worker IDs exist in the workers table
+            'service_workers' => 'nullable|string|min:1',
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
             'description' => 'nullable|string',
@@ -124,6 +128,12 @@ class ServiceController extends Controller
             'address' => 'nullable|string',
             "photo"   => 'nullable|image|max:4096',
         ]);
+
+        $serviceWorkers = collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
+            return [
+                'worker_id' => trim($workerId, ' ,'),
+            ];
+        })->toArray();
 
         $serviceProvider = Auth::user()?->account();
         $service         = $serviceProvider->services()->find($id);
@@ -150,11 +160,11 @@ class ServiceController extends Controller
 
 
         if ($request->has('service_workers') && !empty($request->service_workers)) {
-            $service->workers()->sync($request->service_workers);
+            $service->workers()->sync($serviceWorkers);
         }
 
         if ($request->hasFile('photo')) {
-             $service->addMedia($request->photo)
+            $service->addMedia($request->photo)
                 ->toMediaCollection('photo');
         }
 

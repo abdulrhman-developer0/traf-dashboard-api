@@ -104,13 +104,13 @@ class ServiceScheduleController extends Controller
             'excluded_dates'    => 'nullable|array',  //ma3da 
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
-            'times.*'           => 'date_format:H:i',
+            'times.*'           => 'date_format:h:i',
 
             // custom dates
             'custom_dates'          => 'nullable|array',
             'custom_dates.*.date'   => 'required|date',
             'custom_dates.*.times' => 'required|array|min:1',
-            'custom_dates.*.times.*' => 'date_format:H:i',
+            'custom_dates.*.times.*' => 'date_format:h:i',
         ]);
 
         $pattern   = $request->pattern;
@@ -218,13 +218,13 @@ class ServiceScheduleController extends Controller
             'excluded_dates'    => 'nullable|array',
             'excluded_dates.*'  => 'required|date',
             'times'             => 'required|array|min:1',
-            'times.*'           => 'date_format:H:i',
+            'times.*'           => 'date_format:h:i',
 
             // custom dates
             'custom_dates'          => 'nullable|array',
             'custom_dates.*.date'   => 'required|date',
             'custom_dates.*.times' => 'required|array|min:1',
-            'custom_dates.*.times.*' => 'date_format:H:i',
+            'custom_dates.*.times.*' => 'date_format:h:i',
         ]);
 
         $pattern   = $request->pattern;
