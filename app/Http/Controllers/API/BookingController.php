@@ -99,7 +99,7 @@ class BookingController extends Controller
     {
         $bookingData = $validated = $request->validate([
             'service_id'   => 'required|integer|exists:services,id',
-            'reference_id' => 'required|integer',
+            'reference_id' => 'nullable|integer',
             'date'         => 'required|date'
         ]);
 

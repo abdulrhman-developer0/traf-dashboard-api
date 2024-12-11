@@ -63,7 +63,7 @@ class ServiceController extends Controller
 
         $validated = $request->validate([
             'service_category_id' => 'required|exists:service_categories,id',
-            'service_workers' => $serviceProvider->is_personal ? 'nullable' : 'required|سtring|min:1',
+            'service_workers' => $serviceProvider->is_personal ? 'nullable' : 'required|string|min:1',
             'name' => 'required|string|max:255',
             'duration' => 'required|integer',
             'description' => 'nullable|string',
