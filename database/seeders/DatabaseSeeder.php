@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ServiceSeeder::class);
         // $this->call(ServiceScheduleSeeder::class);
         $this->call(BookingSeeder::class);
-        $this->call(ReviewSeeder::class);
+        // $this->call(ReviewSeeder::class);
         // $this->call(OfferSeeder::class);
-        
+
     }
 }

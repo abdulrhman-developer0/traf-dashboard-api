@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Review extends Model
 {
     protected $fillable = [
+        'reviewable_id',
+        'reviewable_type',
         'booking_id',
         'comment',
         'rating'

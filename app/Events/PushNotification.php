@@ -14,24 +14,26 @@ use Illuminate\Queue\SerializesModels;
 class PushNotification
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
+
     /**
      * Create a new event instance.
      */
-    public $booking;
-
-    public function __construct(Booking $booking)
-    {
-        $this->booking = $booking;
-    }
+    public function __construct(
+        public $data = null
+    ) {}
 
     public function broadcastOn()
     {
-        return new Channel('bookings'); // Or PrivateChannel if necessary
+        return new Channel('notifications'); // Or PrivateChannel if necessary
     }
 
     public function broadcastAs()
     {
-        return 'booking.created';
+        return 'notification';
+    }
+
+    public function broadcastWith()
+    {
+        return $this->data ?? [];
     }
 }

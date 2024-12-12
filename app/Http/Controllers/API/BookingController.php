@@ -8,7 +8,9 @@ use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class BookingController extends Controller
 {
@@ -44,21 +46,13 @@ class BookingController extends Controller
 
         $query = Booking::query()
             ->latest()
-            ->where('created_at', '>=', now()->subDays(90))
-            ->when(
-                $user->isAccount('client'),
-                fn($q) => $q->where('client_id', $account->id)
-                    ->withCount(['reviews as is_reviewed' => fn($q) => $q->where('client_id', $account->id)])
-            )
-            ->when(
-                $user->isAccount('service-provider'),
-                fn($q) => $q->whereHas(
-                    'service',
-                    fn($q) => $q->where('service_provider_id', $account->id)
-                )
-                    ->withCount(['reviews as is_reviewed' => fn($q) => $q->whereRelation('booking.service', 'service_provider_id', $account->id)])
-            )
-            ->with(['client', 'service']);
+            // ->where('created_at', '>=', now()->subDays(90))
+            ->with(['client', 'service'])
+            ->with([
+                'reviews' => fn($q) => $q
+                    ->where('reviews.reviewable_type', $account->getMorphClass())
+                    ->where('reviews.reviewable_id', $account->id)
+            ]);
 
         // filter by status
         if ($request->has('status')) {
@@ -81,7 +75,6 @@ class BookingController extends Controller
         }
 
         $bookings = $query->get();
-
         return $this->okResponse(BookingResource::collection($bookings), 'Retrieved all bookings successfully');
     }
 
@@ -98,20 +91,25 @@ class BookingController extends Controller
 
     public function store(Request $request)
     {
-        $bookingData = $validated = $request->validate([
+        $validated = $request->validate([
             'service_id'   => 'required|integer|exists:services,id',
             'reference_id' => 'nullable|integer',
             'date'         => 'required|date'
         ]);
 
-        // inject client id.
+        // get user
         $user                   = Auth::user();
-        $validated['client_id'] = $user->client?->id;
+
+        $bookingData = [
+            'client_id' => $user->client->id,
+            'service_id' => $request->service_id,
+            'reference_id' => $request->reference_id,
+            'date' => Carbon::create($request->date)->format('m/d/Y h:i A'),
+        ];
 
 
 
         $booking = Booking::create($validated);
-        broadcast(new PushNotification($booking))->toOthers();
 
         return $this->createdResponse([
             'booking_id' => $booking->id,
@@ -140,6 +138,20 @@ class BookingController extends Controller
 
         $booking->status = $request->status;
         $booking->save();
+
+        $notifiable = match ($user->account_type) {
+            'client'            => $booking->service->serviceProvider,
+            'service-provider' => $booking->client,
+            default             => null
+        };
+
+        if ($booking->status == 'canceled') {
+            $notification = new PushNotification(
+                BookingResource::make($booking)->toArray($request),
+            );
+
+            $notifiable->notify($notification);
+        }
 
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
     }

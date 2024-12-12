@@ -82,11 +82,11 @@ class ServiceController extends Controller
             "photo"   => 'nullable|image|max:4096',
         ]);
 
-        $serviceWorkers = collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
+        $serviceWorkers = $request->has('service_workers') ? collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
             return [
                 'worker_id' => trim($workerId, ' ,'),
             ];
-        })->toArray();
+        })->toArray() : [];
 
         $is_home_service = $request->has('is_home_service') ? true : false;
         $is_offer = $request->price_after ? true : false;
@@ -137,11 +137,11 @@ class ServiceController extends Controller
             "photo"   => 'nullable|image|max:4096',
         ]);
 
-        $serviceWorkers = collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
+        $serviceWorkers = $request->has('service_workers') ? collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
             return [
                 'worker_id' => trim($workerId, ' ,'),
             ];
-        })->toArray();
+        })->toArray() : [];
 
         $serviceProvider = Auth::user()?->account();
         $service         = $serviceProvider->services()->find($id);
