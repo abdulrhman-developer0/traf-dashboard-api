@@ -23,7 +23,7 @@ class BookingResource extends JsonResource
             'host_photo'        => $this->getHostPhoto(),
             'is_personal'       => $this->Service->serviceProvider->is_personal,
             'status'            => $this->status,
-            'date'              => $this->date,
+            'date'              => $this->date->toDatetimeString(),
             'left_time'         => $this->getLeftTime(),
             // $this->status === 'confirmed' &&
             'is_now'            => $this->getLeftTime() <= 0 && $this->status !== 'done',

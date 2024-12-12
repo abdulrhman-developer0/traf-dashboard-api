@@ -104,15 +104,15 @@ class BookingController extends Controller
             'client_id' => $user->client->id,
             'service_id' => $request->service_id,
             'reference_id' => $request->reference_id,
-            'date' => Carbon::create($request->date)->format('m/d/Y h:i A'),
+            'date' => Carbon::create($request->date)->toDateTimeString(),
         ];
 
-
-
-        $booking = Booking::create($validated);
+        $booking = Booking::create($bookingData);
 
         return $this->createdResponse([
             'booking_id' => $booking->id,
+            'date'       => $booking->date->toDatetimeString(),
+            'now'        => now()->toDatetimeString(),
         ], 'Booking created successfully');
     }
 
