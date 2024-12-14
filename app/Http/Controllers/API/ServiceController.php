@@ -49,7 +49,14 @@ class ServiceController extends Controller
             $query->whereIn('service_provider_id', $ids);
         }
 
-        $services =  $query->paginate($request->page_size ?? 10);
+        $services =  $query
+            ->with(
+                'schedules',
+                // fn($q) => $q->whereRaw(
+                //     'service_id = services.id'
+                // )
+            )
+            ->paginate($request->page_size ?? 10);
 
 
         return $this->okResponse(ServiceCollection::make($services), 'Services retrieved successfully');

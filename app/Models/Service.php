@@ -89,4 +89,9 @@ class Service extends Model implements HasMedia
     {
         return $this->belongsToMany(Worker::class, 'service_workers', 'service_id', 'worker_id');
     }
+
+    public function schedules()
+    {
+        return $this->hasOne(ServiceSchedule::class);
+    }
 }
