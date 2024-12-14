@@ -10,6 +10,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Traits\APIResponses;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -19,6 +20,13 @@ class ServiceController extends Controller
     {
         $query    =  Service::query()
             ->latest()
+            // Get only first schedule for each worker where service_id = service.id
+            ->with('workers.schedules', function ($q) {
+                $q->whereHas(
+                    'service',
+                    fn($q) => $q->whereRaw('service_id = services.id')
+                );
+            })
             ->withCount([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             ]);
@@ -41,7 +49,14 @@ class ServiceController extends Controller
             $query->whereIn('service_provider_id', $ids);
         }
 
-        $services =  $query->paginate($request->page_size ?? 10);
+        $services =  $query
+            ->with(
+                'schedules',
+                // fn($q) => $q->whereRaw(
+                //     'service_id = services.id'
+                // )
+            )
+            ->paginate($request->page_size ?? 10);
 
 
         return $this->okResponse(ServiceCollection::make($services), 'Services retrieved successfully');
@@ -74,11 +89,11 @@ class ServiceController extends Controller
             "photo"   => 'nullable|image|max:4096',
         ]);
 
-        $serviceWorkers = collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
+        $serviceWorkers = $request->has('service_workers') ? collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
             return [
                 'worker_id' => trim($workerId, ' ,'),
             ];
-        })->toArray();
+        })->toArray() : [];
 
         $is_home_service = $request->has('is_home_service') ? true : false;
         $is_offer = $request->price_after ? true : false;
@@ -129,11 +144,11 @@ class ServiceController extends Controller
             "photo"   => 'nullable|image|max:4096',
         ]);
 
-        $serviceWorkers = collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
+        $serviceWorkers = $request->has('service_workers') ? collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
             return [
                 'worker_id' => trim($workerId, ' ,'),
             ];
-        })->toArray();
+        })->toArray() : [];
 
         $serviceProvider = Auth::user()?->account();
         $service         = $serviceProvider->services()->find($id);

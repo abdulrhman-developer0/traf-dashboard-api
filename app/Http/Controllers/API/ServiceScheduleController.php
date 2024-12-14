@@ -21,14 +21,13 @@ class ServiceScheduleController extends Controller
 
     public function __construct()
     {
-       
+
         // public methods
-        $this->middleware(['auth:sanctum','account:service-provider', 'valid_subscribtion'])->only([
+        $this->middleware(['auth:sanctum', 'account:service-provider', 'valid_subscribtion'])->only([
             'store',
             'update',
             'destroy',
         ]);
-       
     }
 
     public function index(Request $request)
@@ -102,7 +101,7 @@ class ServiceScheduleController extends Controller
             'exclude_limit' => 'required_if:pattern,repetition|integer|min:1', //if repetition
             'excluded_dates'    => 'nullable|array',  //ma3da 
             'excluded_dates.*'  => 'required|date',
-            'times'             => 'required|array|min:1',
+            'times'             => 'required|array',
             'times.*'           => 'date_format:h:i',
 
             // custom dates
@@ -216,13 +215,13 @@ class ServiceScheduleController extends Controller
             'exclude_limit' => 'required_if:pattern,repetition|integer|min:1',
             'excluded_dates'    => 'nullable|array',
             'excluded_dates.*'  => 'required|date',
-            'times'             => 'required|array|min:1',
+            'times'             => 'required|array',
             'times.*'           => 'date_format:h:i',
 
             // custom dates
             'custom_dates'          => 'nullable|array',
             'custom_dates.*.date'   => 'required|date',
-            'custom_dates.*.times' => 'required|array|min:1',
+            'custom_dates.*.times' => 'required|array',
             'custom_dates.*.times.*' => 'date_format:h:i',
         ]);
 

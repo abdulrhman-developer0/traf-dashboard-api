@@ -24,7 +24,7 @@ class WorkerResource extends JsonResource
             'photo'                  => $this->getFirstMediaUrl('photo'),
             'created_at'             => $this->created_at?->diffForHumans(),
             'updated_at'             => $this->updated_at?->diffForHumans(),
-            // 'schedules'              => ServiceScheduleResource::collection($this->schedules),
+            'schedules'              => ServiceScheduleResource::collection($this->schedules),
         ];
     }
 }

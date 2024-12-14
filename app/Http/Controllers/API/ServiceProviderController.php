@@ -30,7 +30,7 @@ class ServiceProviderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = ServiceProvider::with('user');
+        $query = ServiceProvider::query();
 
         // filter by category
         if ($request->has('category_id')) {
@@ -39,17 +39,29 @@ class ServiceProviderController extends Controller
 
         // filter by search
         if ($request->has('search')) {
-            $query->whereHas(
-                'user',
-                fn($q) => $q->where('name', 'like', "$request->search%")->orWhere('name', 'regexp', "[$request->search]")
-            )->orWhereHas('services', function ($q) use ($request) {
-                $q->where('name', 'like', "$request->search%")
-                    ->orWhere('name', 'regexp', "[$request->search]")
-                    ->orWhereHas(
-                        'category',
-                        fn($q) => $q->where('name', 'like', "$request->search%")
-                            ->orWhere('name', 'regexp', "[$request->search]")
-                    );
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "$search%")
+                        ->orWhere('name', 'LIKE', "%$search%")
+                        ->orWhere('name', 'REGEXP', "[$search]")
+                        ->orderByRaw("
+                            CASE
+                                WHEN users.name LIKE ? THEN 1
+                                WHEN users.name LIKE ? THEN 2
+                                WHEN users.name REGEXP ? THEN 3
+                                ELSE 4
+                            END
+                    ", ["$search%", "%$search%", "[$search]"]);
+                })->orWhereHas('services', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "$search%")
+                        ->orWhere('name', 'LIKE', "%$search%")
+                        ->orWhereHas('category', function ($q) use ($search) {
+                            $q->where('name', 'LIKE', "$search%")
+                                ->orWhere('name', 'LIKE', "%$search%");
+                        });
+                });
             });
         }
 
@@ -69,7 +81,6 @@ class ServiceProviderController extends Controller
         // 100-200
         if ($request->has('pricing')) {
 
-            //
             $priceing = explode('-', trim($request->pricing, '- '));
             [$from, $to] = match (count($priceing)) {
                 1 => [trim($priceing[0], ' '), null],
@@ -89,13 +100,15 @@ class ServiceProviderController extends Controller
 
         //filter by rating
         if ($request->has('rating')) {
-            $query->where('rating', 'like', "{$request->rating}%");
+            $query->where('rating', 'like', "{$request->rating}%")
+                ->orderBy('rating', 'desc');
         }
 
 
 
 
-        $serviceProviders = $query->get(['id', 'user_id', 'rating']);
+        $serviceProviders = $query->with('user')
+            ->get(['id', 'user_id', 'rating']);
 
         return $this->okResponse([
             'provider_ids'  => $serviceProviders->pluck('id')->join(','),
