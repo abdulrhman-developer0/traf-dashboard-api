@@ -110,4 +110,9 @@ class Client extends Model implements HasMedia
 
         return $statuses;
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

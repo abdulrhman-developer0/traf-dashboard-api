@@ -13,6 +13,7 @@ use App\Http\Controllers\API\FavoritController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\OfferController;
 use App\Http\Controllers\API\PackageController;
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\ReviewsController;
 use App\Http\Controllers\API\ServiceCategoryController;
 use App\Http\Controllers\API\ServiceController;
@@ -110,6 +111,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Subscription routes
     Route::post('/subscriptions', [SubscriptionController::class, 'subscribe'])
         ->middleware(['account:service-provider']);
+    
+    Route::post('/payment', [PaymentController::class, 'subscribe'])
+        ->middleware(['account:client']);
 
     // Paytabs 
     Route::post('/payments/initiate', [PaytabsController::class, 'initiatePayment']);
@@ -121,7 +125,8 @@ Route::post('/webhooks/paymob', [SubscriptionController::class, 'handlePaymentWe
 // Paymob callback.
 Route::get('/callbacks/paymob', [SubscriptionController::class, 'handlePaymentWebhook']);
 
-
+//client paymob 
+Route::get('/callbacks/paymob', [PaymentController::class, 'handlePaymentWebhook']);
 
 // user 
 
