@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade'); 
-            $table->enum('status', ['pending', 'active', 'expired', 'failed'])->default('pending');
+            // $table->enum('status', ['pending', 'active', 'expired', 'failed'])->default('pending');
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
-            $table->string('payment_id')->nullable();
+            $table->string('amount');
             $table->string('transaction_reference')->nullable();
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date')->nullable();
+            
             
             $table->timestamps();
         });

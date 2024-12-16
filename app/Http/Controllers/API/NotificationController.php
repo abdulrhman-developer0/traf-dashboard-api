@@ -14,15 +14,17 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
+        // Get the authenticated user
         $user = Auth::user();
-
-        $user->notifications()->delete();
-        for ($i = 0; $i < 20; $i += 1) {
-            $user->notify(new ReminderNotification);
-        }
-
-        return response()->json(['data' => $notifications], 200);
+        dd($user);
+        // Retrieve all notifications for the user, ordered by the most recent first
+        // $notifications = $user->notifications()->latest()->get();
+        
+        // Return the notifications as a JSON response
+        // return response()->json(['data' => $notifications], 200);
     }
+    
+    
 
     /**
      * Mark a specific notification as read.

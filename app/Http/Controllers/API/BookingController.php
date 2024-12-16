@@ -6,6 +6,7 @@ use App\Events\PushNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Notifications\PusherNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -115,47 +116,96 @@ class BookingController extends Controller
         ], 'Booking created successfully');
     }
 
+    // public function update(Request $request, $id)
+    // {
+    //     $user = Auth::user();
+    
+    //     $allowedStatuses = match ($user->account_type) {
+    //         'client'            => 'canceled',
+    //         'service-provider' => 'done,canceled',
+    //         'admin'             => '',
+    //     };
+    
+    //     $booking = Booking::find($id);
+    
+    //     if (! $booking) {
+    //         return $this->badResponse('Booking not found');
+    //     }
+    
+    //     $request->validate([
+    //         'status' => "required|in:$allowedStatuses",
+    //     ]);
+    
+    //     $booking->status = $request->status;
+    //     $booking->save();
+    
+    //     $user = match ($user->account_type) {
+    //         'client'            => $booking->service->serviceProvider->user,
+    //         'service-provider'  => $booking->client->user,
+    //         default             => null
+    //     };
+    
+    //     if ($booking->status == 'canceled') {
+    //         // Create the notification
+    //         $notification = new PushNotification(
+    //             $user,
+    //             BookingResource::make($booking)->toArray($request),
+    //         );
+          
+    //         // Send the notification to the user (this will save it in the database)
+    //         $user->notify($notification);
+    
+    //         // Broadcast the notification (for real-time updates)
+    //         broadcast($notification)->toOthers();
+    //     }
+    
+    //     return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
+    // }
+    
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-
+    
         $allowedStatuses = match ($user->account_type) {
             'client'            => 'canceled',
             'service-provider' => 'done,canceled',
             'admin'             => '',
         };
-
+    
         $booking = Booking::find($id);
-
+    
         if (! $booking) {
             return $this->badResponse('Booking not found');
         }
-
+    
         $request->validate([
             'status' => "required|in:$allowedStatuses",
         ]);
-
+    
         $booking->status = $request->status;
         $booking->save();
-
+    
         $user = match ($user->account_type) {
             'client'            => $booking->service->serviceProvider->user,
             'service-provider'  => $booking->client->user,
             default             => null
         };
-
+        // dd($booking);
         if ($booking->status == 'canceled') {
-            $notification = new PushNotification(
+            echo "hello";
+            // Create the notification instance
+            $notification = new PusherNotification(
                 $user,
                 BookingResource::make($booking)->toArray($request),
             );
-
-            broadcast($notification)->toOthers();
+            // dd($notification);
+            // Use the notify method to store the notification in the database and broadcast
+            $user->notify($notification);
         }
-
+    
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
     }
-
+    
     public function destroy($id)
     {
         $booking = Booking::find($id);

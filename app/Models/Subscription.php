@@ -12,10 +12,9 @@ class Subscription extends Model
     protected $fillable = [
         'service_provider_id',
         'package_id',
+        'amount',
         'start_date',
         'end_date',
-        'status', // active, pending, expired
-        'payment_id',
         'payment_status', // pending, paid, failed
         'transaction_reference'
     ];
