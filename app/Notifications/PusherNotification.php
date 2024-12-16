@@ -30,7 +30,7 @@ class PusherNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast','pusher'];
+        return ['database','pusher'];
     }
 
     /**
