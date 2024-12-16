@@ -22,6 +22,11 @@ class PushNotification
         public $data = null
     ) {}
 
+    public function via()
+    {
+        return ['database'];
+    }
+
     public function broadcastOn()
     {
         return new Channel('notifications'); // Or PrivateChannel if necessary

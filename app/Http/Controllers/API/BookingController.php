@@ -163,6 +163,6 @@ class BookingController extends Controller
         }
 
         $booking->delete();
-        return $this->okResponse(Serv, 'Booking deleted successfully');
+        return $this->okResponse([], 'Booking deleted successfully');
     }
 }
