@@ -48,11 +48,10 @@ class BookingController extends Controller
             ->latest()
             // ->where('created_at', '>=', now()->subDays(90))
             ->with(['client', 'service'])
-            ->with([
-                'reviews' => fn($q) => $q
-                    ->where('reviews.reviewable_type', $account->getMorphClass())
-                    ->where('reviews.reviewable_id', $account->id)
-            ]);
+            ->with('reviews', function ($quary) use ($account) {
+                $quary->where('reviewable_type', $account->getMorphClass())
+                    ->where('reviewable_id', $account->id)->count();
+            });
 
         // filter by status
         if ($request->has('status')) {
@@ -140,8 +139,8 @@ class BookingController extends Controller
         $booking->save();
 
         $notifiable = match ($user->account_type) {
-            'client'            => $booking->service->serviceProvider,
-            'service-provider' => $booking->client,
+            'client'            => $booking->service->serviceProvider->user,
+            'service-provider'  => $booking->client->user,
             default             => null
         };
 
