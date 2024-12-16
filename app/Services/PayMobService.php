@@ -41,7 +41,7 @@ class PayMobService
             $orderResponse = Http::withToken($authToken)
                 ->post($this->baseUrl . '/ecommerce/orders', [
                     'amount_cents' => $data['amount'],
-                    'merchant_order_id' => $data['order_id']
+                    'merchant_order_id' => uniqid($data['order_id'] . '_'),
                 ])->throw()->json();
 
 
