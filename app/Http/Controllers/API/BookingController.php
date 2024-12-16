@@ -138,7 +138,7 @@ class BookingController extends Controller
         $booking->status = $request->status;
         $booking->save();
 
-        $notifiable = match ($user->account_type) {
+        $user = match ($user->account_type) {
             'client'            => $booking->service->serviceProvider->user,
             'service-provider'  => $booking->client->user,
             default             => null
@@ -146,10 +146,11 @@ class BookingController extends Controller
 
         if ($booking->status == 'canceled') {
             $notification = new PushNotification(
+                $user,
                 BookingResource::make($booking)->toArray($request),
             );
 
-            $notifiable->notify($notification);
+            broadcast($notification)->toOthers();
         }
 
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');

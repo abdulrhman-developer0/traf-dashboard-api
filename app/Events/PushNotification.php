@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Booking;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -19,7 +20,8 @@ class PushNotification
      * Create a new event instance.
      */
     public function __construct(
-        public $data = null
+        public User $user,
+        public $data = null,
     ) {}
 
     public function via()
@@ -29,7 +31,7 @@ class PushNotification
 
     public function broadcastOn()
     {
-        return new Channel('notifications'); // Or PrivateChannel if necessary
+        return new Channel("notifications.{$this->user->id}"); // Or PrivateChannel if necessary
     }
 
     public function broadcastAs()
