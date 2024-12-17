@@ -107,7 +107,7 @@ class ServiceScheduleController extends Controller
             // custom dates
             'custom_dates'          => 'nullable|array',
             'custom_dates.*.date'   => 'required|date',
-            'custom_dates.*.times' => 'required|array|min:1',
+            'custom_dates.*.times' => 'required|array',
             'custom_dates.*.times.*' => 'date_format:h:i',
         ]);
 

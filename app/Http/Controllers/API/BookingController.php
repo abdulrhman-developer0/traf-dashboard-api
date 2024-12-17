@@ -192,15 +192,16 @@ class BookingController extends Controller
         };
         // dd($booking);
         if ($booking->status == 'canceled') {
-            echo "hello";
-            // Create the notification instance
-            $notification = new PusherNotification(
+            $notification = new \App\Notifications\PusherNotification(
                 $user,
-                BookingResource::make($booking)->toArray($request),
+                BookingResource::make($booking)->toArray($request)
             );
+        
+            // Notify the user (database + broadcast)
+            $user->notify($notification);
             // dd($notification);
             // Use the notify method to store the notification in the database and broadcast
-            $user->notify($notification);
+            // $user->notify($notification2);
         }
     
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');

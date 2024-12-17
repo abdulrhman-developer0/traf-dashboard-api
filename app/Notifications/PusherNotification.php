@@ -2,83 +2,61 @@
 
 namespace App\Notifications;
 
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Broadcasting\Channel; 
+use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Notifications\Messages\MailMessage;
+
 
 class PusherNotification extends Notification
 {
     use Queueable;
+
     public $user;
     public $data;
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct($user, $data)
+
+    public function __construct($user, $data = null)
     {
-        //
         $this->user = $user;
         $this->data = $data;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
+    public function via($notifiable)
     {
-        return ['database', 'broadcast','pusher'];
+        return ['database', 'broadcast'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
     public function toDatabase($notifiable)
     {
         return [
             'user_id' => $this->user->id,
             'data' => $this->data,
-            'message' => 'Your booking has been canceled.'
+            'message' => 'Your booking has been updated.',
         ];
     }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'user_id' => $this->user->id,
+            'data' => $this->data,
+            'message' => 'Your booking has been updated.',
+        ]);
+    }
+
     public function broadcastOn()
     {
-        return new Channel("notifications.{$this->user->id}");
+        return new PrivateChannel("notifications.{$this->user->id}");
     }
 
     public function broadcastAs()
     {
-        return 'notification';
+        return 'booking.updated';
     }
 
-    public function broadcastWith()
+    public function shouldBroadcastNow()
     {
-        return [
-            'user_id' => $this->user->id,
-            'data' => $this->data,
-            'message' => 'Your booking has been canceled.'
-        ];
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
+        return true; // Immediate broadcast
     }
 }
