@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Events\SendNotification;
+use App\Http\Resources\BookingResource;
+use App\Models\Booking;
 
 class TestNotifications extends Command
 {
@@ -28,10 +30,12 @@ class TestNotifications extends Command
     public function handle()
     {
         // This is a sample data to be sent in the notification, you can put any data row wherever you will use the command
-        $data = \App\Models\User::find(1);
+        $user     = \App\Models\User::firstWhere('account_type', 'client');
+        $account  = $user->account();
+        $booking = Booking::where('client_id', $account->id)->first();
 
-        SendNotification::dispatch($data);
+        $data = BookingResource::make($booking)->toArray(request());
 
-
+        SendNotification::dispatch($user, $data);
     }
 }

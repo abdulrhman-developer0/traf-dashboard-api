@@ -14,14 +14,17 @@ class SendNotification implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $user;
     public $data;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($user, array $data = [])
     {
+        $this->user = $user;
         $this->data = $data;
     }
 
@@ -37,7 +40,12 @@ class SendNotification implements ShouldBroadcastNow
         // The ID added here related to the user ID
 
         return [
-            new PrivateChannel("notifications.{$this->data->id}"),
+            new PrivateChannel("notifications.{$this->user->id}"),
         ];
+    }
+
+    public function broadcastWith()
+    {
+        return $this->data;
     }
 }
