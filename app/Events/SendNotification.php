@@ -40,7 +40,7 @@ class SendNotification implements ShouldBroadcastNow
         // The ID added here related to the user ID
 
         return [
-            new PrivateChannel("notifications.{$this->user->id}"),
+            new Channel("notifications.{$this->user->id}"),
         ];
     }
     // getdata for pusher 
