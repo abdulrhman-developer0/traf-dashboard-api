@@ -178,7 +178,7 @@ class ProfileController extends Controller
                             
                             $bookings = Booking::where("service_id", $service->id)
                                 ->where('status', 'confirmed')
-                                ->with(['payments', 'service', 'client'])
+                                ->with(['payments', 'service'])
                                 ->get();
                             // Confirm bookings exist for each service
                             
