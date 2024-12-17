@@ -178,14 +178,14 @@ class ProfileController extends Controller
                             
                             $bookings = Booking::where("service_id", $service->id)
                                 ->where('status', 'confirmed')
-                                ->with(['payments', 'service'])
+                                ->with(['payments', 'service.serviceProvider.user', 'client.user'])
                                 ->get();
                             // Confirm bookings exist for each service
                             
                             $allBookings = array_merge($allBookings, $bookings->toArray());
                         }
                         
-                        return response()->json($allBookings);
+                        return $this->okResponse($allBookings, 'Bookings retrieved successfuly');
                     }
                 }
                 else {
