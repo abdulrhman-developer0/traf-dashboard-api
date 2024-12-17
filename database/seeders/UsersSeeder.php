@@ -35,10 +35,15 @@ class UsersSeeder extends Seeder
         // ]);
         // $dev_user->assignRole('Admin');
         $users = [
+            //1
             ['name' => 'أحمد علي', 'email' => 'ahmed.ali@example.com', 'account_type' => 'service-provider'],
+            //2
             ['name' => 'سارة محمد', 'email' => 'sara.mohamed@example.com', 'account_type' => 'service-provider'],
+            //3
             ['name' => 'خالد حسن', 'email' => 'khaled.hassan@example.com', 'account_type' => 'service-provider'],
+            // 4
             ['name' => 'منى محمود', 'email' => 'mona.mahmoud@example.com', 'account_type' => 'service-provider'],
+            
             ['name' => 'يوسف إبراهيم', 'email' => 'youssef.ibrahim@example.com', 'account_type' => 'client'],
             ['name' => 'هدى أحمد', 'email' => 'hoda.ahmed@example.com', 'account_type' => 'client'],
             ['name' => 'علي سعيد', 'email' => 'ali.saeed@example.com', 'account_type' => 'client'],

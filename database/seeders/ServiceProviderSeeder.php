@@ -45,6 +45,16 @@ class ServiceProviderSeeder extends Seeder
                 'address' => 'الدمام، حي الشاطئ',
                 'rating' => 4.7,
             ],
+            [
+                'user_id' => 4,
+                'is_personal' => true,
+                'tax_registeration_number' => null,
+                'city_id' => 303,
+                'job' => 'فني أظافر',
+                'phone' => '0561234321',
+                'address' => 'الدمام، حي الشاطئ',
+                'rating' => 4.7,
+            ],
         ];
 
 
