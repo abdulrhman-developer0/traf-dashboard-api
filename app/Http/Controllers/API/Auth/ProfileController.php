@@ -159,32 +159,30 @@ class ProfileController extends Controller
                         return response()->json(['message' => 'Client not found'], 404);
                     }
                 } 
-                else if ($user->isAccount('service-provider')) {
-                   
-                  
+               else if ($user->isAccount('service-provider')) {
                     $serviceProvider = ServiceProvider::where('user_id', $user->id)->first();
-                    // echo $serviceProvider;
-                    echo $serviceProvider->id;
+                    dd($serviceProvider); // Confirm service provider is found
+                    
                     if ($serviceProvider) {
                         $services = Service::where('service_provider_id', $serviceProvider->id)->get();
-                       
+                        dd($services); // Confirm services exist
+                
                         $allBookings = []; 
-                        
+                
                         foreach ($services as $service) {
-                        //    echo $service;
-                        echo $service->id;
+                            dd($service); // Confirm each service ID and details
+                            
                             $bookings = Booking::where("service_id", $service->id)
                                 ->where('status', 'confirmed')
-                                ->with(['payments',"service","client"])
+                                ->with(['payments', 'service', 'client'])
                                 ->get();
-                            echo $bookings;
+                            dd($bookings); // Confirm bookings exist for each service
+                            
                             $allBookings = array_merge($allBookings, $bookings->toArray());
                         }
-                    
+                        
                         return response()->json($allBookings);
                     }
-
-
                 }
                 else {
                     return response()->json(['message' => "you aren't allowd to access that"], 403);
