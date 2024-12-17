@@ -129,4 +129,26 @@ class ProfileController extends Controller
             return $this->badResponse($e->getMessage());
         }
     }
+    public function reports() {
+        try {
+            $user = Auth::user();
+
+            if ($user) {
+                $account = $user->account();
+                if ($user->isAccount('client')) {
+                    return response()->json([
+                        'user' => $user,
+                        'account' => $account
+                    ]);
+                } else {
+                    return response()->json(['message' => 'User is not a client'], 403);
+                }
+            } else {
+                return response()->json(['message' => 'User not authenticated'], 401);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
 }

@@ -41,15 +41,17 @@ Route::prefix('auth')->group(function () {
 
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
-
+      
         Route::get('/profile', [ProfileController::class, 'data']);
         Route::put('/profile', [ProfileController::class, 'update']);
+        Route::get('/profile/reports', [ProfileController::class, 'reports']); 
         Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
         Route::get('/profile/{id}', [ProfileController::class, 'dataFor']);
 
         Route::patch('/profile/change-password', [ProfileController::class, 'changePassword']);
         
         Route::delete('/profile', [ProfileController::class, 'destroyAccount']);
+       
     });
 });
 
@@ -60,8 +62,12 @@ Route::apiResource('/service-providers', ServiceProviderController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
 
 
+
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
+
+    
 
     Route::get('/packages', PackageController::class)->middleware(['account:service-provider']);
 
@@ -93,6 +99,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // services 
     Route::get('/services/favorits', [FavoritController::class, 'index']);
     Route::post('/services/favorits', [FavoritController::class, 'taggle']);
+
+   
+
     Route::apiResource('services', ServiceController::class);
 
     //Serivce Categories 
@@ -146,3 +155,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware(['auth:sanctum']);
+
+
+

@@ -43,7 +43,7 @@ class SendNotification implements ShouldBroadcastNow
             new PrivateChannel("notifications.{$this->user->id}"),
         ];
     }
-
+    // getdata for pusher 
     public function broadcastWith()
     {
         return $this->data;

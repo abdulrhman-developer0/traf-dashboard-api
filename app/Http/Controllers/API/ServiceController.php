@@ -196,4 +196,5 @@ class ServiceController extends Controller
         $service->delete();
         return $this->okResponse([], 'Service deleted successfully');
     }
+  
 }
