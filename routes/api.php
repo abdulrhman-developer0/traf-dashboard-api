@@ -48,6 +48,8 @@ Route::prefix('auth')->group(function () {
         Route::get('/profile/{id}', [ProfileController::class, 'dataFor']);
 
         Route::patch('/profile/change-password', [ProfileController::class, 'changePassword']);
+        
+        Route::delete('/profile', [ProfileController::class, 'destroyAccount']);
     });
 });
 

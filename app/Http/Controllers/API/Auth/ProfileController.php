@@ -111,4 +111,22 @@ class ProfileController extends Controller
 
         return $this->okResponse([], 'Password Change Successfuly');
     }
+
+    public function destroyAccount()
+    {
+        try {
+            $user       = Auth::user();
+            $account    = $user->account();
+
+            $accountDeleted = $account->delete();
+            $userDeletedd   = $user->deleted  = $user->delete();
+
+            return $this->okResponse([
+                'user_deleted'       => $userDeletedd,
+                'account_deleted'    => $accountDeleted
+            ], 'Account deleted successfuly.');
+        } catch (\Exception $e) {
+            return $this->badResponse($e->getMessage());
+        }
+    }
 }
