@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Events\PushNotification;
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Models\Client;
 use App\Models\ServiceProvider;
+use App\Notifications\DBNotification;
 use App\Notifications\PusherNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
@@ -115,6 +117,13 @@ class BookingController extends Controller
 
         $booking = Booking::create($bookingData);
 
+        $data = BookingResource::make($booking)->toArray($request);
+        $user = $booking->service->serviceProvider->user;
+
+        // Notify the user (database + broadcast)
+        $user->notify(new DBNotification($data)); 
+        SendNotification::dispatch($user, $data);
+
         return $this->createdResponse([
             'booking_id' => $booking->id,
             'date'       => $booking->date->toDatetimeString(),
@@ -191,25 +200,21 @@ class BookingController extends Controller
         $booking->status = $request->status;
         $booking->save();
 
-        $user = match ($user->account_type) {
-            'client'            => $booking->service->serviceProvider->user,
-            'service-provider'  => $booking->client->user,
-            default             => null
-        };
-        // dd($booking);
         if ($booking->status == 'canceled') {
+
+            $user = match ($user->account_type) {
+                'client'            => $booking->service->serviceProvider->user,
+                'service-provider'  => $booking->client->user,
+                default             => null
+            };
             
-            $notification = new \App\Notifications\PusherNotification(
-                $user,
-                BookingResource::make($booking)->toArray($request)
-            );
+            
+            $data = BookingResource::make($booking)->toArray($request);
            
             
             // Notify the user (database + broadcast)
-            $user->notify($notification);
-            // dd($notification);
-            // Use the notify method to store the notification in the database and broadcast
-            // $user->notify($notification2);
+            $user->notify(new DBNotification($data)); 
+            SendNotification::dispatch($user, $data);
         }
 
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');

@@ -7,15 +7,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ReminderNotification extends Notification
+class DBNotification extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
-    {
+    public function __construct(
+        public array $data
+    ) {
         //
     }
 
@@ -29,6 +30,8 @@ class ReminderNotification extends Notification
         return ['database'];
     }
 
+
+
     /**
      * Get the array representation of the notification.
      *
@@ -36,8 +39,6 @@ class ReminderNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            'unread_notifications' => $notifiable->notifications()->unread()->count(),
-        ];
+        return $this->data;
     }
 }

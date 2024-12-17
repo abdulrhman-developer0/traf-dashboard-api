@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Events\SendNotification;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Notifications\DBNotification;
 
 class TestNotifications extends Command
 {
@@ -38,5 +39,6 @@ class TestNotifications extends Command
         $data = BookingResource::make($booking)->toArray(request());
 
         SendNotification::dispatch($user, $data);
+        $user->notify(new DBNotification($data));
     }
 }
