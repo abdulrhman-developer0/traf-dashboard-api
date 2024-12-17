@@ -170,7 +170,7 @@ class ProfileController extends Controller
                         $allBookings = []; 
                 
                         foreach ($services as $service) {
-                            dd($service); // Confirm each service ID and details
+                           
                             
                             $bookings = Booking::where("service_id", $service->id)
                                 ->where('status', 'confirmed')
