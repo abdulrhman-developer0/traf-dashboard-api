@@ -28,7 +28,7 @@ class BookingSeeder extends Seeder
                     'client_id' => $clientId,
                     'service_id' => $serviceId,
                     'date'       => now()->format('m/d/Y'),
-                    'status'     => fake()->randomElement(['pending', 'canceled', 'confirmed', 'done']),
+                    'status'     => 'confirmed',
                 ]);
             }
         }
