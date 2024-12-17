@@ -161,7 +161,7 @@ public function subscribe(Request $request) {
     if (!$singleBooking) {
         return $this->badResponse('Unauthorized access to the booking');
     }
-
+    $singleBooking->update(['status' => 'confirmed']);
     // Retrieve the service associated with the booking
     $serviceId = $singleBooking->service_id;
     $service = Service::where('id', $serviceId)->first();

@@ -22,6 +22,7 @@ class SendNotification implements ShouldBroadcastNow
      */
     public function __construct($data)
     {
+        
         $this->data = $data;
     }
 

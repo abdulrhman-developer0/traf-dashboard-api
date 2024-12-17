@@ -30,6 +30,7 @@ class TestNotifications extends Command
         // This is a sample data to be sent in the notification, you can put any data row wherever you will use the command
         $data = \App\Models\User::find(1);
 
+        echo $data;
         SendNotification::dispatch($data);
 
 

@@ -63,6 +63,7 @@ class BookingController extends Controller
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
+        
 
         // filter by client_id
         if ($request->has('client_id')) {
