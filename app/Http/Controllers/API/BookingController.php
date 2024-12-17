@@ -197,9 +197,7 @@ class BookingController extends Controller
                 $user,
                 BookingResource::make($booking)->toArray($request)
             );
-            return response()->json([
-                "mssg" => $notification
-            ]);
+           
             
             // Notify the user (database + broadcast)
             $user->notify($notification);
