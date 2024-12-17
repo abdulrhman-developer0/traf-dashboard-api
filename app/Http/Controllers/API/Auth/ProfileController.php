@@ -135,10 +135,12 @@ class ProfileController extends Controller
     }
     public function reports()
     {
-
+        echo "????????????";
         try {
+           
             $user = Auth::user();
-
+            
+          
             if ($user) {
                 
                 if ($user->isAccount('client')) {
@@ -158,7 +160,10 @@ class ProfileController extends Controller
                     }
                 } 
                 else if ($user->isAccount('service-provider')) {
+                   
+                  
                     $serviceProvider = ServiceProvider::where('user_id', $user->id)->first();
+                    echo $serviceProvider;
                     if ($serviceProvider) {
                         $services = Service::where('service_provider_id', $serviceProvider->id)->get();
                       
