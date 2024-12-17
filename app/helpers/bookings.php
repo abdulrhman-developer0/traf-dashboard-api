@@ -16,13 +16,15 @@ if (!function_exists('isTimeAvailable')) {
     function isTimeAvailable(int $serviceId, Carbon $datetime): bool
     {
         // Retrieve all schedules for the service
-        $schedules = ServiceSchedule::where('service_id', $serviceId)
+        $schedules = ServiceSchedule::latest()
+            ->where('service_id', $serviceId)
             ->where('start_date', '<=', $datetime)
             ->where('end_date', '>=', $datetime)
             ->get();
 
         // ignored ids
         $ignoredIds = [];
+        // dd($schedules->toArray());
 
         // Check if the time is available
         foreach ($schedules as $schedule) {
@@ -31,6 +33,8 @@ if (!function_exists('isTimeAvailable')) {
                 ->where('date', $datetime)
                 ->whereNotIn('id', $ignoredIds)
                 ->first();
+
+            // dd($existingBooking);
 
             if (!$existingBooking) {
                 return true; // Time is not available
