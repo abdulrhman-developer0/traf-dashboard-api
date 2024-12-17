@@ -135,7 +135,7 @@ class ProfileController extends Controller
     }
     public function reports()
     {
-        echo "????????????";
+        
         try {
            
             $user = Auth::user();
