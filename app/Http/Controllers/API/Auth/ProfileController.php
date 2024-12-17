@@ -172,6 +172,7 @@ class ProfileController extends Controller
                         
                         foreach ($services as $service) {
                         //    echo $service;
+                        echo $service->id;
                             $bookings = Booking::where("service_id", $service->id)
                                 ->where('status', 'confirmed')
                                 ->with(['payments',"service","client"])
