@@ -24,11 +24,11 @@ class Booking extends Model
         'date'  => 'datetime'
     ];
 
-    public function client(): BelongsTo
-    {
-        return $this->belongsTo(Client::class);
-    }
-
+    public function client()
+{
+    return $this->belongsTo(Client::class, 'client_id', 'id');
+}
+   
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);

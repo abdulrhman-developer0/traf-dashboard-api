@@ -35,9 +35,9 @@ class Client extends Model implements HasMedia
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
+    
     public function favoritServices(): BelongsToMany
     {
         return $this->belongsToMany(Service::class, 'favorits');

@@ -150,9 +150,13 @@ class ProfileController extends Controller
                        
                         $bookings = $client->bookings()
                         ->where('status', 'confirmed')
-                        ->with(['service.serviceProvider','payments'])
+                        ->with([
+                             'client.user',
+                             'service.serviceProvider',
+                             'service.serviceProvider.user',
+                            'payments'
+                        ])
                         ->get();
-            
                         return $bookings;
                     } else {
                       
