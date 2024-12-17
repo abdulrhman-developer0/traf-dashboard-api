@@ -10,6 +10,7 @@ use App\Http\Controllers\SystemLogController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\SystemTrashController;
 
+
 Route::get('/', function () {
     return redirect('/dashboard');
 });
