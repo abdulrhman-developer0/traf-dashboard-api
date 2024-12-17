@@ -161,7 +161,7 @@ class ProfileController extends Controller
                 } 
                else if ($user->isAccount('service-provider')) {
                     $serviceProvider = ServiceProvider::where('user_id', $user->id)->first();
-                    dd($serviceProvider); // Confirm service provider is found
+                    // dd($serviceProvider); // Confirm service provider is found
                     
                     if ($serviceProvider) {
                         $services = Service::where('service_provider_id', $serviceProvider->id)->get();
