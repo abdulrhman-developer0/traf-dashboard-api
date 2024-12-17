@@ -55,6 +55,19 @@ class ServiceSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'service_category_id' => 3,
+                'service_provider_id' => 4,
+                'name' => 'جلسة باديكير ومناكير ورسم حنة  ',
+                'duration' => 75,
+                'description' => 'جلسة مناكير وباديكير ورسم حنة باحدث الاشكال والطلاءات .',
+                'rating' => 4.7,
+                'price_before' => 00.00,
+                'price_after' => 250.00,
+                'is_offer' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
     
         foreach ($services as $service) {
