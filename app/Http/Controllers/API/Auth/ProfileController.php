@@ -165,7 +165,7 @@ class ProfileController extends Controller
                     
                     if ($serviceProvider) {
                         $services = Service::where('service_provider_id', $serviceProvider->id)->get();
-                        dd($services); // Confirm services exist
+                       // Confirm services exist
                 
                         $allBookings = []; 
                 
@@ -176,7 +176,7 @@ class ProfileController extends Controller
                                 ->where('status', 'confirmed')
                                 ->with(['payments', 'service', 'client'])
                                 ->get();
-                            dd($bookings); // Confirm bookings exist for each service
+                            // Confirm bookings exist for each service
                             
                             $allBookings = array_merge($allBookings, $bookings->toArray());
                         }
