@@ -152,20 +152,28 @@ class ProfileController extends Controller
             
                         return $bookings;
                     } else {
-                        // Handle case where no client is found
+                      
                         return response()->json(['message' => 'Client not found'], 404);
                     }
                 } 
                 else if ($user->isAccount('service-provider')) {
                     $serviceProvider = ServiceProvider::where('user_id', $user->id)->first();
                     if ($serviceProvider) {
-                        $services=Service::where('service_provider_id',$serviceProvider->id)->get();
-
-                        // $bookings = Booking::where('status', 'confirmed') 
-                        // ->with(['client', 'service.serviceProvider', 'payment']) 
-                        // ->get();
-            
-                        return $services;
+                        $services = Service::where('service_provider_id', $serviceProvider->id)->get();
+                      
+                        $allBookings = []; 
+                        
+                        foreach ($services as $service) {
+                          
+                            $bookings = Booking::where("service_id", $service->id)
+                                ->where('status', 'confirmed')
+                                ->with(['payments',"service","client"])
+                                ->get();
+                          
+                            $allBookings = array_merge($allBookings, $bookings->toArray());
+                        }
+                    
+                        return response()->json($allBookings);
                     }
 
 
