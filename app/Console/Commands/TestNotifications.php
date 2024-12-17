@@ -30,6 +30,7 @@ class TestNotifications extends Command
     public function handle()
     {
         // This is a sample data to be sent in the notification, you can put any data row wherever you will use the command
+
         $user     = \App\Models\User::firstWhere('account_type', 'client');
         $account  = $user->account();
         $booking = Booking::where('client_id', $account->id)->first();

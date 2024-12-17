@@ -31,7 +31,7 @@ class PushNotification
  
     public function broadcastOn() 
     { 
-        return new Channel("notifications.{$this->user->id}"); // Or PrivateChannel if necessary 
+        return new Channel("notifications"); // Or PrivateChannel if necessary 
     } 
  
     public function broadcastAs() 
