@@ -135,10 +135,7 @@ class ProfileController extends Controller
     }
     public function reports()
     {
-<<<<<<< HEAD
 
-=======
->>>>>>> 1480c7ec58060449cdc326d054a5c9f6165c5ef1
         try {
             $user = Auth::user();
 
