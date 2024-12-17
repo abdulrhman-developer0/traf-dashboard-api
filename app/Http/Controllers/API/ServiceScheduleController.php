@@ -101,14 +101,14 @@ class ServiceScheduleController extends Controller
             'exclude_limit' => 'required_if:pattern,repetition|integer|min:1', //if repetition
             'excluded_dates'    => 'nullable|array',  //ma3da 
             'excluded_dates.*'  => 'required|date',
-            'times'             => 'required|array',
-            'times.*'           => 'date_format:h:i',
+            'times'             => 'nullable|array',
+            'times.*'           => 'date_format:H:i',
 
             // custom dates
             'custom_dates'          => 'nullable|array',
             'custom_dates.*.date'   => 'required|date',
             'custom_dates.*.times' => 'required|array|min:1',
-            'custom_dates.*.times.*' => 'date_format:h:i',
+            'custom_dates.*.times.*' => 'date_format:H:i',
         ]);
 
         $pattern   = $request->pattern;
@@ -215,14 +215,14 @@ class ServiceScheduleController extends Controller
             'exclude_limit' => 'required_if:pattern,repetition|integer|min:1',
             'excluded_dates'    => 'nullable|array',
             'excluded_dates.*'  => 'required|date',
-            'times'             => 'required|array',
-            'times.*'           => 'date_format:h:i',
+            'times'             => 'nullable|array',
+            'times.*'           => 'date_format:H:i',
 
             // custom dates
             'custom_dates'          => 'nullable|array',
             'custom_dates.*.date'   => 'required|date',
             'custom_dates.*.times' => 'required|array',
-            'custom_dates.*.times.*' => 'date_format:h:i',
+            'custom_dates.*.times.*' => 'date_format:H:i',
         ]);
 
         $pattern   = $request->pattern;
