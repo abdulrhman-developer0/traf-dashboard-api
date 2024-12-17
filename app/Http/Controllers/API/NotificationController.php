@@ -4,11 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Notifications\ReminderNotification;
+use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
+    use APIResponses;
+
     /**
      * Retrieve all notifications for the authenticated user.
      */
@@ -16,15 +19,15 @@ class NotificationController extends Controller
     {
         // Get the authenticated user
         $user = Auth::user();
-        dd($user);
+
         // Retrieve all notifications for the user, ordered by the most recent first
-        // $notifications = $user->notifications()->latest()->get();
-        
+        $notifications = $user->notifications()->latest()->get();
+
         // Return the notifications as a JSON response
-        // return response()->json(['data' => $notifications], 200);
+        return $this->okResponse($notifications->map(fn($n) => $n->data), 'Notifications retrieved successfuly.');
     }
-    
-    
+
+
 
     /**
      * Mark a specific notification as read.
