@@ -129,7 +129,9 @@ class ProfileController extends Controller
             return $this->badResponse($e->getMessage());
         }
     }
-    public function reports() {
+    public function reports()
+    {
+
         try {
             $user = Auth::user();
 
@@ -150,5 +152,4 @@ class ProfileController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
 }
