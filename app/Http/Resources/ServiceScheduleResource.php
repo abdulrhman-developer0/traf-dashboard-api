@@ -47,7 +47,7 @@ class ServiceScheduleResource extends JsonResource
                     return [
                         'date' => $customDate->start_date->format('m/d/Y'),
                         'times' => $customDate->times->map(function ($wt) {
-                            return $wt->time->format('h:i');
+                            return $wt->time->format('H:i');
                         })
                     ];
                 })
