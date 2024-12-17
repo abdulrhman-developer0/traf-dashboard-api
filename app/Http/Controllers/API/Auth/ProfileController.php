@@ -166,7 +166,7 @@ class ProfileController extends Controller
                     echo $serviceProvider;
                     if ($serviceProvider) {
                         $services = Service::where('service_provider_id', $serviceProvider->id)->get();
-                      
+                        echo $services;
                         $allBookings = []; 
                         
                         foreach ($services as $service) {
