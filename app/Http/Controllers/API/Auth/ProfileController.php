@@ -167,11 +167,11 @@ class ProfileController extends Controller
                     echo $serviceProvider->id;
                     if ($serviceProvider) {
                         $services = Service::where('service_provider_id', $serviceProvider->id)->get();
-                        echo $services;
+                       
                         $allBookings = []; 
                         
                         foreach ($services as $service) {
-                          
+                           echo $service;
                             $bookings = Booking::where("service_id", $service->id)
                                 ->where('status', 'confirmed')
                                 ->with(['payments',"service","client"])
