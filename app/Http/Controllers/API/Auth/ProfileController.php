@@ -163,7 +163,8 @@ class ProfileController extends Controller
                    
                   
                     $serviceProvider = ServiceProvider::where('user_id', $user->id)->first();
-                    echo $serviceProvider;
+                    // echo $serviceProvider;
+                    echo $serviceProvider->id;
                     if ($serviceProvider) {
                         $services = Service::where('service_provider_id', $serviceProvider->id)->get();
                         echo $services;
