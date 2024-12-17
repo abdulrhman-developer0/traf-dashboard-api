@@ -171,12 +171,12 @@ class ProfileController extends Controller
                         $allBookings = []; 
                         
                         foreach ($services as $service) {
-                           echo $service;
+                        //    echo $service;
                             $bookings = Booking::where("service_id", $service->id)
                                 ->where('status', 'confirmed')
                                 ->with(['payments',"service","client"])
                                 ->get();
-                          
+                            echo $bookings;
                             $allBookings = array_merge($allBookings, $bookings->toArray());
                         }
                     
