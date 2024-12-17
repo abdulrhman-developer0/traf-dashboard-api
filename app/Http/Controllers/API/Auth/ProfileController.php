@@ -4,6 +4,10 @@ namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Booking;
+use App\Models\Client;
+use App\Models\Service;
+use App\Models\ServiceProvider;
 use App\Models\User;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
@@ -131,19 +135,47 @@ class ProfileController extends Controller
     }
     public function reports()
     {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1480c7ec58060449cdc326d054a5c9f6165c5ef1
         try {
             $user = Auth::user();
 
             if ($user) {
-                $account = $user->account();
+                
                 if ($user->isAccount('client')) {
-                    return response()->json([
-                        'user' => $user,
-                        'account' => $account
-                    ]);
-                } else {
-                    return response()->json(['message' => 'User is not a client'], 403);
+
+                    $client = Client::where('user_id', $user->id)->first();
+                    if ($client) {
+                       
+                        $bookings = $client->bookings()
+                        ->where('status', 'confirmed')
+                        ->with(['service.serviceProvider','payments'])
+                        ->get();
+            
+                        return $bookings;
+                    } else {
+                        // Handle case where no client is found
+                        return response()->json(['message' => 'Client not found'], 404);
+                    }
+                } 
+                else if ($user->isAccount('service-provider')) {
+                    $serviceProvider = ServiceProvider::where('user_id', $user->id)->first();
+                    if ($serviceProvider) {
+                        $services=Service::where('service_provider_id',$serviceProvider->id)->get();
+
+                        // $bookings = Booking::where('status', 'confirmed') 
+                        // ->with(['client', 'service.serviceProvider', 'payment']) 
+                        // ->get();
+            
+                        return $services;
+                    }
+
+
+                }
+                else {
+                    return response()->json(['message' => "you aren't allowd to access that"], 403);
                 }
             } else {
                 return response()->json(['message' => 'User not authenticated'], 401);

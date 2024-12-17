@@ -143,18 +143,13 @@ public function subscribe(Request $request) {
         'transaction_id' => 'required'
     ]);
     
-    // Get the authenticated user
+  
     $user = Auth::user();
-
-    // Ensure only clients can access the payment process
     if (!$user->isAccount('client')) {
         return $this->badResponse('Only Clients can Access to this Payment');
     }
 
-    // Get the client account
     $client = $user->account();
-
-    // Retrieve the booking details based on the client and booking ID
     $singleBooking = Booking::where('id', $validatedBooking['booking_id'])
                             ->where('client_id', $client->id)
                             ->first();
@@ -162,14 +157,12 @@ public function subscribe(Request $request) {
         return $this->badResponse('Unauthorized access to the booking');
     }
     $singleBooking->update(['status' => 'confirmed']);
-    // Retrieve the service associated with the booking
     $serviceId = $singleBooking->service_id;
     $service = Service::where('id', $serviceId)->first();
     if (!$service) {
         return $this->badResponse('Service not found');
     }
 
-    // Get the service name and the appropriate amount to charge
     $serviceName = $service->name;
     $amount = $service->is_offer ? $service->price_after : $service->price_before;
 
@@ -179,7 +172,7 @@ public function subscribe(Request $request) {
 
         // Create the payment record
         $payment = Payment::create([
-            'client_id' => $client->id,
+            'booking_id' => $singleBooking->id,
             'payment_status' => 'paid',
             'transaction_reference' => $validatedBooking['transaction_id'],  // Corrected variable
             'amount' => $amount,  // Assuming you need to store the amount as well

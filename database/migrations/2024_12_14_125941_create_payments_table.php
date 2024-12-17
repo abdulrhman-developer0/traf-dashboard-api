@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade'); 
+            
+            $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade'); 
             // $table->enum('status', ['pending', 'active', 'expired', 'failed'])->default('pending');
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
             $table->string('amount');
