@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             'is_verfied'        => (bool) $this->code_verified,
             'is_personal'       => (bool) $account?->is_personal,
             'user_id'           => $this->id,
+            'fcm_token'         => $this->fcm_token,
             'account_id'        => $account?->id,
             'type'              => $this->account_type,
             'photo'             => $account->getFirstMediaUrl('photo'),
