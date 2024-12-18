@@ -123,7 +123,11 @@ class BookingController extends Controller
 
         // Notify the user (database + broadcast)
         $user->notify(new DBNotification($data));
-        SendNotification::dispatch($user, $data);
+        //SendNotification::dispatch($user, $data);
+
+        // Send Firebase Notification
+        app('App\Http\Controllers\API\FcmController')->sendFcmNotification($user->id,'Notification Title','Notification Body');
+
 
         return $this->createdResponse([
             'booking_id' => $booking->id,

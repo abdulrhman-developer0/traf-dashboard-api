@@ -1,65 +1,42 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Http\Controllers\API;
 
-use Illuminate\Console\Command;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Google\Client as GoogleClient;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
-use App\Events\SendNotification;
-use App\Http\Resources\BookingResource;
-use App\Models\Booking;
-use App\Notifications\DBNotification;
-
-class TestNotifications extends Command
+class FcmController extends Controller
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'TestNotifications';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'TestNotifications';
-
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function updateDeviceToken(Request $request)
     {
-        // This is a sample data to be sent in the notification, you can put any data row wherever you will use the command
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'fcm_token' => 'required|string',
+        ]);
 
-        /*$user     = \App\Models\User::firstWhere('account_type', 'client');
-        $account  = $user->account();
-        $booking = Booking::where('client_id', $account->id)->first();
+        $request->user()->update(['fcm_token' => $request->fcm_token]);
 
-        $data = BookingResource::make($booking)->toArray(request());
-
-        SendNotification::dispatch($user, $data);
-        $user->notify(new DBNotification($data));*/
-
-        $this->send('123','Abed','Is here','Message',1);
-
-        
+        return response()->json(['message' => 'Device token updated successfully']);
     }
 
-    public static function send($firebaseToken,$title,$body,$type,$id)
+    public function sendFcmNotification($user_id,$title,$body)
     {
-        
-
-        $fcm = $firebaseToken;
+        $user = \App\Models\User::find($user_id);
+        $fcm = $user->fcm_token;
 
         if (!$fcm) {
             return response()->json(['message' => 'User does not have a device token'], 400);
         }
 
+        $title = $title;
         $description = $body;
+        $projectId = 'traf-e54b9'; # INSERT COPIED PROJECT ID
 
         $credentialsFilePath = public_path('json/traf-e54b9-firebase-adminsdk-tfa1j-47937aae94.json');
-        $client = new \Google_Client();
+        $client = new GoogleClient();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
         $client->refreshTokenWithAssertion();
@@ -79,16 +56,12 @@ class TestNotifications extends Command
                     "title" => $title,
                     "body" => $description,
                 ],
-                "data" => [
-                    'type' => $type,
-                    'id' => strval($id)
-                ]
             ]
         ];
         $payload = json_encode($data);
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/v1/projects/newsapp-ba299/messages:send");
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/v1/projects/{$projectId}/messages:send");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -100,10 +73,9 @@ class TestNotifications extends Command
         curl_close($ch);
 
         if ($err) {
-            echo $err;
-            /*return response()->json([
+            return response()->json([
                 'message' => 'Curl Error: ' . $err
-            ], 500);*/
+            ], 500);
         } else {
             return response()->json([
                 'message' => 'Notification has been sent',
@@ -111,5 +83,4 @@ class TestNotifications extends Command
             ]);
         }
     }
-
 }

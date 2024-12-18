@@ -27,6 +27,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\PaytabsController;
 use App\Http\Controllers\Webhooks\PaymobWebhook;
+use App\Http\Controllers\API\FcmController;
+
 use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -130,6 +132,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Paytabs 
     Route::post('/payments/initiate', [PaytabsController::class, 'initiatePayment']);
     Route::post('/payments/verify', [PaytabsController::class, 'verifyPayment']);
+
+    Route::put('update-device-token', [FcmController::class, 'updateDeviceToken']);
+
 });
 
 Route::post('/webhooks/paymob', PaymobWebhook::class);
