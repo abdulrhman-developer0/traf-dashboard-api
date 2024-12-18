@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Google\Client as GoogleClient;
 use Illuminate\Support\Facades\Storage;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Http;
 
 class FcmController extends Controller
 {
+    use APIResponses;
+
     public function updateDeviceToken(Request $request)
     {
         $request->validate([
@@ -17,9 +20,8 @@ class FcmController extends Controller
         ]);
 
         $request->user()->update(['fcm_token' => $request->fcm_token]);
-        return $request->user();
 
-        return response()->json(['message' => 'Device token updated successfully']);
+        return $this->okResponse([], 'Device token updated successfully');
     }
 
     public function sendFcmNotification($user_id, $title, $body)
