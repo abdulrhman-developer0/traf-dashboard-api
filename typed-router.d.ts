@@ -33,10 +33,5 @@ declare module 'vue-router/auto-routes' {
     'user-list-add-new-user-drawer': RouteRecordInfo<'user-list-add-new-user-drawer', '/user/list/AddNewUserDrawer', Record<never, never>, Record<never, never>>,
     'user-list-index-backup': RouteRecordInfo<'user-list-index-backup', '/user/list/index-backup', Record<never, never>, Record<never, never>>,
     'user-view-id': RouteRecordInfo<'user-view-id', '/user/view/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    'website-navigation': RouteRecordInfo<'website-navigation', '/website/navigation', Record<never, never>, Record<never, never>>,
-    'website-post': RouteRecordInfo<'website-post', '/website/post', Record<never, never>, Record<never, never>>,
-    'website-post-create-edit': RouteRecordInfo<'website-post-create-edit', '/website/post/create-edit', Record<never, never>, Record<never, never>>,
-    'website-post-category': RouteRecordInfo<'website-post-category', '/website/post-category', Record<never, never>, Record<never, never>>,
-    'website-post-tag': RouteRecordInfo<'website-post-tag', '/website/post-tag', Record<never, never>, Record<never, never>>,
   }
 }

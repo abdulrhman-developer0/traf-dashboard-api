@@ -13,16 +13,16 @@ class FcmController extends Controller
     public function updateDeviceToken(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'fcm_token' => 'required|string',
         ]);
 
         $request->user()->update(['fcm_token' => $request->fcm_token]);
+        return $request->user();
 
         return response()->json(['message' => 'Device token updated successfully']);
     }
 
-    public function sendFcmNotification($user_id,$title,$body)
+    public function sendFcmNotification($user_id, $title, $body)
     {
         $user = \App\Models\User::find($user_id);
         $fcm = $user->fcm_token;
