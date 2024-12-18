@@ -39,7 +39,8 @@ class User extends Authenticatable implements HasMedia, HasAccounts
         'last_activity',
         'account_type',
         'code',
-        'expire_at'
+        'expire_at',
+        'fcm_token',
 
     ];
 
