@@ -19,7 +19,7 @@ class ValidSubscription
 
         $account = Auth::user()->account();
 
-        // if (!$account->current_subscriptions) {
+        // if (!$account->currentSubscription) {
         //     return response()->json(['message' => 'Access denied. No valid subscription found.'], 403);
         // }
 

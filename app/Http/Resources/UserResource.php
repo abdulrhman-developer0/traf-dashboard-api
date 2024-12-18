@@ -37,6 +37,7 @@ class UserResource extends JsonResource
             'reviews_count'     => $account->reviews_count ?? 0,
             'rating_stats'      => $account->rating_stats,
             'booking_stats'     => $account->booking_stats,
+            'subscription'      => optional($account->currentSubscription)->only(['payment_status', 'start_date', 'end_date'])
         ];
     }
 }

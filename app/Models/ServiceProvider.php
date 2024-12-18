@@ -60,14 +60,13 @@ class ServiceProvider extends Model implements HasMedia
         return $this->morphMany(Review::class, 'reviewable');
     }
 
-    public function current_subscriptions()
+    public function currentSubscription()
     {
 
-        return 
-        $this->hasOne(Subscription::class)
-        ->where('status','active')
-        ->where('start_date','<=',now())
-        ->where('end_date','>=', now());
+        return $this->hasOne(Subscription::class)
+            ->where('payment_status', 'paid')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now());
     }
 
     /**
@@ -133,5 +132,4 @@ class ServiceProvider extends Model implements HasMedia
 
         return $statuses;
     }
-    
 }
