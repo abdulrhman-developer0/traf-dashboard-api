@@ -16,7 +16,7 @@ class TestNotifications extends Command
      *
      * @var string
      */
-    protected $signature = 'TestNotifications';
+    protected $signature = 'TestNotifications {user_id}';
 
     /**
      * The console command description.
@@ -41,22 +41,14 @@ class TestNotifications extends Command
         SendNotification::dispatch($user, $data);
         $user->notify(new DBNotification($data));*/
 
-        $this->send('123','Abed','Is here','Message',1);
+        $user = \App\Models\User::firstWhere('id', $this->argument('user_id'));
+        $firebaseToken = $user->fcm_token;
 
-        
+        $this->send($firebaseToken, 'Test tile', 'Is here', 'Message', 1);
     }
 
-    public static function send($firebaseToken,$title,$body,$type,$id)
+    public static function send($fcm, $title, $body, $type, $id)
     {
-        
-
-        $fcm = $firebaseToken;
-
-        if (!$fcm) {
-            return response()->json(['message' => 'User does not have a device token'], 400);
-        }
-
-        $description = $body;
 
         $credentialsFilePath = public_path('json/traf-e54b9-firebase-adminsdk-tfa1j-47937aae94.json');
         $client = new \Google_Client();
@@ -77,7 +69,7 @@ class TestNotifications extends Command
                 "token" => $fcm,
                 "notification" => [
                     "title" => $title,
-                    "body" => $description,
+                    "body" => $body,
                 ],
                 "data" => [
                     'type' => $type,
@@ -111,5 +103,4 @@ class TestNotifications extends Command
             ]);
         }
     }
-
 }
