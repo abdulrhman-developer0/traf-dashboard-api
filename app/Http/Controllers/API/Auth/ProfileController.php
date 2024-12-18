@@ -135,67 +135,19 @@ class ProfileController extends Controller
     }
     public function reports()
     {
-        
-        try {
-           
-            $user = Auth::user();
-            
-          
-            if ($user) {
-                
-                if ($user->isAccount('client')) {
+        $user       = Auth::user();
+        $account    = $user->account();
 
-                    $client = Client::where('user_id', $user->id)->first();
-                    if ($client) {
-                       
-                        $bookings = $client->bookings()
-                        ->where('status', 'confirmed')
-                        ->with([
-                             'client.user',
-                             'service.serviceProvider',
-                             'service.serviceProvider.user',
-                            'payments'
-                        ])
-                        ->get();
-                        return $bookings;
-                    } else {
-                      
-                        return response()->json(['message' => 'Client not found'], 404);
-                    }
-                } 
-               else if ($user->isAccount('service-provider')) {
-                    $serviceProvider = ServiceProvider::where('user_id', $user->id)->first();
-                    // dd($serviceProvider); // Confirm service provider is found
-                    
-                    if ($serviceProvider) {
-                        $services = Service::where('service_provider_id', $serviceProvider->id)->get();
-                       // Confirm services exist
-                
-                        $allBookings = []; 
-                
-                        foreach ($services as $service) {
-                           
-                            
-                            $bookings = Booking::where("service_id", $service->id)
-                                ->where('status', 'confirmed')
-                                ->with(['payments', 'service.serviceProvider.user', 'client.user'])
-                                ->get();
-                            // Confirm bookings exist for each service
-                            
-                            $allBookings = array_merge($allBookings, $bookings->toArray());
-                        }
-                        
-                        return $this->okResponse($allBookings, 'Bookings retrieved successfuly');
-                    }
-                }
-                else {
-                    return response()->json(['message' => "you aren't allowd to access that"], 403);
-                }
-            } else {
-                return response()->json(['message' => 'User not authenticated'], 401);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        $bookings = Booking::whereStatus('confirmed')
+            ->with(['client.user', 'service.serviceProvider.user', 'payments'])
+            ->when($user->isAccount('client'), function ($q) use ($account) {
+                $q->where('client_id', $account->id);
+            })
+            ->when($user->isAccount('service-provider'), function ($q) use ($account) {
+                $q->whereHas('service.serviceProvider', fn($q) => $q->where('id', $account->id));
+            })
+            ->get();
+
+        return $this->okResponse($bookings, 'Profile reports retrieved successfuly.');
     }
 }

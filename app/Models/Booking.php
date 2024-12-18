@@ -25,10 +25,10 @@ class Booking extends Model
     ];
 
     public function client()
-{
-    return $this->belongsTo(Client::class, 'client_id', 'id');
-}
-   
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
+
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
@@ -43,7 +43,8 @@ class Booking extends Model
     {
         return $this->hasMany(Review::class);
     }
-    public function payments(){
+    public function payments()
+    {
         return $this->hasOne(Payment::class);
     }
 }
