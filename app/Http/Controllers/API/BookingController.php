@@ -51,6 +51,7 @@ class BookingController extends Controller
 
         $query = Booking::query()
             ->latest()
+            ->whereStatus('confirmed')
             // ->where('created_at', '>=', now()->subDays(90))
             ->with(['client', 'service'])
             ->with('reviews', function ($quary) use ($user, $account) {
@@ -65,7 +66,7 @@ class BookingController extends Controller
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
-        
+
 
         // filter by client_id
         if ($request->has('client_id')) {
@@ -121,7 +122,7 @@ class BookingController extends Controller
         $user = $booking->service->serviceProvider->user;
 
         // Notify the user (database + broadcast)
-        $user->notify(new DBNotification($data)); 
+        $user->notify(new DBNotification($data));
         SendNotification::dispatch($user, $data);
 
         return $this->createdResponse([
@@ -207,13 +208,13 @@ class BookingController extends Controller
                 'service-provider'  => $booking->client->user,
                 default             => null
             };
-            
-            
+
+
             $data = BookingResource::make($booking)->toArray($request);
-           
-            
+
+
             // Notify the user (database + broadcast)
-            $user->notify(new DBNotification($data)); 
+            $user->notify(new DBNotification($data));
             SendNotification::dispatch($user, $data);
         }
 
