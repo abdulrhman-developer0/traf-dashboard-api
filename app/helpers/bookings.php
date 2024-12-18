@@ -30,6 +30,7 @@ if (!function_exists('isTimeAvailable')) {
         foreach ($schedules as $schedule) {
             $existingBooking = DB::table('bookings')
                 ->where('service_id', $serviceId)
+                ->whereStats('confirmed')
                 ->where('date', $datetime)
                 ->whereNotIn('id', $ignoredIds)
                 ->first();
