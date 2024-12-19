@@ -212,7 +212,7 @@ class BookingController extends Controller
                 'message' => $message,
                 'user' => [
                     'id' => $user->id,
-                    'account_id' => $user->accout()->id,
+                    'account_id' => $user->account()->id,
                     'name' => $user->name
                 ]
             ];
