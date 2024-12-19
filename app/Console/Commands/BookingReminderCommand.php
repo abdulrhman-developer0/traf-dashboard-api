@@ -1,47 +1,52 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Console\Commands;
 
-use App\Events\PushNotification;
-use App\Events\SendNotification;
-use App\Http\Resources\BookingResource;
+use App\Jobs\BookingRemindersJob;
 use App\Models\Booking;
 use App\Notifications\DBNotification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class BookingRemindersJob implements ShouldQueue
+class BookingReminderCommand extends Command
 {
-    use Queueable;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:booking-reminder';
 
     /**
-     * Create a new job instance.
+     * The console command description.
+     *
+     * @var string
      */
-    public function __construct()
-    {
-        // 
-    }
+    protected $description = 'Command description';
 
     /**
-     * Execute the job.
+     * Execute the console command.
      */
-    public function handle(): void
+    public function handle()
     {
         $bookings =  Booking::query()
-            ->latest()
+            ->whereStatus('confirmed')
             ->where('date', '>=', now())
-            // ->where('date', '<=', now()->endOfDay())
             ->get();
 
         foreach ($bookings as $booking) {
 
 
             $hours = now()->diffInHours($booking->date);
+            // $minutes = now()->diffInMinutes($booking->date);
+            // dd($minutes);
 
 
-            if ($hours > 0 && $hours <= 3) {
+
+            if ($hours >= 0 && $hours <= 3) {
+                // dd($booking->toArray());
+
                 foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $targetUser) {
                     $title = 'تذكير';
                     $message = 'لديك موعد قريب';
