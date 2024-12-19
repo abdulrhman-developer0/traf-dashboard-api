@@ -54,7 +54,7 @@ class ServiceScheduleController extends Controller
                     ->where('end_date', '>=', $date);
             });
 
-        return $query->get();
+        return ServiceSchedule::find(7);
 
         $schedule = $query->with(['excludedDates', 'customWorkDates.times'])
             ->first();
