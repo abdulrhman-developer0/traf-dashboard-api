@@ -35,9 +35,6 @@ class BookingReminderCommand extends Command
             ->where('date', '>=', now())
             ->get();
 
-            
-        dd($bookings->toArray());
-
         foreach ($bookings as $booking) {
 
 
