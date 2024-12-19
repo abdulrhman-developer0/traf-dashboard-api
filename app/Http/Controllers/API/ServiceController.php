@@ -25,7 +25,7 @@ class ServiceController extends Controller
                 $q->whereHas(
                     'service',
                     fn($q) => $q->whereRaw('service_id = services.id')
-                );
+                )->latest();
             })
             ->withCount([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
@@ -196,5 +196,4 @@ class ServiceController extends Controller
         $service->delete();
         return $this->okResponse([], 'Service deleted successfully');
     }
-  
 }
