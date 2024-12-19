@@ -264,7 +264,7 @@ class ServiceScheduleController extends Controller
             )->toArray()
             : [];
 
-        $subscription = $schedule->serviceProvider->currentSubscription;
+        $subscription = $schedule->service->serviceProvider->currentSubscription;
         if (! $subscription) {
             return $this->badResponse([], 'You must have a subscription to add a schedule');
         }
