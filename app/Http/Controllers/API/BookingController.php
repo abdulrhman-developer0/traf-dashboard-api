@@ -203,7 +203,7 @@ class BookingController extends Controller
             };
 
             $title   = 'تم الغاء الموعد';
-            $message = "تم الغاء الحجز في\"{$booking->service->name}\"";
+            $message = "تم الغاء الحجز في {$booking->service->name}";
             $data = [
                 'status' => 'canceled',
                 'date' => $booking->date,
