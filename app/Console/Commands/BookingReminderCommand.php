@@ -49,7 +49,7 @@ class BookingReminderCommand extends Command
 
                 foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $targetUser) {
                     $title = 'تذكير';
-                    $message = 'لديك موعد قريب';
+                    $message = 'لديك موعد قريب في ' . $booking->date->format('h:i');
 
                     $user = match ($targetUser->account_type) {
                         'client'            => $booking->service->serviceProvider->user,
