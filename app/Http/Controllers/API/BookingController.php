@@ -210,20 +210,14 @@ class BookingController extends Controller
                 'sent_at' => now(),
                 'title' => $title,
                 'message' => $message,
-                'user' => [
-                    'id' => $user->id,
-                    'account_id' => $user->account()->id,
-                    'name' => $user->name
-                ]
+                'user' => null
             ];
 
 
-            // Notify the user (database + broadcast)
+            //notify the user in database.
             $user->notify(new DBNotification($data));
-            // SendNotification::dispatch($user, $data);
 
-            // Send Firebase Notification
-
+            // notify the user in FCM
             app('App\Http\Controllers\API\FcmController')->sendFcmNotification(
                 $user->id,
                 $title,
