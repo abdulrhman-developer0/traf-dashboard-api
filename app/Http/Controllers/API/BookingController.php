@@ -51,7 +51,7 @@ class BookingController extends Controller
 
         $query = Booking::query()
             ->latest()
-            ->whereStatus('confirmed')
+            ->whereIn('status', ['confirmed', 'done'])
             // ->where('created_at', '>=', now()->subDays(90))
             ->with(['client', 'service'])
             ->with('reviews', function ($quary) use ($user, $account) {
