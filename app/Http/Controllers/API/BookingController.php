@@ -118,17 +118,6 @@ class BookingController extends Controller
 
         $booking = Booking::create($bookingData);
 
-        $data = BookingResource::make($booking)->toArray($request);
-        $user = $booking->service->serviceProvider->user;
-
-        // Notify the user (database + broadcast)
-        $user->notify(new DBNotification($data));
-        //SendNotification::dispatch($user, $data);
-
-        // Send Firebase Notification
-        app('App\Http\Controllers\API\FcmController')->sendFcmNotification($user->id,'Notification Title','Notification Body');
-
-
         return $this->createdResponse([
             'booking_id' => $booking->id,
             'date'       => $booking->date->toDatetimeString(),
@@ -213,13 +202,33 @@ class BookingController extends Controller
                 default             => null
             };
 
-
-            $data = BookingResource::make($booking)->toArray($request);
+            $title   = 'تم الغاء الموعد';
+            $message = "تم الغاء الحجز في\"$booking->service->name\"";
+            $data = [
+                'status' => 'canceled',
+                'date' => $booking->date,
+                'sent_at' => now(),
+                'title' => $title,
+                'message' => $message,
+                'user' => [
+                    'id' => $user->id,
+                    'account_id' => $user->accout()->id,
+                    'name' => $user->name
+                ]
+            ];
 
 
             // Notify the user (database + broadcast)
             $user->notify(new DBNotification($data));
-            SendNotification::dispatch($user, $data);
+            // SendNotification::dispatch($user, $data);
+
+            // Send Firebase Notification
+
+            app('App\Http\Controllers\API\FcmController')->sendFcmNotification(
+                $user->id,
+                $title,
+                $message
+            );
         }
 
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
