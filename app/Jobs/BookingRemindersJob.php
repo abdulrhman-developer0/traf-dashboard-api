@@ -38,15 +38,43 @@ class BookingRemindersJob implements ShouldQueue
 
 
             $hours = now()->diffInHours($booking->date);
-            
+
 
             if ($hours > 0 && $hours <= 3) {
-                $data = BookingResource::make($booking)->toArray(request());
-                $user = $booking->client->user;
+                foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $targetUser) {
+                    $title = 'تذكير';
+                    $message = 'لديك موعد قريب';
 
-                // Notify the user (database + broadcast)
-                $user->notify(new DBNotification($data));
-                SendNotification::dispatch($user, $data);
+                    $user = match ($targetUser->account_type) {
+                        'client'            => $booking->service->serviceProvider->user,
+                        'service-provider'  => $booking->client->user,
+                        default             => null
+                    };
+
+                    $data = [
+                        'status' => 'confirmed',
+                        'date' => $booking->date,
+                        'sent_at' => now(),
+                        'title' => $title,
+                        'message' => $message,
+                        'user' => [
+                            'id' => $user->id,
+                            'account_id' => $user->account()->id,
+                            'name' => $user->name
+                        ]
+                    ];
+
+                    // Notify the target user in the database.
+                    $targetUser->notify(new DBNotification($data));
+
+                    // Notify the target user via FCM
+                    app('App\Http\Controllers\API\FcmController')
+                        ->sendFcmNotification(
+                            $targetUser->id,
+                            $title,
+                            $message
+                        );
+                }
             }
         }
     }
