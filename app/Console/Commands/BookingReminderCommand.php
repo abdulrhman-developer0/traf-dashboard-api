@@ -48,6 +48,8 @@ class BookingReminderCommand extends Command
                 // dd($booking->toArray());
 
                 foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $targetUser) {
+                    if (! $targetUser->fcm_token ) continue;
+
                     $title = 'تذكير';
                     $message = 'لديك موعد قريب في ' . $booking->date->format('h:i');
 
