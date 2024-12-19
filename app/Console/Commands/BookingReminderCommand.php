@@ -85,6 +85,6 @@ class BookingReminderCommand extends Command
         }
 
         Log::info('Test reminder notifications');
-        dd($bookings);
+        dd($bookings->iterator_to_array());
     }
 }
