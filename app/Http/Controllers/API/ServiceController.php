@@ -19,10 +19,8 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $query    =  Service::query()
-            ->latest()
             // Get only first schedule for each worker where service_id = service.id
             ->with('workers.schedules', function ($q) {
-                $q->latest();
                 $q->whereHas(
                     'worker',
                     fn($q) => $q->whereRaw('worker_id = workers.id')
@@ -30,11 +28,10 @@ class ServiceController extends Controller
                 $q->whereHas(
                     'service',
                     fn($q) => $q->whereRaw('service_id = services.id')
-                );
-            })
-            ->withCount([
+                )->latest();
+            })->withCount([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
-            ]);
+            ])->latest();
 
         // filter by search
         if ($request->has('search')) {
@@ -69,7 +66,20 @@ class ServiceController extends Controller
 
     public function show($id)
     {
-        $service = Service::find($id);
+        $service = Service::whereId($id)
+            // Get only first schedule for each worker where service_id = service.id
+            ->with('workers.schedules', function ($q) {
+                $q->whereHas(
+                    'worker',
+                    fn($q) => $q->whereRaw('worker_id = workers.id')
+                );
+                $q->whereHas(
+                    'service',
+                    fn($q) => $q->whereRaw('service_id = services.id')
+                )->latest();
+            })
+            ->first();
+
         if (!$service) {
             return $this->badResponse([], 'Service not found');
         }
