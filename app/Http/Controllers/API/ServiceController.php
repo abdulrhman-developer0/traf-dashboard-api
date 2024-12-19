@@ -74,10 +74,10 @@ class ServiceController extends Controller
                     //     'worker',
                     //     fn($q) => $q->whereRaw('service_schedules.worker_id = workers.id')
                     // )
-                    // ->whereHas(
-                    //     'service',
-                    //     fn($q) => $q->whereRaw('service_id = services.id')
-                    // )
+                    ->whereHas(
+                        'service',
+                        fn($q) => $q->whereRaw('service_id = services.id')
+                    )
                     ->latest();
             })
             ->first();
