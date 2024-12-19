@@ -145,13 +145,18 @@ class ServiceScheduleController extends Controller
             )->toArray()
             : [];
 
-        $planDays = 90;
+        $subscription = $serviceProvider->currentSubscriptions;
+        if (! $subscription) {
+            return $this->badResponse([], 'You must have a subscription to add a schedule');
+        }
+
+        $planDays = $subscription->package->duration_in_days;
 
         $endDate = match ($pattern) {
-            "one-time"      => $startDate->copy()->addDay(),
-            "daily"         => $startDate->copy()->addDays($planDays),
-            'repetition'    => $startDate->copy()->addDays($planDays),
-            'manual'        => $endDate
+            "one-time"      => $startDate->copy()->endOfDay(),
+            "daily"         => $startDate->copy()->addDays($planDays)->endOfDay(),
+            'repetition'    => $startDate->copy()->addDays($planDays)->endOfDay(),
+            'manual'        => $endDate->copy()->endOfDay()
         };
 
         $schedule = ServiceSchedule::create([
@@ -259,13 +264,18 @@ class ServiceScheduleController extends Controller
             )->toArray()
             : [];
 
-        $planDays = 90;
+        $subscription = $schedule->serviceProvider->currentSubscriptions;
+        if (! $subscription) {
+            return $this->badResponse([], 'You must have a subscription to add a schedule');
+        }
+
+        $planDays = $subscription->package->duration_in_days;
 
         $endDate = match ($pattern) {
-            "one-time"      => $startDate->copy()->addDay(),
-            "daily"         => $startDate->copy()->addDays($planDays),
-            'repetition'    => $startDate->copy()->addDays($planDays),
-            'manual'        => $endDate
+            "one-time"      => $startDate->copy()->endOfDay(),
+            "daily"         => $startDate->copy()->addDays($planDays)->endOfDay(),
+            'repetition'    => $startDate->copy()->addDays($planDays)->endOfDay(),
+            'manual'        => $endDate->copy()->endOfDay()
         };
 
 
