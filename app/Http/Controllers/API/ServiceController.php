@@ -22,10 +22,15 @@ class ServiceController extends Controller
             ->latest()
             // Get only first schedule for each worker where service_id = service.id
             ->with('workers.schedules', function ($q) {
+                $q->latest();
+                $q->whereHas(
+                    'worker',
+                    fn($q) => $q->whereRaw('worker_id = workers.id')
+                );
                 $q->whereHas(
                     'service',
                     fn($q) => $q->whereRaw('service_id = services.id')
-                )->latest();
+                );
             })
             ->withCount([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
