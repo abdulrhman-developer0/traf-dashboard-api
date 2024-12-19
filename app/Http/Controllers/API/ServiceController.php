@@ -69,10 +69,11 @@ class ServiceController extends Controller
         $service = Service::whereId($id)
             // Get only first schedule for each worker where service_id = service.id
             ->with('workers.schedules', function ($q) {
-                $q->whereHas(
-                    'worker',
-                    fn($q) => $q->whereRaw('worker_id = workers.id')
-                )
+                $q
+                    // ->whereHas(
+                    //     'worker',
+                    //     fn($q) => $q->whereRaw('service_schedules.worker_id = workers.id')
+                    // )
                     // ->whereHas(
                     //     'service',
                     //     fn($q) => $q->whereRaw('service_id = services.id')
