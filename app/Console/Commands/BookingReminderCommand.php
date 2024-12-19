@@ -35,6 +35,9 @@ class BookingReminderCommand extends Command
             ->where('date', '>=', now())
             ->get();
 
+            
+        dd($bookings->toArray());
+
         foreach ($bookings as $booking) {
 
 
@@ -58,7 +61,7 @@ class BookingReminderCommand extends Command
                     };
 
                     $data = [
-                        'status' => 'confirmed',
+                        'status' => 'reminding',
                         'date' => $booking->date,
                         'sent_at' => now(),
                         'title' => $title,
@@ -85,6 +88,5 @@ class BookingReminderCommand extends Command
         }
 
         Log::info('Test reminder notifications');
-        dd($bookings->toArray());
     }
 }
