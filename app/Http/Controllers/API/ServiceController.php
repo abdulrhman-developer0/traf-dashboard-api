@@ -26,7 +26,7 @@ class ServiceController extends Controller
                     //     'worker',
                     //     fn($q) => $q->whereRaw('service_workers.worker_id = workers.id')
                     // )
-                    ->whereRaw('reference_id = workers.id')
+                    ->whereRaw('reference_id = service_workers.worker_id')
                     ->whereHas(
                         'service',
                         fn($q) => $q->whereRaw('service_id = services.id')
