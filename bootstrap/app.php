@@ -15,7 +15,7 @@ use Illuminate\Console\Scheduling\Schedule;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withSchedule(function (Schedule $schedule) {
-        $schedule->job(BookingRemindersJob::class)->everyMinute();
+        $schedule->command('app:booking-reminder')->everySecond();
     })
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
