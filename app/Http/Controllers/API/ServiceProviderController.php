@@ -81,20 +81,15 @@ class ServiceProviderController extends Controller
         // 100-200
         if ($request->has('pricing')) {
 
-            $priceing = explode('-', trim($request->pricing, '- '));
-            [$from, $to] = match (count($priceing)) {
-                1 => [trim($priceing[0], ' '), null],
-                2 => [trim($priceing[0], ' '), trim($priceing[1], ' ')],
-                default => [null, null],
-            };
+            $pricingRange = collect(
+                explode('-', trim($request->pricing, '- '))
+            )->map(
+                fn($v) => trim($v, '- ')
+            )->toArray();
 
-            $query->whereHas('services', function ($q) use ($from, $to) {
-                $q->where(
-                    fn($q) => $q->where('price_before', '>=', $from)->orWhere('price_after', '>=', $from)
-                )->when(
-                    $to,
-                    fn($q) => $q->where('price_before', '<=', $to)->orWhere('price_after', '<=', $to)
-                );
+            $query->whereHas('services', function ($q) use ($pricingRange) {
+                $q->whereBetween('price_before', $pricingRange)
+                    ->orWhereBetween('price_after', $pricingRange);
             });
         }
 
