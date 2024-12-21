@@ -57,12 +57,6 @@ class BookingReminderCommand extends Command
                     'time' => $booking->date->format('h:i A')
                 ], 'ar');;
 
-                $user = match ($targetUser->account_type) {
-                    'client'            => $booking->service->serviceProvider->user,
-                    'service-provider'  => $booking->client->user,
-                    default             => null
-                };
-
                 $data = [
                     'status' => 'reminding',
                     'date' => $booking->date,
