@@ -196,30 +196,38 @@ class BookingController extends Controller
 
         if ($booking->status == 'canceled') {
 
-            $user = match ($user->account_type) {
+            $targetUser = match ($user->account_type) {
                 'client'            => $booking->service->serviceProvider->user,
                 'service-provider'  => $booking->client->user,
                 default             => null
             };
 
             $title   = 'تم الغاء الموعد';
-            $message = "تم الغاء الحجز في {$booking->service->name}";
+            $message = __('mobile.canceled_booking', [
+                'service_name' => $booking->service->name,
+                'name' => $user->name,
+                'time' => $booking->date->format('h:i A')
+            ], 'ar');
             $data = [
                 'status' => 'canceled',
                 'date' => $booking->date,
                 'sent_at' => now(),
                 'title' => $title,
                 'message' => $message,
-                'user' => null
+                'user' => [
+                    'id'            => $user->id,
+                    'account_id'    => $user->account()?->id,
+                    'name'          => $user->name
+                ]
             ];
 
 
             //notify the user in database.
-            $user->notify(new DBNotification($data));
+            $targetUser->notify(new DBNotification($data));
 
             // notify the user in FCM
             app('App\Http\Controllers\API\FcmController')->sendFcmNotification(
-                $user->id,
+                $targetUser->id,
                 $title,
                 $message
             );

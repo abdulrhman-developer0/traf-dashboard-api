@@ -188,8 +188,13 @@ class PaymentController extends Controller
 
             $targtUser = $booking->service->serviceProvider->user;
 
-            $title   = 'تم تأكيد الموعد';
-            $message = "لديك موعد مع $user->name";
+            $title   = 'تم تأكيد موعد';
+            $message = __('mobile.confirmed_booking',[
+                'service_name' => $booking->service->name,
+                'name' => $user->name,
+                'time' => $booking->date->format('h:i A')
+            ], 'ar');
+            
             $data = [
                 'status' => 'confirmed',
                 'date' => $booking->date,
