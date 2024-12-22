@@ -98,8 +98,8 @@ class ReviewsController extends Controller
         $ratableAccount->reviews()->create($reviewData);
 
         return [
-            $ratableAccount->user,
-            $booking->client->user
+            $ratableAccount,
+            $booking->client
         ];
 
         $ratableAccount->update([
