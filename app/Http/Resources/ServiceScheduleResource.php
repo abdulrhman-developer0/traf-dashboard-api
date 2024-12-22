@@ -61,9 +61,9 @@ class ServiceScheduleResource extends JsonResource
             return new Collection;
         }
 
-        if ($schedule?->is_custom) {
+        if ( $schedule->is_custom ) {
             return $schedule->custom_work_times;
-        }`
+        }
 
         return $schedule->workTimes;
     }
