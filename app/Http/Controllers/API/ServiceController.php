@@ -108,7 +108,7 @@ class ServiceController extends Controller
             ];
         })->toArray() : [];
 
-        $is_home_service = $request->has('is_home_service') ? true : false;
+        $is_home_service = $request->custom_work_times ?? false;
         $is_offer = $request->price_after ? true : false;
 
         // Create the service
@@ -170,7 +170,7 @@ class ServiceController extends Controller
             return $this->badResponse([], "You not have a service with id $id");
         }
 
-        $is_home_service = $request->has('is_home_service') ? true : $service->is_home_service;
+        $is_home_service = $request->is_home_service ?? false;
         $is_offer = $request->price_after ? true : false;
 
         $service->update([
