@@ -56,7 +56,6 @@ class ServiceScheduleController extends Controller
 
         $schedule = $query->with(['workTimes', 'excludedDates', 'customWorkDates.times'])
             ->first();
-            return $schedule;
 
 
         if ($schedule) {
@@ -72,7 +71,7 @@ class ServiceScheduleController extends Controller
 
             $schedule['is_custom']  = (bool) $customQuery->count() > 0;
             if ($schedule->is_custom) {
-                $schedule['times'] = $customQuery->get();
+                $schedule['work_times'] = $customQuery->get();
             }
         }
 
