@@ -103,7 +103,7 @@ class ReviewsController extends Controller
 
         return [
             $ratableAccount
-        ]
+        ];
 
         $booking->service->update([
             'rating'  => Review::whereHas(
