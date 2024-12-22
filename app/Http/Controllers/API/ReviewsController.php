@@ -100,7 +100,7 @@ class ReviewsController extends Controller
         
 
         $ratableAccount->update([
-            'rating'  => $account->reviews()->avg('rating')
+            'rating'  => $ratableAccount->reviews()->avg('rating')
         ]);
 
         return [
