@@ -65,6 +65,6 @@ class ServiceScheduleResource extends JsonResource
         //     return dd($schedule->customWorkDates->toArray());
         // }`
 
-        return $schedule->workTimes;
+        return $schedule->work_times;
     }
 }
