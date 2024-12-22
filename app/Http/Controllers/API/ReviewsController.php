@@ -97,13 +97,15 @@ class ReviewsController extends Controller
 
         $ratableAccount->reviews()->create($reviewData);
 
-        return [
-            $ratableAccount
-        ];
+        
 
         $ratableAccount->update([
             'rating'  => $account->reviews()->avg('rating')
         ]);
+
+        return [
+            $ratableAccount->refresh()
+        ];
 
         $booking->service->update([
             'rating'  => Review::whereHas(
