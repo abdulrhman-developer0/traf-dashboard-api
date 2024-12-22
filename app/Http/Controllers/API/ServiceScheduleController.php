@@ -73,8 +73,8 @@ class ServiceScheduleController extends Controller
             if ($schedule->is_custom) {
                 $customWorkTimes = $customQuery->get();
                 $customWorkTimes = $schedule->workTimes;
-                return $customWorkTimes;
-                $schedule['work_times'] = $workTimes;
+                // return $customWorkTimes;
+                // $schedule['work_times'] = $workTimes;
             }
         }
 
