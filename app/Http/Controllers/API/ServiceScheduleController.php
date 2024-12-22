@@ -65,8 +65,8 @@ class ServiceScheduleController extends Controller
                 ->count() > 0;
 
             $customQuery = $schedule->customWorkDates()
-                ->where('start_date', '<=', $date)
-                ->where('end_date', '>=', $date)
+                ->where('start_date', '>=', $date->stsartOfDay())
+                ->where('end_date', '<=', $date->endOfDay())
                 ->limit(1);
 
             $schedule['is_custom']  = (bool) $customQuery->count() > 0;
