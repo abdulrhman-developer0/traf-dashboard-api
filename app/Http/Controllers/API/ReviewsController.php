@@ -102,9 +102,8 @@ class ReviewsController extends Controller
         ]);
 
         return [
-            'u' => $user,
-            'a' => $account,
-            'ra' => $ratableAccount
+            'ratable' => $ratableAccount,
+            'booking' => $booking->with(['client.user', 'service.serviceProvider.user'])->first(),
         ];
 
         $booking->service->update([
