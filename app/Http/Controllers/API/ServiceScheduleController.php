@@ -75,6 +75,8 @@ class ServiceScheduleController extends Controller
             }
         }
 
+        return $schedule->toArray();
+
         return $this->okResponse(ServiceScheduleResource::make($schedule), 'Retrieve times successfuly');
     }
 
