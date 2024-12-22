@@ -28,6 +28,7 @@ class BookingResource extends JsonResource
             // $this->status === 'confirmed' &&
             'is_now'            => $this->getLeftTime() <= 0 && $this->status !== 'done',
             'is_reviewed'       =>  $this->reviews->count() > 0,
+            'address'           => $this->getAddress(),
             'created_at'        => $this->created_at?->diffForHumans(),
         ];
     }
@@ -53,5 +54,15 @@ class BookingResource extends JsonResource
     public function getLeftTime()
     {
         return now()->diffInMinutes(Carbon::parse($this->date));
+    }
+
+
+    public function getAddress(): ?string
+    {
+        if ($this->service->is_home_service) {
+            return $this->getAddress;
+        }
+
+        return $this->service->address ?? $this->service->serviceProvider->getAddress;
     }
 }

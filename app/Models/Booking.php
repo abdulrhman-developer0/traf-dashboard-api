@@ -17,6 +17,7 @@ class Booking extends Model
         'service_id',
         'reference_id',
         'date',
+        'address',
         'status'
     ];
 

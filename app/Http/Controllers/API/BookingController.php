@@ -85,7 +85,7 @@ class BookingController extends Controller
 
         // filter by provider_id
         if ($request->has('provider_id')) {
-            $query->whereHas('service', fn ($q) => $q->where('service_provider_id', $request->provider_id));
+            $query->whereHas('service', fn($q) => $q->where('service_provider_id', $request->provider_id));
         }
 
         $bookings = $query->get();
@@ -108,7 +108,8 @@ class BookingController extends Controller
         $validated = $request->validate([
             'service_id'   => 'required|integer|exists:services,id',
             'reference_id' => 'nullable|integer',
-            'date'         => 'required|date'
+            'date'         => 'required|date',
+            'address'      => 'nullable|string:max:255'
         ]);
 
         // get user
@@ -119,6 +120,7 @@ class BookingController extends Controller
             'service_id' => $request->service_id,
             'reference_id' => $request->reference_id,
             'date' => Carbon::create($request->date)->toDateTimeString(),
+            'address' => $request->address,
         ];
 
         $booking = Booking::create($bookingData);
@@ -127,6 +129,7 @@ class BookingController extends Controller
             'booking_id' => $booking->id,
             'date'       => $booking->date->toDatetimeString(),
             'now'        => now()->toDatetimeString(),
+            'address'    => $booking->address
         ], 'Booking created successfully');
     }
 
