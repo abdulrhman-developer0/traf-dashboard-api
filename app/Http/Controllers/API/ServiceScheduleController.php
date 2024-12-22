@@ -70,12 +70,10 @@ class ServiceScheduleController extends Controller
                 ->limit(1);
 
             $schedule['is_custom']  = (bool) $customQuery->count() > 0;
-            // if ($schedule->is_custom) {
-            //     $schedule['work_times'] = $customQuery->get();
-            // }
+            if ($schedule->is_custom) {
+                $schedule['times'] = $customQuery->get();
+            }
         }
-
-        return $schedule->toArray();
 
         return $this->okResponse(ServiceScheduleResource::make($schedule), 'Retrieve times successfuly');
     }
