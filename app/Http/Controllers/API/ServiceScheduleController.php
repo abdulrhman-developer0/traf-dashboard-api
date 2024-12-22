@@ -55,11 +55,6 @@ class ServiceScheduleController extends Controller
             })->latest();
 
         $schedule = $query->with(['excludedDates', 'customWorkDates.times'])
-            ->with('customWorkDates as customs', function ($q) use ($date) {
-                $q->where('start_date', '<=', $date)
-                    ->where('end_date', '>=', $date)
-                    ->limit(1);
-            })
             ->first();
 
 
@@ -69,7 +64,15 @@ class ServiceScheduleController extends Controller
                 ->where('end_date', '>=', $date)
                 ->count() > 0;
 
-            $schedule['is_custom'] = (bool) $schedule->customs->count();
+            $customQuery = $schedule->customWorkDates()
+                ->where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date)
+                ->limit(1);
+
+            $schedule['is_custom']  = (bool) $customDate->count() > 0;
+            if ($schedule->is_custom) {
+                $schedule['work_times'] = $customDate->get();
+            }
         }
 
         return $this->okResponse(ServiceScheduleResource::make($schedule), 'Retrieve times successfuly');
