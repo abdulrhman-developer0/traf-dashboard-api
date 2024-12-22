@@ -102,6 +102,7 @@ class ReviewsController extends Controller
         ]);
 
         return [
+            'output'  => $ratableAccount->rating,
             'ratable' => $ratableAccount->load('user'),
             'booking' => $booking->with(['client.user', 'service.serviceProvider.user'])->first(),
         ];
