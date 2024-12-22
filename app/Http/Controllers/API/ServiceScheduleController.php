@@ -69,7 +69,7 @@ class ServiceScheduleController extends Controller
                 ->where('end_date', '>=', $date)
                 ->limit(1);
 
-            $schedule['is_custom']  = (bool) $customDate->count() > 0;
+            $schedule['is_custom']  = (bool) $schedule->count() > 0;
             if ($schedule->is_custom) {
                 $schedule['work_times'] = $customDate->get();
             }
