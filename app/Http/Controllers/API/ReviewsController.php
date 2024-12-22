@@ -85,7 +85,7 @@ class ReviewsController extends Controller
         if (
             $booking->client->user->id != $user->id && $booking->service->serviceProvider->user->id != $user->id
         ) {
-            return $this->badResponse([], "You not have a booking with id {$request->booking_id}");
+            // return $this->badResponse([], "You not have a booking with id {$request->booking_id}");
         }
 
 
@@ -102,7 +102,9 @@ class ReviewsController extends Controller
         ]);
 
         return [
-            $ratableAccount
+            'u' => $user,
+            'a' => $account,
+            'ra' => $ratableAccount
         ];
 
         $booking->service->update([
