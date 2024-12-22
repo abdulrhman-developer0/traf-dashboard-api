@@ -62,7 +62,7 @@ class ServiceScheduleResource extends JsonResource
         }
 
         if ($schedule?->is_custom) {
-            return $schedule->customWorkDates->first()->times;
+            return dd($schedule->customWorkDates->first()->times);
         }
 
         return $schedule->workTimes;;
