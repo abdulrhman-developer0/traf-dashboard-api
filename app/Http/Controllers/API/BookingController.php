@@ -83,6 +83,11 @@ class BookingController extends Controller
             $query->where('reference_id', $request->reference_id);
         }
 
+        // filter by provider_id
+        if ($request->has('provider_id')) {
+            $query->whereHas('service', fn ($q) => $q->where('service_provider_id', $request->provider_id));
+        }
+
         $bookings = $query->get();
         return $this->okResponse(BookingResource::collection($bookings), 'Retrieved all bookings successfully');
     }
