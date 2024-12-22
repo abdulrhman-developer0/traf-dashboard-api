@@ -83,21 +83,21 @@ class ReviewsController extends Controller
         $account    = $user->account();
 
         if (
-            $booking->client_id != $account?->id && $booking->service->service_provider_id != $account?->id
+            $booking->client->user->id != $user->id && $booking->service->serviceProvider->user->id != $user->id
         ) {
             return $this->badResponse([], "You not have a booking with id {$request->booking_id}");
         }
 
 
-        $ratable = match ($user->account_type) {
+        $ratableAccount = match ($user->account_type) {
             'client'            => $booking->service->serviceProvider,
             'service-provider'  => $booking->client,
             default             => null
         };
 
-        $ratable->reviews()->create($reviewData);
+        $ratableAccount->reviews()->create($reviewData);
 
-        $ratable->update([
+        $ratableAccount->update([
             'rating'  => $account->reviews()->avg('rating')
         ]);
 
