@@ -110,8 +110,6 @@ class ReviewsController extends Controller
             )->avg('rating')
         ]);
 
-        return  $booking->service;
-
 
         return $this->createdResponse([], 'Review created successfuly');;
     }
