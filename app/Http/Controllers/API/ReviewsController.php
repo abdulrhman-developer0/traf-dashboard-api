@@ -110,7 +110,10 @@ class ReviewsController extends Controller
             )->avg('rating')
         ]);
 
-        return $booking->service->refresh();
+        return  Review::whereHas(
+            'booking',
+            fn($q) => $q->where('service_id', $booking->service_id)
+        )->avg('rating');
 
 
         return $this->createdResponse([], 'Review created successfuly');;
