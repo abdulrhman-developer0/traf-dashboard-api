@@ -101,6 +101,10 @@ class ReviewsController extends Controller
             'rating'  => $account->reviews()->avg('rating')
         ]);
 
+        return [
+            $ratableAccount
+        ]
+
         $booking->service->update([
             'rating'  => Review::whereHas(
                 'booking',
