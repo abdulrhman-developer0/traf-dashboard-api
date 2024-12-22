@@ -71,7 +71,7 @@ class ServiceScheduleController extends Controller
 
             $schedule['is_custom']  = (bool) $customQuery->count() > 0;
             if ($schedule->is_custom) {
-                $schedule['work_times'] = dd($customQuery->first()?->times ?? [], $date);
+                $schedule['work_times'] = dd($customQuery->first()?->times?->toArray() ?? [], $date);
             }
         }
 
