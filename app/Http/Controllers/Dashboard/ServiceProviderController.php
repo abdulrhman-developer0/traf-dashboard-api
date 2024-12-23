@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\LatestServiceProviderCollection;
 use App\Models\ServiceProvider;
 use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ServiceProviderController extends Controller
@@ -19,7 +20,9 @@ class ServiceProviderController extends Controller
         $providers_count = $requests_this_week->count();
         $new_providers   = ServiceProvider::whereDay('created_at', now())->count();
         $logouts_count = 0;
-        $allowed_accounts = 0;
+        $deleted_accounts = User::onlyTrashed()
+            ->whereAccountType('service-provider')
+            ->count();
 
         $total_providers = ServiceProvider::count();
 
@@ -27,7 +30,7 @@ class ServiceProviderController extends Controller
             'providers_count' => $providers_count,
             'new_providers'   => $new_providers,
             'logouts_count'   => $logouts_count,
-            'allowed_accounts' => $allowed_accounts,
+            'deleted_accounts' => $deleted_accounts,
             'total_providers'  => $total_providers,
         ];
 
@@ -61,7 +64,7 @@ class ServiceProviderController extends Controller
             ->latest()
             ->with(['user'])
             ->paginate(4);
-        
+
 
         $data = [
             'stats' => $stats,
