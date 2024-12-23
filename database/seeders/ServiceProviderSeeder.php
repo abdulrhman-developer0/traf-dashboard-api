@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Package;
+use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -57,20 +60,35 @@ class ServiceProviderSeeder extends Seeder
             ],
         ];
 
+        $users = User::whereAccountType('service-provider')->get();
 
-        foreach ($serviceProviders as $provider) {
+
+        for ($i = 0; $i < $users->count(); $i += 1) {
             // Insert service provider and get the ID of the inserted record
             $providerId = DB::table('service_providers')->insertGetId([
-                'user_id' => $provider['user_id'],
-                'is_personal' => $provider['is_personal'],
-                'tax_registeration_number' => $provider['tax_registeration_number'],
+                'user_id' => $users[$i]->id,
+                'is_personal' => $serviceProviders[$i]['is_personal'],
+                'tax_registeration_number' => $serviceProviders[$i]['tax_registeration_number'],
                 // 'city_id' => $provider['city_id'],
-                'job' => $provider['job'],
-                'phone' => $provider['phone'],
-                'address' => $provider['address'],
-                'rating' => $provider['rating'],
+                'job' => $serviceProviders[$i]['job'],
+                'phone' => $serviceProviders[$i]['phone'],
+                'address' => $serviceProviders[$i]['address'],
+                'rating' => $serviceProviders[$i]['rating'],
                 'created_at' => now(),
                 'updated_at' => now(),
+            ]);
+
+            $start_date = now();
+            $end_date   =  now()->addDays(30)->endOfDay();
+            $package = Package::get()->random();
+            Subscription::create([
+                'service_provider_id' => $providerId,
+                'package_id'    => $package->id,
+                'payment_status' => 'paid',
+                'start_date' => $start_date,
+                'end_Date'   => $end_date,
+                'amount'     => $package->price,
+                'transaction_reference' => 's1e1e1d1e1r'
             ]);
         }
     }
