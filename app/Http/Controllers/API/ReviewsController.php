@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ReviewResource;
 use App\Models\Booking;
 use App\Models\Review;
+use App\Models\Service;
 use App\Models\User;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Laravel\Reverb\Protocols\Pusher\Server;
 
 class ReviewsController extends Controller
 {
@@ -97,7 +100,7 @@ class ReviewsController extends Controller
 
         $ratableAccount->reviews()->create($reviewData);
 
-        
+
 
         $ratableAccount->update([
             'rating'  => $ratableAccount->reviews()->avg('rating')
@@ -110,8 +113,7 @@ class ReviewsController extends Controller
             )->avg('rating')
         ]);
 
-
-        return $this->createdResponse([], 'Review created successfuly');;
+        return $this->createdResponse([], 'Review created successfuly');
     }
 
     public function show(string $id)

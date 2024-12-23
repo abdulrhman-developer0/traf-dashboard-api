@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('duration');
             $table->longText('description')->nullable();
-            $table->decimal('rating', 1, 1)->default(0.00);
+            $table->decimal('rating')->default(0.00);
             $table->decimal('price_before', 10, 2);
             $table->decimal('price_after', 10, 2)->nullable(); 
             $table->text('address')->nullable();
