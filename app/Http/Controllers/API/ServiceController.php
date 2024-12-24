@@ -108,7 +108,7 @@ class ServiceController extends Controller
             ];
         })->toArray() : [];
 
-        $is_home_service = $request->custom_work_times ?? false;
+        $is_home_service = $request->is_home_service ?? false;
         $is_offer = $request->price_after ? true : false;
 
         // Create the service
