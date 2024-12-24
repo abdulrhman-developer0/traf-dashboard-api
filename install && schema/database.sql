@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2024 at 02:09 AM
+-- Generation Time: Dec 24, 2024 at 12:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,14 +42,6 @@ CREATE TABLE `activity_log` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `activity_log`
---
-
-INSERT INTO `activity_log` (`id`, `log_name`, `description`, `subject_type`, `event`, `subject_id`, `causer_type`, `causer_id`, `properties`, `batch_uuid`, `created_at`, `updated_at`) VALUES
-(1, 'default', 'updated', 'App\\Models\\User', 'updated', 4, NULL, NULL, '{\"attributes\":{\"name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"email\":\"mona.mahmoud@example.com\"},\"old\":{\"name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"email\":\"mona.mahmoud@example.com\"}}', NULL, '2024-12-17 22:53:28', '2024-12-17 22:53:28'),
-(2, 'default', 'updated', 'App\\Models\\User', 'updated', 6, NULL, NULL, '{\"attributes\":{\"name\":\"\\u0647\\u062f\\u0649 \\u0623\\u062d\\u0645\\u062f\",\"email\":\"hoda.ahmed@example.com\"},\"old\":{\"name\":\"\\u0647\\u062f\\u0649 \\u0623\\u062d\\u0645\\u062f\",\"email\":\"hoda.ahmed@example.com\"}}', NULL, '2024-12-18 00:31:42', '2024-12-18 00:31:42');
-
 -- --------------------------------------------------------
 
 --
@@ -62,6 +54,7 @@ CREATE TABLE `bookings` (
   `service_id` bigint(20) UNSIGNED NOT NULL,
   `reference_id` int(10) UNSIGNED DEFAULT NULL,
   `date` datetime NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
   `status` enum('pending','canceled','confirmed','done') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -71,23 +64,16 @@ CREATE TABLE `bookings` (
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`id`, `client_id`, `service_id`, `reference_id`, `date`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:41', '2024-12-17 22:32:41'),
-(2, 2, 1, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:41', '2024-12-17 22:32:41'),
-(3, 3, 1, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:41', '2024-12-17 22:32:41'),
-(4, 1, 3, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:41', '2024-12-17 22:32:41'),
-(5, 2, 3, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:42', '2024-12-17 22:32:42'),
-(6, 3, 3, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:42', '2024-12-17 22:32:42'),
-(7, 1, 4, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:42', '2024-12-17 22:32:42'),
-(8, 2, 4, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:42', '2024-12-17 22:32:42'),
-(9, 3, 4, NULL, '2024-12-18 00:00:00', 'confirmed', '2024-12-17 22:32:42', '2024-12-17 22:32:42'),
-(10, 2, 4, NULL, '2024-12-17 19:00:00', 'pending', '2024-12-18 00:32:01', '2024-12-18 00:32:01'),
-(11, 2, 4, NULL, '2024-12-17 19:00:00', 'pending', '2024-12-18 00:32:07', '2024-12-18 00:32:07'),
-(12, 2, 4, NULL, '2024-12-17 19:00:00', 'pending', '2024-12-18 00:34:20', '2024-12-18 00:34:20'),
-(13, 2, 4, NULL, '2024-12-17 19:00:00', 'pending', '2024-12-18 00:34:28', '2024-12-18 00:34:28'),
-(14, 2, 4, NULL, '2024-12-17 19:00:00', 'pending', '2024-12-18 00:36:09', '2024-12-18 00:36:09'),
-(15, 2, 4, NULL, '2024-12-17 19:00:00', 'pending', '2024-12-18 00:37:06', '2024-12-18 00:37:06'),
-(16, 2, 4, NULL, '2024-12-17 19:00:00', 'pending', '2024-12-18 00:37:19', '2024-12-18 00:37:19');
+INSERT INTO `bookings` (`id`, `client_id`, `service_id`, `reference_id`, `date`, `address`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:30', '2024-12-23 22:20:30'),
+(2, 2, 1, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(3, 3, 1, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(4, 1, 3, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(5, 2, 3, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(6, 3, 3, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(7, 1, 4, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:32', '2024-12-23 22:20:32'),
+(8, 2, 4, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:32', '2024-12-23 22:20:32'),
+(9, 3, 4, NULL, '2024-12-24 00:00:00', NULL, 'confirmed', '2024-12-23 22:20:32', '2024-12-23 22:20:32');
 
 -- --------------------------------------------------------
 
@@ -100,16 +86,6 @@ CREATE TABLE `cache` (
   `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('client-rating-stats-2', 'a:5:{s:9:\"excellent\";i:0;s:9:\"very_good\";i:0;s:4:\"good\";i:0;s:3:\"bad\";i:0;s:8:\"very_bad\";i:0;}', 1734478333),
-('client-reviews-count-2', 'i:0;', 1734478333),
-('service-provider-rating-stats-4', 'a:5:{s:9:\"excellent\";i:0;s:9:\"very_good\";i:0;s:4:\"good\";i:0;s:3:\"bad\";i:0;s:8:\"very_bad\";i:0;}', 1734472439),
-('service-provider-reviews-count-4', 'i:0;', 1734472438);
 
 -- --------------------------------------------------------
 
@@ -235,9 +211,9 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `user_id`, `phone`, `address`, `rating`, `area`, `city`, `created_at`, `updated_at`) VALUES
-(1, 5, '01012345678', 'شارع النيل، الجيزة', 4.5, NULL, NULL, '2024-12-17 22:32:37', '2024-12-17 22:32:37'),
-(2, 6, '01098765432', 'شارع فيصل، القاهرة', 4, NULL, NULL, '2024-12-17 22:32:37', '2024-12-17 22:32:37'),
-(3, 7, '01234567890', 'مدينة نصر، القاهرة', 3.8, NULL, NULL, '2024-12-17 22:32:37', '2024-12-17 22:32:37');
+(1, 5, '01012345678', 'شارع النيل، الجيزة', 4.5, NULL, NULL, '2024-12-23 22:20:19', '2024-12-23 22:20:19'),
+(2, 6, '01098765432', 'شارع فيصل، القاهرة', 4, NULL, NULL, '2024-12-23 22:20:19', '2024-12-23 22:20:19'),
+(3, 7, '01234567890', 'مدينة نصر، القاهرة', 3.8, NULL, NULL, '2024-12-23 22:20:19', '2024-12-23 22:20:19');
 
 -- --------------------------------------------------------
 
@@ -394,11 +370,11 @@ CREATE TABLE `media` (
 --
 
 INSERT INTO `media` (`id`, `model_type`, `model_id`, `uuid`, `collection_name`, `name`, `file_name`, `mime_type`, `disk`, `conversions_disk`, `size`, `manipulations`, `custom_properties`, `generated_conversions`, `responsive_images`, `order_column`, `created_at`, `updated_at`) VALUES
-(1, 'App\\Models\\Worker', 1, 'ab6f4f1b-e3b0-4728-8784-4e4a85699d12', 'photo', 'dr-elham', 'dr-elham.jpg', 'image/jpeg', 'public', 'public', 80750, '[]', '[]', '[]', '[]', 1, '2024-12-17 22:32:39', '2024-12-17 22:32:39'),
-(2, 'App\\Models\\Worker', 2, '9000e31c-1254-40de-aaf8-ecafc7c56e16', 'photo', 'norayousef', 'norayousef.jpg', 'image/jpeg', 'public', 'public', 124170, '[]', '[]', '[]', '[]', 1, '2024-12-17 22:32:39', '2024-12-17 22:32:39'),
-(3, 'App\\Models\\Worker', 3, 'a0f7bcd3-bca5-41ff-b8f1-442050c8f065', 'photo', 'rahmaAli', 'rahmaAli.jpg', 'image/jpeg', 'public', 'public', 70450, '[]', '[]', '[]', '[]', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(4, 'App\\Models\\Worker', 4, '827e8354-6a7a-42dc-b45e-ffdee67421b6', 'photo', 'sarahHasan', 'sarahHasan.jpeg', 'image/jpeg', 'public', 'public', 14249, '[]', '[]', '[]', '[]', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(5, 'App\\Models\\Worker', 5, 'be54d2c8-ae75-4ac9-ae1e-0de59a4df828', 'photo', 'noraAbdallah', 'noraAbdallah.jpg', 'image/jpeg', 'public', 'public', 92925, '[]', '[]', '[]', '[]', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40');
+(1, 'App\\Models\\Worker', 1, 'f31d2764-d485-41c2-afea-7804a77f8c73', 'photo', 'dr-elham', 'dr-elham.jpg', 'image/jpeg', 'public', 'public', 80750, '[]', '[]', '[]', '[]', 1, '2024-12-23 22:20:27', '2024-12-23 22:20:27'),
+(2, 'App\\Models\\Worker', 2, 'e5727a29-4028-4d28-987d-4b09272a74a7', 'photo', 'norayousef', 'norayousef.jpg', 'image/jpeg', 'public', 'public', 124170, '[]', '[]', '[]', '[]', 1, '2024-12-23 22:20:28', '2024-12-23 22:20:28'),
+(3, 'App\\Models\\Worker', 3, '2edcad46-0a44-4da4-8bf5-c3bb1ad553a3', 'photo', 'rahmaAli', 'rahmaAli.jpg', 'image/jpeg', 'public', 'public', 70450, '[]', '[]', '[]', '[]', 1, '2024-12-23 22:20:28', '2024-12-23 22:20:28'),
+(4, 'App\\Models\\Worker', 4, '8ab268e7-e343-414a-90c2-a48a649c12b2', 'photo', 'sarahHasan', 'sarahHasan.jpeg', 'image/jpeg', 'public', 'public', 14249, '[]', '[]', '[]', '[]', 1, '2024-12-23 22:20:29', '2024-12-23 22:20:29'),
+(5, 'App\\Models\\Worker', 5, 'd7f5fe62-a269-431f-b3fa-fb444c2d46fa', 'photo', 'noraAbdallah', 'noraAbdallah.jpg', 'image/jpeg', 'public', 'public', 92925, '[]', '[]', '[]', '[]', 1, '2024-12-23 22:20:29', '2024-12-23 22:20:29');
 
 -- --------------------------------------------------------
 
@@ -457,7 +433,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (38, '2024_12_08_161425_create_custom_work_dates_table', 1),
 (39, '2024_12_09_132743_create_custom_work_times_table', 1),
 (40, '2024_12_10_191919_add_deleted_at_to_workers_table', 1),
-(41, '2024_12_14_125941_create_payments_table', 1);
+(41, '2024_12_14_125941_create_payments_table', 1),
+(42, '2024_12_18_152147_add_fcm_token_to_users_table', 1);
 
 -- --------------------------------------------------------
 
@@ -499,19 +476,6 @@ CREATE TABLE `notifications` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `notifications`
---
-
-INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
-('2d4756ce-e2be-412c-84dd-1c83b45c3063', 'App\\Notifications\\DBNotification', 'App\\Models\\User', 4, '{\"id\":13,\"service_id\":4,\"service_name\":\"\\u062c\\u0644\\u0633\\u0629 \\u0628\\u0627\\u062f\\u064a\\u0643\\u064a\\u0631 \\u0648\\u0645\\u0646\\u0627\\u0643\\u064a\\u0631 \\u0648\\u0631\\u0633\\u0645 \\u062d\\u0646\\u0629  \",\"host_name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"host_photo\":\"\",\"is_personal\":true,\"status\":null,\"date\":\"2024-12-17 19:00:00\",\"left_time\":-454.47159474999995,\"is_now\":true,\"is_reviewed\":false,\"created_at\":\"0 seconds ago\"}', NULL, '2024-12-18 00:34:28', '2024-12-18 00:34:28'),
-('430324f9-4b75-43d8-9bf9-c84df072938d', 'App\\Notifications\\DBNotification', 'App\\Models\\User', 4, '{\"id\":11,\"service_id\":4,\"service_name\":\"\\u062c\\u0644\\u0633\\u0629 \\u0628\\u0627\\u062f\\u064a\\u0643\\u064a\\u0631 \\u0648\\u0645\\u0646\\u0627\\u0643\\u064a\\u0631 \\u0648\\u0631\\u0633\\u0645 \\u062d\\u0646\\u0629  \",\"host_name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"host_photo\":\"\",\"is_personal\":true,\"status\":null,\"date\":\"2024-12-17 19:00:00\",\"left_time\":-452.1240263333333,\"is_now\":true,\"is_reviewed\":false,\"created_at\":\"0 seconds ago\"}', NULL, '2024-12-18 00:32:07', '2024-12-18 00:32:07'),
-('45e4d504-d74f-4bf4-9686-8ebeaa588944', 'App\\Notifications\\DBNotification', 'App\\Models\\User', 4, '{\"id\":12,\"service_id\":4,\"service_name\":\"\\u062c\\u0644\\u0633\\u0629 \\u0628\\u0627\\u062f\\u064a\\u0643\\u064a\\u0631 \\u0648\\u0645\\u0646\\u0627\\u0643\\u064a\\u0631 \\u0648\\u0631\\u0633\\u0645 \\u062d\\u0646\\u0629  \",\"host_name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"host_photo\":\"\",\"is_personal\":true,\"status\":null,\"date\":\"2024-12-17 19:00:00\",\"left_time\":-454.3419843166667,\"is_now\":true,\"is_reviewed\":false,\"created_at\":\"0 seconds ago\"}', NULL, '2024-12-18 00:34:20', '2024-12-18 00:34:20'),
-('5b1fc050-5121-4127-9b70-503a3a323d43', 'App\\Notifications\\DBNotification', 'App\\Models\\User', 4, '{\"id\":15,\"service_id\":4,\"service_name\":\"\\u062c\\u0644\\u0633\\u0629 \\u0628\\u0627\\u062f\\u064a\\u0643\\u064a\\u0631 \\u0648\\u0645\\u0646\\u0627\\u0643\\u064a\\u0631 \\u0648\\u0631\\u0633\\u0645 \\u062d\\u0646\\u0629  \",\"host_name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"host_photo\":\"\",\"is_personal\":true,\"status\":null,\"date\":\"2024-12-17 19:00:00\",\"left_time\":-457.11081518333333,\"is_now\":true,\"is_reviewed\":false,\"created_at\":\"0 seconds ago\"}', NULL, '2024-12-18 00:37:06', '2024-12-18 00:37:06'),
-('70c1e84f-5a75-4517-97ba-db3362894c52', 'App\\Notifications\\DBNotification', 'App\\Models\\User', 4, '{\"id\":14,\"service_id\":4,\"service_name\":\"\\u062c\\u0644\\u0633\\u0629 \\u0628\\u0627\\u062f\\u064a\\u0643\\u064a\\u0631 \\u0648\\u0645\\u0646\\u0627\\u0643\\u064a\\u0631 \\u0648\\u0631\\u0633\\u0645 \\u062d\\u0646\\u0629  \",\"host_name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"host_photo\":\"\",\"is_personal\":true,\"status\":null,\"date\":\"2024-12-17 19:00:00\",\"left_time\":-456.1635045333333,\"is_now\":true,\"is_reviewed\":false,\"created_at\":\"0 seconds ago\"}', NULL, '2024-12-18 00:36:09', '2024-12-18 00:36:09'),
-('f5eec240-6582-4bfb-9b95-ebabfb2f3656', 'App\\Notifications\\DBNotification', 'App\\Models\\User', 4, '{\"id\":16,\"service_id\":4,\"service_name\":\"\\u062c\\u0644\\u0633\\u0629 \\u0628\\u0627\\u062f\\u064a\\u0643\\u064a\\u0631 \\u0648\\u0645\\u0646\\u0627\\u0643\\u064a\\u0631 \\u0648\\u0631\\u0633\\u0645 \\u062d\\u0646\\u0629  \",\"host_name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"host_photo\":\"\",\"is_personal\":true,\"status\":null,\"date\":\"2024-12-17 19:00:00\",\"left_time\":-457.3196696833334,\"is_now\":true,\"is_reviewed\":false,\"created_at\":\"0 seconds ago\"}', NULL, '2024-12-18 00:37:19', '2024-12-18 00:37:19'),
-('f6d9ca5e-d73c-4f59-88bc-4fa1373a2b16', 'App\\Notifications\\DBNotification', 'App\\Models\\User', 4, '{\"id\":10,\"service_id\":4,\"service_name\":\"\\u062c\\u0644\\u0633\\u0629 \\u0628\\u0627\\u062f\\u064a\\u0643\\u064a\\u0631 \\u0648\\u0645\\u0646\\u0627\\u0643\\u064a\\u0631 \\u0648\\u0631\\u0633\\u0645 \\u062d\\u0646\\u0629  \",\"host_name\":\"\\u0645\\u0646\\u0649 \\u0645\\u062d\\u0645\\u0648\\u062f\",\"host_photo\":\"\",\"is_personal\":true,\"status\":null,\"date\":\"2024-12-17 19:00:00\",\"left_time\":-452.0329206,\"is_now\":true,\"is_reviewed\":false,\"created_at\":\"1 second ago\"}', NULL, '2024-12-18 00:32:02', '2024-12-18 00:32:02');
 
 -- --------------------------------------------------------
 
@@ -596,6 +560,21 @@ CREATE TABLE `payments` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `booking_id`, `payment_status`, `amount`, `transaction_reference`, `created_at`, `updated_at`) VALUES
+(1, 1, 'paid', '200', '1f2s135d', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(2, 2, 'paid', '200', '1f2s135d', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(3, 3, 'paid', '200', '1f2s135d', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(4, 4, 'paid', '250', '1f2s135d', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(5, 5, 'paid', '250', '1f2s135d', '2024-12-23 22:20:31', '2024-12-23 22:20:31'),
+(6, 6, 'paid', '250', '1f2s135d', '2024-12-23 22:20:32', '2024-12-23 22:20:32'),
+(7, 7, 'paid', '250', '1f2s135d', '2024-12-23 22:20:32', '2024-12-23 22:20:32'),
+(8, 8, 'paid', '250', '1f2s135d', '2024-12-23 22:20:32', '2024-12-23 22:20:32'),
+(9, 9, 'paid', '250', '1f2s135d', '2024-12-23 22:20:32', '2024-12-23 22:20:32');
+
 -- --------------------------------------------------------
 
 --
@@ -643,14 +622,6 @@ CREATE TABLE `personal_access_tokens` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `personal_access_tokens`
---
-
-INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
-(1, 'App\\Models\\User', 4, 'api-user-login', '0e8438d54fa475d47119500986dccf76eae7112e4a020753f44ebe4194b12c7d', '[\"*\"]', '2024-12-18 00:31:17', NULL, '2024-12-17 22:53:28', '2024-12-18 00:31:17'),
-(2, 'App\\Models\\User', 6, 'api-user-login', '3465220147b0878686d755c5ae6a48507852cf27a04e40e0d7601e7541351885', '[\"*\"]', '2024-12-18 00:37:19', NULL, '2024-12-18 00:31:43', '2024-12-18 00:37:19');
 
 -- --------------------------------------------------------
 
@@ -766,7 +737,7 @@ CREATE TABLE `services` (
   `name` varchar(255) NOT NULL,
   `duration` int(11) NOT NULL,
   `description` longtext DEFAULT NULL,
-  `rating` decimal(1,1) NOT NULL DEFAULT 0.0,
+  `rating` decimal(8,2) NOT NULL DEFAULT 0.00,
   `price_before` decimal(10,2) NOT NULL,
   `price_after` decimal(10,2) DEFAULT NULL,
   `address` text DEFAULT NULL,
@@ -781,10 +752,10 @@ CREATE TABLE `services` (
 --
 
 INSERT INTO `services` (`id`, `service_category_id`, `service_provider_id`, `name`, `duration`, `description`, `rating`, `price_before`, `price_after`, `address`, `is_home_service`, `is_offer`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'جلسة تنظيف بشرة', 60, 'جلسة متخصصة لتنظيف البشرة بعمق باستخدام أفضل المنتجات.', 0.9, 0.00, 200.00, NULL, 0, 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(2, 2, 2, 'جلسة مكياج سوارية', 90, 'جلسة مكياج سوارية باستخدام أحدث التقنيات لإطلالة رائعة.', 0.9, 300.00, NULL, NULL, 0, 0, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(3, 3, 3, 'جلسة مساج', 75, 'جلسة مساج تساعد على الاسترخاء وتحسين الدورة الدموية.', 0.9, 0.00, 250.00, NULL, 0, 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(4, 3, 4, 'جلسة باديكير ومناكير ورسم حنة  ', 75, 'جلسة مناكير وباديكير ورسم حنة باحدث الاشكال والطلاءات .', 0.9, 0.00, 250.00, NULL, 0, 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40');
+(1, 1, 1, 'جلسة تنظيف بشرة', 60, 'جلسة متخصصة لتنظيف البشرة بعمق باستخدام أفضل المنتجات.', 4.50, 0.00, 200.00, NULL, 0, 1, '2024-12-23 22:20:30', '2024-12-23 22:20:30'),
+(2, 2, 2, 'جلسة مكياج سوارية', 90, 'جلسة مكياج سوارية باستخدام أحدث التقنيات لإطلالة رائعة.', 4.80, 300.00, NULL, NULL, 0, 0, '2024-12-23 22:20:30', '2024-12-23 22:20:30'),
+(3, 3, 3, 'جلسة مساج', 75, 'جلسة مساج تساعد على الاسترخاء وتحسين الدورة الدموية.', 4.70, 0.00, 250.00, NULL, 0, 1, '2024-12-23 22:20:30', '2024-12-23 22:20:30'),
+(4, 3, 4, 'جلسة باديكير ومناكير ورسم حنة  ', 75, 'جلسة مناكير وباديكير ورسم حنة باحدث الاشكال والطلاءات .', 4.70, 0.00, 250.00, NULL, 0, 1, '2024-12-23 22:20:30', '2024-12-23 22:20:30');
 
 -- --------------------------------------------------------
 
@@ -806,13 +777,13 @@ CREATE TABLE `service_categories` (
 --
 
 INSERT INTO `service_categories` (`id`, `name`, `image_path`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'رسم الحنة', 'logos/Hana-Drawing.svg', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(2, 'مكياج', 'logos/makeup.svg', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(3, 'باديكير ومناكير ', 'logos/nails.svg', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(4, 'مساج', 'logos/spa-svgrepo-com.svg', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(5, 'بشرة', 'logos/skincare-icon.svg', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(6, 'عناية بالشعر', 'logos/hear-care.svg', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40'),
-(7, 'عروض', 'logos/offers.svg', 1, '2024-12-17 22:32:40', '2024-12-17 22:32:40');
+(1, 'رسم الحنة', 'logos/Hana-Drawing.svg', 1, '2024-12-23 22:20:29', '2024-12-23 22:20:29'),
+(2, 'مكياج', 'logos/makeup.svg', 1, '2024-12-23 22:20:29', '2024-12-23 22:20:29'),
+(3, 'باديكير ومناكير ', 'logos/nails.svg', 1, '2024-12-23 22:20:29', '2024-12-23 22:20:29'),
+(4, 'مساج', 'logos/spa-svgrepo-com.svg', 1, '2024-12-23 22:20:30', '2024-12-23 22:20:30'),
+(5, 'بشرة', 'logos/skincare-icon.svg', 1, '2024-12-23 22:20:30', '2024-12-23 22:20:30'),
+(6, 'عناية بالشعر', 'logos/hear-care.svg', 1, '2024-12-23 22:20:30', '2024-12-23 22:20:30'),
+(7, 'عروض', 'logos/offers.svg', 1, '2024-12-23 22:20:30', '2024-12-23 22:20:30');
 
 -- --------------------------------------------------------
 
@@ -831,6 +802,7 @@ CREATE TABLE `service_providers` (
   `rating` float NOT NULL DEFAULT 0,
   `area` varchar(255) DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
+  `status` enum('pending','rejected','approved') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -839,11 +811,11 @@ CREATE TABLE `service_providers` (
 -- Dumping data for table `service_providers`
 --
 
-INSERT INTO `service_providers` (`id`, `user_id`, `is_personal`, `tax_registeration_number`, `job`, `phone`, `address`, `rating`, `area`, `city`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '1234567890', 'فنان مكياج', '0501234567', 'الرياض، حي الروضة', 4.9, NULL, NULL, '2024-12-17 22:32:38', '2024-12-17 22:32:38'),
-(2, 2, 0, '1122334455', 'مصفف شعر', '0509876543', 'جدة، حي الصفا', 4.6, NULL, NULL, '2024-12-17 22:32:38', '2024-12-17 22:32:38'),
-(3, 3, 1, NULL, 'فني أظافر', '0561234321', 'الدمام، حي الشاطئ', 4.7, NULL, NULL, '2024-12-17 22:32:38', '2024-12-17 22:32:38'),
-(4, 4, 1, NULL, 'فني أظافر', '0561234321', 'الدمام، حي الشاطئ', 4.7, NULL, NULL, '2024-12-17 22:32:39', '2024-12-17 22:32:39');
+INSERT INTO `service_providers` (`id`, `user_id`, `is_personal`, `tax_registeration_number`, `job`, `phone`, `address`, `rating`, `area`, `city`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '1234567890', 'فنان مكياج', '0501234567', 'الرياض، حي الروضة', 4.9, NULL, NULL, 'pending', '2024-12-23 22:20:19', '2024-12-23 22:20:19'),
+(2, 2, 0, '1122334455', 'مصفف شعر', '0509876543', 'جدة، حي الصفا', 4.6, NULL, NULL, 'pending', '2024-12-23 22:20:20', '2024-12-23 22:20:20'),
+(3, 3, 1, NULL, 'فني أظافر', '0561234321', 'الدمام، حي الشاطئ', 4.7, NULL, NULL, 'pending', '2024-12-23 22:20:21', '2024-12-23 22:20:21'),
+(4, 4, 1, NULL, 'فني أظافر', '0561234321', 'الدمام، حي الشاطئ', 4.7, NULL, NULL, 'pending', '2024-12-23 22:20:21', '2024-12-23 22:20:21');
 
 -- --------------------------------------------------------
 
@@ -891,6 +863,13 @@ CREATE TABLE `sessions` (
   `last_activity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('dBq6sYD10ylPcLbFKWEG51IfjArNjG4yDvs3wH71', NULL, '127.0.0.1', 'PostmanRuntime/7.43.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoibVp2UEdYVTUxQ2pHZXBYcHQ1YWR5aUVVUXdOejNuSWlLdE5WMUxlcyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC90ZXN0Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1734993384);
+
 -- --------------------------------------------------------
 
 --
@@ -909,6 +888,16 @@ CREATE TABLE `subscriptions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `subscriptions`
+--
+
+INSERT INTO `subscriptions` (`id`, `service_provider_id`, `package_id`, `payment_status`, `transaction_reference`, `amount`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'paid', 's1e1e1d1e1r', '15.00', '2024-12-23 22:20:19', '2025-01-23 21:59:59', '2024-12-23 22:20:20', '2024-12-23 22:20:20'),
+(2, 2, 3, 'paid', 's1e1e1d1e1r', '150.00', '2024-12-23 22:20:20', '2025-01-23 21:59:59', '2024-12-23 22:20:20', '2024-12-23 22:20:20'),
+(3, 3, 3, 'paid', 's1e1e1d1e1r', '150.00', '2024-12-23 22:20:21', '2025-01-23 21:59:59', '2024-12-23 22:20:21', '2024-12-23 22:20:21'),
+(4, 4, 3, 'paid', 's1e1e1d1e1r', '150.00', '2024-12-23 22:20:21', '2025-01-23 21:59:59', '2024-12-23 22:20:21', '2024-12-23 22:20:21');
 
 -- --------------------------------------------------------
 
@@ -945,24 +934,25 @@ CREATE TABLE `users` (
   `last_activity` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `fcm_token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `code`, `expire_at`, `code_verified`, `account_type`, `remember_token`, `last_activity`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'أحمد علي', 'ahmed.ali@example.com', NULL, '$2y$12$D5m4mLZWFFTrpToZPGSCqOl.jkQB7FHaQBzvEiJv90bvDSNzBA0KO', NULL, NULL, 0, 'service-provider', NULL, NULL, '2024-12-17 22:32:33', '2024-12-17 22:32:33', NULL),
-(2, 'سارة محمد', 'sara.mohamed@example.com', NULL, '$2y$12$2VEHKu5uIUfMPqK5rmsOA.Oc3/OlPYIsmfTrBcnJbmWB3mKct5MWW', NULL, NULL, 0, 'service-provider', NULL, NULL, '2024-12-17 22:32:34', '2024-12-17 22:32:34', NULL),
-(3, 'خالد حسن', 'khaled.hassan@example.com', NULL, '$2y$12$AnVKEbSL5j6YKOU7hz3oS.n2sFymUBCRCms3SDTYxqsPI6fEZb5NK', NULL, NULL, 0, 'service-provider', NULL, NULL, '2024-12-17 22:32:34', '2024-12-17 22:32:34', NULL),
-(4, 'منى محمود', 'mona.mahmoud@example.com', NULL, '$2y$12$zR4UKGDlih3mxRLkU9cdueMEJXE6xUsoA6O9bGt.veI7qzbJ9X/A.', '19294', '2024-12-18 01:13:28', 0, 'service-provider', NULL, NULL, '2024-12-17 22:32:34', '2024-12-17 22:32:34', NULL),
-(5, 'يوسف إبراهيم', 'youssef.ibrahim@example.com', NULL, '$2y$12$kIh4cmPbkqHoVQ8XH3Rb4O9dJ39HSzSXYMWdK5KscaAqn9cXAhRJ.', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-17 22:32:35', '2024-12-17 22:32:35', NULL),
-(6, 'هدى أحمد', 'hoda.ahmed@example.com', NULL, '$2y$12$1gkRCCuBOEo7eZOVjyhrbuB/5xIan1QRATGX6QtRFJhWjYLj5VHVy', '35160', '2024-12-18 02:51:42', 0, 'client', NULL, NULL, '2024-12-17 22:32:35', '2024-12-17 22:32:35', NULL),
-(7, 'علي سعيد', 'ali.saeed@example.com', NULL, '$2y$12$Pbeq2j.R4dQxzBv2icKHQ.lHNaP.GWkSnd8xB14buUBTnaAPmU23y', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-17 22:32:35', '2024-12-17 22:32:35', NULL),
-(8, 'نورا سامي', 'nora.samy@example.com', NULL, '$2y$12$mkblvnPwgeu4zZMzCTJk3eX9Km5Hyt6Odb0j8saw7bLWoEQY/T0Pu', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-17 22:32:36', '2024-12-17 22:32:36', NULL),
-(9, 'عمر فؤاد', 'omar.fouad@example.com', NULL, '$2y$12$hhcrbZdnCF0M3OjvuUut/u0NqBhBRTDCYpjwehbyEF1nqaj0cbu7m', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-17 22:32:37', '2024-12-17 22:32:37', NULL),
-(10, 'ليلى سمير', 'laila.samir@example.com', NULL, '$2y$12$up2AU4jkCFzeK3sKcpPKe.yix/1sgV5nN5K.QR1i7qai8puSm/JCm', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-17 22:32:37', '2024-12-17 22:32:37', NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `code`, `expire_at`, `code_verified`, `account_type`, `remember_token`, `last_activity`, `created_at`, `updated_at`, `deleted_at`, `fcm_token`) VALUES
+(1, 'أحمد علي', 'ahmed.ali@example.com', NULL, '$2y$12$n7o847U4qnQ325hrganUS.12nnoa7zMlsrM1Q43Bc7TkLIAjEdrea', NULL, NULL, 0, 'service-provider', NULL, NULL, '2024-12-23 22:20:14', '2024-12-23 22:20:14', NULL, NULL),
+(2, 'سارة محمد', 'sara.mohamed@example.com', NULL, '$2y$12$FEtMKGo/xNB8bgTFej5cOeRBQS3VLKWqaEY8xUgKzbpFwOJtxvr82', NULL, NULL, 0, 'service-provider', NULL, NULL, '2024-12-23 22:20:14', '2024-12-23 22:20:14', NULL, NULL),
+(3, 'خالد حسن', 'khaled.hassan@example.com', NULL, '$2y$12$7n6oWP05TNxO/.fkMpMtuuOMjMYLYgUTuM7ikGF5UmZefTsRy9hUK', NULL, NULL, 0, 'service-provider', NULL, NULL, '2024-12-23 22:20:15', '2024-12-23 22:20:15', NULL, NULL),
+(4, 'منى محمود', 'mona.mahmoud@example.com', NULL, '$2y$12$TImNy7S6meYUKjoLyq7vp.c2nFEqL5AQgRyvszgllrBPB/TmSdsfW', NULL, NULL, 0, 'service-provider', NULL, NULL, '2024-12-23 22:20:15', '2024-12-23 22:20:15', NULL, NULL),
+(5, 'يوسف إبراهيم', 'youssef.ibrahim@example.com', NULL, '$2y$12$o58r65voLtR5rm.ENj7qxe8xGWRx1aFW3/ZArDtUlFpScvCw1yR22', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-23 22:20:16', '2024-12-23 22:20:16', NULL, NULL),
+(6, 'هدى أحمد', 'hoda.ahmed@example.com', NULL, '$2y$12$1/UaI.BCOFkt6z4XPVkwo.EPbTMgbxznG62vu1hDKuVkIrr3HJeaS', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-23 22:20:16', '2024-12-23 22:20:16', NULL, NULL),
+(7, 'علي سعيد', 'ali.saeed@example.com', NULL, '$2y$12$eCH/5lKUqh9iUELWMlL9fulpuvW2tbR/G/auyhnL6BPjtDIW33E9S', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-23 22:20:17', '2024-12-23 22:20:17', NULL, NULL),
+(8, 'نورا سامي', 'nora.samy@example.com', NULL, '$2y$12$IPJbYjuX1.8S.VJk1ZmLHOhAkfuCRPPklByQZDmgnaoDHtnW9cRa2', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-23 22:20:17', '2024-12-23 22:20:17', NULL, NULL),
+(9, 'عمر فؤاد', 'omar.fouad@example.com', NULL, '$2y$12$e9iZVJYmUhSZwXtwO8Nln.kx6G2jctj0pJv.hyegwijfZjIK1hHUS', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-23 22:20:18', '2024-12-23 22:20:18', NULL, NULL),
+(10, 'ليلى سمير', 'laila.samir@example.com', NULL, '$2y$12$WEGILDs9U2QjEynPDEO1/.SJoN1KzytKX/x6d5YjvA9vKWClr4YsW', NULL, NULL, 0, 'client', NULL, NULL, '2024-12-23 22:20:18', '2024-12-23 22:20:18', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -986,11 +976,11 @@ CREATE TABLE `workers` (
 --
 
 INSERT INTO `workers` (`id`, `service_provider_id`, `name`, `phone`, `address`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 'د/الهام ماضي', '012345674', 'Saudi Arabia, ElReyad', '2024-12-17 22:32:39', '2024-12-17 22:32:39', NULL),
-(2, 1, 'د/نورا يوسف', '010987654', 'Egypt, Cairo', '2024-12-17 22:32:39', '2024-12-17 22:32:39', NULL),
-(3, 1, 'د/رحمة علي', '011234567', 'Saudi Arabia, Jeddah', '2024-12-17 22:32:40', '2024-12-17 22:32:40', NULL),
-(4, 1, 'د/سارة حسن', '012345678', 'UAE, Dubai', '2024-12-17 22:32:40', '2024-12-17 22:32:40', NULL),
-(5, 1, 'د/نورا عبد الله', '010123456', 'Qatar, Doha', '2024-12-17 22:32:40', '2024-12-17 22:32:40', NULL);
+(1, 1, 'د/الهام ماضي', '012345674', 'Saudi Arabia, ElReyad', '2024-12-23 22:20:21', '2024-12-23 22:20:21', NULL),
+(2, 1, 'د/نورا يوسف', '010987654', 'Egypt, Cairo', '2024-12-23 22:20:28', '2024-12-23 22:20:28', NULL),
+(3, 1, 'د/رحمة علي', '011234567', 'Saudi Arabia, Jeddah', '2024-12-23 22:20:28', '2024-12-23 22:20:28', NULL),
+(4, 1, 'د/سارة حسن', '012345678', 'UAE, Dubai', '2024-12-23 22:20:29', '2024-12-23 22:20:29', NULL),
+(5, 1, 'د/نورا عبد الله', '010123456', 'Qatar, Doha', '2024-12-23 22:20:29', '2024-12-23 22:20:29', NULL);
 
 --
 -- Indexes for dumped tables
@@ -1332,13 +1322,13 @@ ALTER TABLE `workers`
 -- AUTO_INCREMENT for table `activity_log`
 --
 ALTER TABLE `activity_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `chats`
@@ -1416,7 +1406,7 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `offers`
@@ -1440,7 +1430,7 @@ ALTER TABLE `packages`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -1458,7 +1448,7 @@ ALTER TABLE `permission_groups`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reset_tokens`
@@ -1530,7 +1520,7 @@ ALTER TABLE `service_workers`
 -- AUTO_INCREMENT for table `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `system_logs`
