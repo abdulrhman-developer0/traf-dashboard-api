@@ -21,6 +21,7 @@ class BookingResource extends JsonResource
             'service_name'      => $this->service?->name,
             'host_name'         => $this->getHostName(),
             'host_photo'        => $this->getHostPhoto(),
+            'host_phone'        => $this->service->serviceProvider->phone,
             'rating'            => $this->service->serviceProvider->rating,
             'is_personal'       => $this->Service->serviceProvider->is_personal,
             'status'            => $this->status,
