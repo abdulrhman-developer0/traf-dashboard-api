@@ -8,6 +8,7 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\SystemLogController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\JoinRequestController;
@@ -21,7 +22,8 @@ use App\Http\Controllers\SystemTrashController;
 // Route::get('/test', [ServiceProviderController::class, 'index']);
 // Route::get('/test', [ClientController::class, 'index']);
 // Route::get('/test', [PricingController::class, 'index']);
-Route::get('/test', [ServiceController::class, 'index']);
+// Route::get('/test', [ServiceController::class, 'index']);
+Route::get('/test', [CategoryController::class, 'index']);
 
 Route::get('/', function () {
     return redirect('/dashboard');
