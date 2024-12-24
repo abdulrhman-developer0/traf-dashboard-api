@@ -14,6 +14,20 @@ class LatestServiceCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'current_page'  => $this->currentPage(),
+            'last_page'     => $this->lastPage(),
+            'next_page_url' => $this->nextPageUrl(),
+            'items'     => $this->collection->map(function ($item) {
+                return [
+                    'id'                => $item->id,
+                    'photo'             => $item->getFirstMediaUrl('photo'),
+                    'name'              => $item->name,
+                    'category_name'     => $item->category->name,
+                    'rating'            => $item->rating,
+                    'price'             => $item->is_offer ? $item->price_after : $item->price_before,
+                ];
+            })
+        ];
     }
 }
