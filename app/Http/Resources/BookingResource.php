@@ -31,6 +31,7 @@ class BookingResource extends JsonResource
             'address'           => $this->getAddress(),
             'created_at'        => $this->created_at?->diffForHumans(),
             'client_name'       => $this->client->user->name,
+            'client_phone'      => $this->client->phone,
             'client_photo'      => $this->client->getFirstMediaUrl('photo'),
             'client_address'    => $this->address ?? $this->client->address,
         ];
