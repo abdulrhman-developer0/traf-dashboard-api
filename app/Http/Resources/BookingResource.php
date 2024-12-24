@@ -30,6 +30,9 @@ class BookingResource extends JsonResource
             'is_reviewed'       =>  $this->reviews->count() > 0,
             'address'           => $this->getAddress(),
             'created_at'        => $this->created_at?->diffForHumans(),
+            'client_name'       => $this->client->user->name,
+            'client_photo'      => $this->client->getFirstMediaUrl('photo'),
+            'client_address'    => $this->address ?? $this->client->address,
         ];
     }
 
@@ -60,9 +63,9 @@ class BookingResource extends JsonResource
     public function getAddress(): ?string
     {
         if ($this->service->is_home_service) {
-            return $this->getAddress;
+            return $this->address;
         }
 
-        return $this->service->address ?? $this->service->serviceProvider->getAddress;
+        return $this->service->address ?? $this->service->serviceProvider->address;
     }
 }
