@@ -21,6 +21,7 @@ class BookingResource extends JsonResource
             'service_name'      => $this->service?->name,
             'host_name'         => $this->getHostName(),
             'host_photo'        => $this->getHostPhoto(),
+            'rating'            => $this->service->serviceProvider->rating,
             'is_personal'       => $this->Service->serviceProvider->is_personal,
             'status'            => $this->status,
             'date'              => $this->date->toDatetimeString(),
@@ -34,6 +35,7 @@ class BookingResource extends JsonResource
             'client_phone'      => $this->client->phone,
             'client_photo'      => $this->client->getFirstMediaUrl('photo'),
             'client_address'    => $this->address ?? $this->client->address,
+            'client_rating'     => $this->client->rating
         ];
     }
 
