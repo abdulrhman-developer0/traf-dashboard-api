@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\ServiceProvider;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class HomeController extends Controller
 {
@@ -52,7 +53,7 @@ class HomeController extends Controller
             ->whereYear('created_at', '=', $year)
             ->latest()
             ->with('client.user', 'service.serviceProvider.user')
-            ->paginate(4);
+            ->paginate(3);
 
         $data = [
             'stats' => [
@@ -66,6 +67,10 @@ class HomeController extends Controller
             'bookings' => LatestBookingsCollection::make($bookings_paginated),
         ];
 
-        return $data;
+
+        return Inertia::render('index', [
+            'data' => $data,
+            'title' => 'Dashboard'
+        ]);
     }
 }

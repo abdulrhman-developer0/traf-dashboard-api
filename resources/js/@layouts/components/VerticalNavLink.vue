@@ -31,7 +31,7 @@ const hideTitleAndBadge = configStore.isVerticalNavMini()
     <Component
       :is="item.to ? Link : 'a'"
       v-bind="getComputedNavLinkToProp(item)"
-      :href="item.path ? '/dashboard'+item.path : route(item.path)"
+      :href="item.path ? item.path : route(item.path)"
       :class="{ 'router-link-active router-link-exact-active': isNavLinkActive(item, $router) }"
     >
       <Component

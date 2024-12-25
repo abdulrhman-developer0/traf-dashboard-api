@@ -12,6 +12,11 @@
   "Bookings" : "الحجوزات",
   "Services types" : "أنواع الخدمات",
   "Payments" : "الدفع",
-  "Polices" : "السياسات"
+  "Polices" : "السياسات",
+
+  "pending" : "قيد الإنتظار",
+  "canceled" : "مُلغاه",
+  "confirmed" : "مؤكدة",
+  "done" : "تمت"
 
 }

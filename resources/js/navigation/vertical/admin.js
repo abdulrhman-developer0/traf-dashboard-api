@@ -1,16 +1,16 @@
 export default [
     {
         title: 'Dashboard',
-        to: '/dashboard',
+        to: '/',
         icon: { icon: 'tabler-smart-home' },
         path: '/',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Join requests',
-        to: '/admin/users-management',
+        to: '/requests',
         icon: { icon: 'tabler-users' },
-        path: '/admin/users-management',
+        path: '/requests', 
         permission: 'dashboard-dashboard-view'
     },
     

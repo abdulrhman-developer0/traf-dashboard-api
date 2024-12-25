@@ -91,11 +91,32 @@ const verticalNavAttrs = computed(() => {
           />
         </div>
       </header>
-      <main class="layout-page-content" :class="title == 'Messages' ? 'messages-layout' : ''">
-        <div class="page-content-container">
-          <slot />
+
+      <main class="layout-page-content pa-0">
+
+        <!-- Content -->
+        <div class="container-xxl d-flex align-items-stretch flex-grow-1 ">
+
+          <div class="flex-shrink-1 flex-grow-1 container-p-x container-p-y pa-7 ">
+            <slot />
+          </div>
+
+          <div class="flex-shrink-1 flex-grow-0 align-self-stretch">
+            <div class="notificationsSidebar pt-4 px-3">
+              <h3>الإشعارات</h3>
+
+              <h3>الأنشطة</h3>
+            </div>
+          </div>
+
         </div>
+        <!--/ Content -->
+
       </main>
+      
+      
+
+
       <footer class="layout-footer"  v-if="title != 'Messages'">
         <div class="footer-content-container">
           <slot name="footer" />

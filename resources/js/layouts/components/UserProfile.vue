@@ -6,7 +6,6 @@ import { usePage, router } from '@inertiajs/vue3'
 const page = usePage()
 
 const user = computed(() => page.props.user)
-console.log(page.props)
 const logout = () => {
   router.post(route('logout'))
 }

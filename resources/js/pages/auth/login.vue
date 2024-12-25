@@ -39,7 +39,7 @@ const isPasswordVisible = ref(false)
 </script>
 
 <template>
-  <Head title="Login" /> 
+  <Head title="تسجيل الدخول" /> 
   <BlankLayout>
     <div class="auth-wrapper d-flex align-center justify-center pa-4">
       

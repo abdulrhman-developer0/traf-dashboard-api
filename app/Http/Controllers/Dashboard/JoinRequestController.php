@@ -9,6 +9,7 @@ use App\Models\JoinRequest;
 use App\Models\ServiceProvider;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class JoinRequestController extends Controller
 {
@@ -69,6 +70,11 @@ class JoinRequestController extends Controller
             'providers' => LatestServiceProviderCollection::make($providers_paginated),
         ];
 
-        return $data;
+        //return $data;
+
+        return Inertia::render('requests/index', [
+            'data' => $data,
+            'title' => 'Join requests'
+        ]);
     }
 }
