@@ -15,9 +15,9 @@ class ServiceProviderController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $requests_this_week = ServiceProvider::where('created_at', '>=', now()->subWeek())->get();
+        $providerss_this_week = ServiceProvider::where('created_at', '>=', now()->subWeek())->get();
 
-        $providers_count = $requests_this_week->count();
+        $providers_count = $providerss_this_week->count();
         $new_providers   = ServiceProvider::whereDay('created_at', now())->count();
         $logouts_count = 0;
         $deleted_accounts = User::onlyTrashed()
@@ -42,13 +42,13 @@ class ServiceProviderController extends Controller
             $start->addMonth();
         }
 
-        $actualData = Subscription::query()
+       $actualData = Subscription::query()
             ->selectRaw('DATE_FORMAT(subscriptions.start_date, "%Y-%m") as month, SUM(subscriptions.amount) as total_amount')
             ->whereYear('subscriptions.start_date', '=', $year)
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total_amount', 'month')
-            ->toArray();
+            ->toArray(); 
 
         $chart = collect($months)->map(function ($month) use ($actualData) {
             return [

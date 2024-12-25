@@ -21,6 +21,8 @@ class BookingResource extends JsonResource
             'service_name'      => $this->service?->name,
             'host_name'         => $this->getHostName(),
             'host_photo'        => $this->getHostPhoto(),
+            'host_phone'        => $this->service->serviceProvider->phone,
+            'rating'            => $this->service->serviceProvider->rating,
             'is_personal'       => $this->Service->serviceProvider->is_personal,
             'status'            => $this->status,
             'date'              => $this->date->toDatetimeString(),
@@ -30,6 +32,11 @@ class BookingResource extends JsonResource
             'is_reviewed'       =>  $this->reviews->count() > 0,
             'address'           => $this->getAddress(),
             'created_at'        => $this->created_at?->diffForHumans(),
+            'client_name'       => $this->client->user->name,
+            'client_phone'      => $this->client->phone,
+            'client_photo'      => $this->client->getFirstMediaUrl('photo'),
+            'client_address'    => $this->address ?? $this->client->address,
+            'client_rating'     => $this->client->rating
         ];
     }
 
@@ -60,9 +67,9 @@ class BookingResource extends JsonResource
     public function getAddress(): ?string
     {
         if ($this->service->is_home_service) {
-            return $this->getAddress;
+            return $this->address;
         }
 
-        return $this->service->address ?? $this->service->serviceProvider->getAddress;
+        return $this->service->address ?? $this->service->serviceProvider->address;
     }
 }

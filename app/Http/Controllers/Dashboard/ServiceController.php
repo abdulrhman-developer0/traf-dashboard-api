@@ -3,35 +3,21 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Dashboard\LatestClientCollection;
-use App\Models\Client;
+use App\Http\Resources\Dashboard\LatestServiceCollection;
 use App\Models\Payment;
-use App\Models\User;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
-class ClientController extends Controller
+class ServiceController extends Controller
 {
     public function index(Request $request)
     {
         $year = $request->input('year', now()->year);
 
-        $clients_this_week = Client::where('created_at', '>=', now()->subWeek())->get();
-
-        $clients_count = $clients_this_week->count();
-        $new_clients   = Client::whereDay('created_at', now())->count();
-        $logouts_count = 0;
-        $deleted_accounts = User::onlyTrashed()
-            ->whereAccountType('client')
-            ->count();
-
-        $total_clients = Client::count();
+        $total_services = Service::count();
 
         $stats = [
-            'clients_count' => $clients_count,
-            'new_clients'   => $new_clients,
-            'logouts_count'   => $logouts_count,
-            'deleted_accounts' => $deleted_accounts,
-            'total_clients'  => $total_clients,
+            'total_services'  => $total_services,
         ];
 
         $start = now()->subMonths(11)->startOfMonth()->year($year);
@@ -58,18 +44,17 @@ class ClientController extends Controller
             ];
         })->toArray();
 
-        $clients_paginated = Client::query()
-            ->select(['id', 'user_id', 'created_at'])
+        $services_paginated = Service::query()
             ->whereYear('created_at', '=', $year)
             ->latest()
-            ->with(['user'])
+            ->with(['category'])
             ->paginate(4);
 
 
         $data = [
             'stats' => $stats,
             'chart' => $chart,
-            'clients' => LatestClientCollection::make($clients_paginated),
+            'services' => LatestServiceCollection::make($services_paginated),
         ];
 
         return $data;
