@@ -22,31 +22,38 @@ class HomeController extends Controller
         $visitors_count = 2100;
         $providers_count = ServiceProvider::whereYear('created_at', '=', $year)->count();
         $bookings_count = Booking::whereYear('created_at', '=', $year)->count();
-        $services_count = Service::count();
+        $services_count = Service::whereYear('created_at', $year)->count();
 
-        $start = now()->subMonths(11)->startOfMonth()->year($year);
-        $end = now()->startOfMonth()->year($year);
+        $stats = [
+            'users_count' => $users_count,
+            'visitors_count' => $visitors_count,
+            'providers_count' => $providers_count,
+            'bookings_count' => $bookings_count,
+            'services_count' => $services_count,
+        ];
+
+        $start = now()->startOfYear();
+        $end = now()->endOfYear();
+
         $months = [];
         while ($start <= $end) {
-            $months[] = $start->format('Y-m');
+            $months[] = $start->format('m');
             $start->addMonth();
         }
 
-        $actualData = Payment::query()
-            ->join('bookings', 'bookings.id', '=', 'payments.booking_id')
-            ->selectRaw('DATE_FORMAT(bookings.date, "%Y-%m") as month, SUM(payments.amount) as total_amount')
+        $actualData = Booking::query()
+            ->selectRaw('
+                DATE_FORMAT(bookings.date, "%m") as month
+            ')
             ->whereYear('bookings.date', '=', $year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total_amount', 'month')
-            ->toArray();
+            ->get()
+            ->groupBy('month');
 
         $chart = collect($months)->map(function ($month) use ($actualData) {
-            return [
-                'month' => $month,
-                'total_amount' => $actualData[$month] ?? 0,
-            ];
+            $actual = $actualData[$month] ?? collect();
+            return $actual->count();
         })->toArray();
+        return $chart;
 
         $bookings_paginated = Booking::query()
             ->select(['id', 'client_id', 'service_id', 'date', 'status'])
@@ -72,13 +79,7 @@ class HomeController extends Controller
             });
 
         $data = [
-            'stats' => [
-                'users_count' => $users_count,
-                'visitors_count' => $visitors_count,
-                'providers_count' => $providers_count,
-                'bookings_count' => $bookings_count,
-                'services_count' => $services_count,
-            ],
+            'stats' => $stats,
             'category_stats' => $category_stats,
             'chart' => $chart,
             'bookings' => LatestBookingsCollection::make($bookings_paginated),
