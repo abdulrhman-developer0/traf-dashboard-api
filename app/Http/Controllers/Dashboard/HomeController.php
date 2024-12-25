@@ -53,7 +53,6 @@ class HomeController extends Controller
             $actual = $actualData[$month] ?? collect();
             return $actual->count();
         })->toArray();
-        return $chart;
 
         $bookings_paginated = Booking::query()
             ->select(['id', 'client_id', 'service_id', 'date', 'status'])
