@@ -7,6 +7,7 @@ use App\Http\Resources\Dashboard\LatestBookingsCollection;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\ServiceProvider;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -55,6 +56,22 @@ class HomeController extends Controller
             ->with('client.user', 'service.serviceProvider.user')
             ->paginate(3);
 
+        $category_stats = ServiceCategory::query()
+            ->join('services', 'services.service_category_id', '=', 'service_categories.id')
+            ->select([
+                'service_categories.id',
+                'service_categories.name'
+            ])
+            ->selectRaw("
+                (SELECT COUNT(*) FROM bookings WHERE bookings.service_id = services.id) as bookings_count,
+                ((SELECT COUNT(*) FROM bookings WHERE bookings.service_id = services.id) / (SELECT COUNT(*) FROM bookings) * 100) as percentage
+            ")
+            ->get()
+            ->map(function ($category) {
+                $category['percentage'] = (float) $category['percentage'];
+                return $category;
+            });
+
         $data = [
             'stats' => [
                 'users_count' => $users_count,
@@ -63,6 +80,7 @@ class HomeController extends Controller
                 'bookings_count' => $bookings_count,
                 'services_count' => $services_count,
             ],
+            'category_stats' => $category_stats,
             'chart' => $chart,
             'bookings' => LatestBookingsCollection::make($bookings_paginated),
         ];
