@@ -1,6 +1,10 @@
 <script setup>
 import { VerticalNav } from '@layouts/components'
 import { useLayoutConfigStore } from '@layouts/stores/config'
+import { usePage  } from '@inertiajs/vue3'
+
+const page = usePage()
+const title = computed(() => page.props.title)
 
 const props = defineProps({
   navItems: {
@@ -87,12 +91,12 @@ const verticalNavAttrs = computed(() => {
           />
         </div>
       </header>
-      <main class="layout-page-content">
+      <main class="layout-page-content" :class="title == 'Messages' ? 'messages-layout' : ''">
         <div class="page-content-container">
           <slot />
         </div>
       </main>
-      <footer class="layout-footer">
+      <footer class="layout-footer"  v-if="title != 'Messages'">
         <div class="footer-content-container">
           <slot name="footer" />
         </div>

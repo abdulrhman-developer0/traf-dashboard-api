@@ -18,7 +18,6 @@ const props = defineProps({
 
 const page = usePage()
 
-const permissions = computed(() => page.props.user.permissions)
 
 const configStore = useLayoutConfigStore()
 const hideTitleAndBadge = configStore.isVerticalNavMini()
@@ -26,9 +25,8 @@ const hideTitleAndBadge = configStore.isVerticalNavMini()
 
 <template>
   <li
-    v-if="permissions.includes(item.permission)"
     class="nav-link"
-    :class="{ disabled: item.disable }"
+    :class="item.title == page.props.title ? 'active' : ''"
   >
     <Component
       :is="item.to ? Link : 'a'"

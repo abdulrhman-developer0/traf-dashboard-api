@@ -21,20 +21,29 @@ class UsersSeeder extends Seeder
     {
 
 
-        // $dev_user = User::factory()->create([
-        //     'name' => 'Admin',
-        //     'email' => 'admin@gmail.com',
-        //     'password' => Hash::make('admin32224')
-        // ]);
-        // $dev_user->assignRole('Admin');
+        $dev_user = User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('adminadmin'),
+            'account_type' => 'admin',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        $dev_user->assignRole('Admin');
 
-        // $dev_user = User::factory()->create([
-        //     'name' => 'Abed Said',
-        //     'email' => 'abed.allah.said@gmail.com',
-        //     'password' => Hash::make('abedsaid')
-        // ]);
-        // $dev_user->assignRole('Admin');
-        $users = [
+        $dev_user = User::factory()->create([
+            'name' => 'Abed Said',
+            'email' => 'abed.allah.said@gmail.com',
+            'password' => Hash::make('abedsaid'),
+            'account_type' => 'admin',
+            'created_at' => now(),
+            'updated_at' => now(),
+
+        ]);
+        $dev_user->assignRole('Admin');
+
+
+        /*$users = [
             //1
             ['name' => 'أحمد علي', 'email' => 'ahmed.ali@example.com', 'account_type' => 'service-provider'],
             //2
@@ -62,7 +71,7 @@ class UsersSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }
+        }*/
 
     }
 }

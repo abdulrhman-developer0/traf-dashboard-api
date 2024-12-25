@@ -12,6 +12,7 @@ use App\Models\LoginAttempt;
 
 class AuthenticateController extends Controller
 {
+
     public function index()
     {
         return Inertia::render('auth/login', [

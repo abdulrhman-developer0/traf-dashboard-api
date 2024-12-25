@@ -21,20 +21,10 @@ class PermissionsGroupsSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
 
-        $actions = ['view','add','edit','delete'];
+        $actions = ['view'];
 
         $groups = [
             'Dashboard|Dashboard',
-
-            'Users|Users',
-
-            'Roles and Permissions|Roles',
-            'Roles and Permissions|Permissions',
-
-            'System Logs and Trash|System Trash',
-            'System Logs and Trash|Activity log',
-            'System Logs and Trash|System log',
-
         ];
 
 

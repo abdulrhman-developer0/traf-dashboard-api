@@ -1,4 +1,8 @@
 <script setup>
+
+import enimage from '../../../images/lang/en.png'
+import arimage from '../../../images/lang/ar.png'
+
 const props = defineProps({
   languages: {
     type: Array,
@@ -15,8 +19,12 @@ const { locale } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
-  <IconBtn>
-    <VIcon icon="tabler-language" />
+  <VBtn variant="default" >
+    <div class="d-flex flex-row gap-3" style="align-items: center;">
+      <img :src="locale == 'en' ? enimage : arimage" width="24px" height="24px" style="border-radius: 50%" alt="">
+      <span style="color: #374557;font-size: 18px;font-weight: 600" >{{ $t('lang') }}</span>
+      <VIcon color="#9A9A9A"icon="tabler-caret-down-filled" />
+    </div>
 
     <!-- Menu -->
     <VMenu
@@ -44,5 +52,5 @@ const { locale } = useI18n({ useScope: 'global' })
         </VListItem>
       </VList>
     </VMenu>
-  </IconBtn>
+  </VBtn>
 </template>

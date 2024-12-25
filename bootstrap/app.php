@@ -32,8 +32,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'admin'     => AdminMiddleware::class,
-            'account'   => CheckAccountType::class
-
+            'account'   => CheckAccountType::class,
+            'Inertia' => HandleInertiaRequests::class,
+            'UserLastActivity' => UpdateUserLastActivity::class
         ]);
     })
 

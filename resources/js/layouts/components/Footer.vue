@@ -4,13 +4,13 @@
     <span class="d-flex align-center text-medium-emphasis">
       &copy;
       {{ new Date().getFullYear() }}
-      Copyrights © Reserved to 
+      جميع الحقوق محفوظة لموقع 
       <a
-        href="https://sanamedia.com"
+        href="https://traf.com"
         target="_blank"
         rel="noopener noreferrer"
         class="text-primary ms-1"
-      >Sana Media</a>
+      >ترف</a>
     </span>
     <!-- 👉 Footer: right content -->
     <span class="d-md-flex gap-x-4 text-primary d-none">

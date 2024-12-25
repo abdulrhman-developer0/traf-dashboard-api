@@ -22,12 +22,12 @@ Route::get('/', function () {
 });
 
 
-Route::group(['middleware' => ['auth', 'can:dashboard-dashboard-view'],'prefix' => 'dashboard'], function() {
+Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:dashboard-dashboard-view'],'prefix' => 'dashboard'], function() {
 
     Route::get('/', [DashboardController::class, 'index'])->name('index');
 
     Route::middleware(['admin'])->group(function () {
-
+ 
         Route::resource('users', UsersController::class);
 
         Route::resource('roles', RolesController::class);

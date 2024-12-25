@@ -1,6 +1,11 @@
 <script setup>
-import navItems from '@/navigation/vertical'
+import AdminNavItems from '@/navigation/vertical/admin'
+
 import { themeConfig } from '@themeConfig'
+import { usePage  } from '@inertiajs/vue3'
+const page = usePage()
+const title = computed(() => page.props.title)
+
 
 // Components
 import Footer from '@/layouts/components/Footer.vue'
@@ -16,7 +21,7 @@ import { VerticalNavLayout } from '@layouts'
 </script>
 
 <template>
-  <VerticalNavLayout :nav-items="navItems">
+  <VerticalNavLayout :nav-items="AdminNavItems">
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
@@ -31,16 +36,19 @@ import { VerticalNavLayout } from '@layouts'
           />
         </IconBtn>
 
-
+        <h3 class="mainpagetitle">
+          <VIcon
+            size="26"
+            icon="tabler-hand-stop"
+            color="#E55175"
+          />
+          مرحبًا بعودتك، {{ page.props.user.name }}
+        </h3>
+        <VSpacer />
+        <NavSearchBar />
         <VSpacer />
 
-        <NavBarI18n
-          v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
-          :languages="themeConfig.app.i18n.langConfig"
-        />
-        <NavbarThemeSwitcher />
-        <NavBarNotifications class="me-1" />
-        <UserProfile />
+        <UserProfile class="ml-4" />
       </div>
     </template>
 
