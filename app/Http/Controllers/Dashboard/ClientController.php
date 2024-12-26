@@ -24,7 +24,7 @@ class ClientController extends Controller
             ->whereAccountType('client')
             ->count();
 
-        $total_clients = Client::count();
+        $total_clients = Client::whereYear('created_at', $year)->count();
 
         $stats = [
             'clients_count' => $clients_count,
@@ -34,28 +34,26 @@ class ClientController extends Controller
             'total_clients'  => $total_clients,
         ];
 
-        $start = now()->subMonths(11)->startOfMonth()->year($year);
-        $end = now()->startOfMonth()->year($year);
+        $start = now()->startOfYear();
+        $end = now()->endOfYear();
+
         $months = [];
         while ($start <= $end) {
-            $months[] = $start->format('Y-m');
+            $months[] = $start->format('m');
             $start->addMonth();
         }
 
         $actualData = Payment::query()
-            ->join('bookings', 'bookings.id', '=', 'payments.booking_id')
-            ->selectRaw('DATE_FORMAT(bookings.date, "%Y-%m") as month, SUM(payments.amount) as total_amount')
-            ->whereYear('bookings.date', '=', $year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total_amount', 'month')
-            ->toArray();
+            ->selectRaw('
+                DATE_FORMAT(created_at, "%m") as month
+            ')
+            ->whereYear('created_at', '=', $year)
+            ->get()
+            ->groupBy('month');
 
         $chart = collect($months)->map(function ($month) use ($actualData) {
-            return [
-                'month' => $month,
-                'total_amount' => $actualData[$month] ?? 0,
-            ];
+            $actual = $actualData[$month] ?? collect();
+            return $actual->count();
         })->toArray();
 
         $clients_paginated = Client::query()

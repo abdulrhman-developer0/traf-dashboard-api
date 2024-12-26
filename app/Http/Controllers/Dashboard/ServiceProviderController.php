@@ -24,7 +24,7 @@ class ServiceProviderController extends Controller
             ->whereAccountType('service-provider')
             ->count();
 
-        $total_providers = ServiceProvider::count();
+        $total_providers = ServiceProvider::whereYear('created_at', $year)->count();
 
         $stats = [
             'providers_count' => $providers_count,
@@ -34,27 +34,26 @@ class ServiceProviderController extends Controller
             'total_providers'  => $total_providers,
         ];
 
-        $start = now()->subMonths(11)->startOfMonth()->year($year);
-        $end = now()->startOfMonth()->year($year);
+        $start = now()->startOfYear();
+        $end = now()->endOfYear();
+
         $months = [];
         while ($start <= $end) {
-            $months[] = $start->format('Y-m');
+            $months[] = $start->format('m');
             $start->addMonth();
         }
 
-       $actualData = Subscription::query()
-            ->selectRaw('DATE_FORMAT(subscriptions.start_date, "%Y-%m") as month, SUM(subscriptions.amount) as total_amount')
-            ->whereYear('subscriptions.start_date', '=', $year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total_amount', 'month')
-            ->toArray(); 
+        $actualData = Subscription::query()
+            ->selectRaw('
+                DATE_FORMAT(created_at, "%m") as month
+            ')
+            ->whereYear('created_at', '=', $year)
+            ->get()
+            ->groupBy('month');
 
         $chart = collect($months)->map(function ($month) use ($actualData) {
-            return [
-                'month' => $month,
-                'total_amount' => $actualData[$month] ?? 0,
-            ];
+            $actual = $actualData[$month] ?? collect();
+            return $actual->count();
         })->toArray();
 
         $providers_paginated = ServiceProvider::query()

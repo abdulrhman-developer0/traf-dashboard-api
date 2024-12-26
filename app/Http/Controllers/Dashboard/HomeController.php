@@ -41,11 +41,11 @@ class HomeController extends Controller
             $start->addMonth();
         }
 
-        $actualData = Booking::query()
+        $actualData = Payment::query()
             ->selectRaw('
-                DATE_FORMAT(bookings.date, "%m") as month
+                DATE_FORMAT(created_at, "%m") as month
             ')
-            ->whereYear('bookings.date', '=', $year)
+            ->whereYear('created_at', '=', $year)
             ->get()
             ->groupBy('month');
 

@@ -15,7 +15,7 @@ class ServiceController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $total_services = Service::count();
+        $total_services = Service::whereYear('created_at', $year)->count();
 
         $stats = [
             'total_services'  => $total_services,
@@ -37,29 +37,28 @@ class ServiceController extends Controller
                 return $category;
             });
 
-        $start = now()->subMonths(11)->startOfMonth()->year($year);
-        $end = now()->startOfMonth()->year($year);
-        $months = [];
-        while ($start <= $end) {
-            $months[] = $start->format('Y-m');
-            $start->addMonth();
-        }
-
-        $actualData = Payment::query()
-            ->join('bookings', 'bookings.id', '=', 'payments.booking_id')
-            ->selectRaw('DATE_FORMAT(bookings.date, "%Y-%m") as month, SUM(payments.amount) as total_amount')
-            ->whereYear('bookings.date', '=', $year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total_amount', 'month')
-            ->toArray();
-
-        $chart = collect($months)->map(function ($month) use ($actualData) {
-            return [
-                'month' => $month,
-                'total_amount' => $actualData[$month] ?? 0,
-            ];
-        })->toArray();
+            $start = now()->startOfYear();
+            $end = now()->endOfYear();
+    
+            $months = [];
+            while ($start <= $end) {
+                $months[] = $start->format('m');
+                $start->addMonth();
+            }
+    
+            $actualData = Payment::query()
+                ->selectRaw('
+                    DATE_FORMAT(created_at, "%m") as month
+                ')
+                ->whereYear('created_at', '=', $year)
+                ->get()
+                ->groupBy('month');
+    
+            $chart = collect($months)->map(function ($month) use ($actualData) {
+                $actual = $actualData[$month] ?? collect();
+                return $actual->count();
+            })->toArray();
+            
 
         $services_paginated = Service::query()
             ->whereYear('created_at', '=', $year)
