@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
 
 
         // production seeders
-        /*$this->call(PackagesSeeder::class);
+        $this->call(PackagesSeeder::class);
 
-        $this->call(CitySeeder::class);
+        // $this->call(CitySeeder::class);
         $this->call(ClientSeeder::class);
         $this->call(ServiceProviderSeeder::class);
         $this->call(WorkerSeeder::class);
@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ServiceSeeder::class);
         // $this->call(ServiceScheduleSeeder::class);
         $this->call(BookingSeeder::class);
-        // $this->call(ReviewSeeder::class);
-        // $this->call(OfferSeeder::class);*/
+        $this->call(ReviewSeeder::class);
+        // $this->call(OfferSeeder::class);
 
     }
 }

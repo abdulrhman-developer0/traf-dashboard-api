@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Dashboard\BookingCollection;
 use App\Http\Resources\Dashboard\LatestServiceProviderCollection;
+use App\Http\Resources\Dashboard\ReviewCollection;
+use App\Http\Resources\ServiceCollection;
+use App\Models\Booking;
+use App\Models\Review;
 use App\Models\ServiceProvider;
 use App\Models\Subscription;
 use App\Models\User;
@@ -69,6 +74,80 @@ class ServiceProviderController extends Controller
             'stats' => $stats,
             'chart' => $chart,
             'providers' => LatestServiceProviderCollection::make($providers_paginated),
+        ];
+
+        return $data;
+    }
+
+    public function show(Request $request, string $id)
+    {
+        $serviceProvider = ServiceProvider::query()
+            ->whereId($id)
+            ->select([
+                '.id',
+                'user_id',
+                'phone',
+                'rating'
+            ])
+            ->with([
+                'user' => fn($q) => $q->select(['id', 'name']),
+            ])
+            ->firstOrFail();
+
+        // query the reviews and reviews stats
+        $reviewQuery = Review::query()
+        ->whereHas('booking.service.serviceProvider', fn ($q) => $q->whereId($serviceProvider->id));
+
+        $reviews_stats = array_merge([
+            'total' => $reviewQuery->count()
+        ], get_rating_stats($reviewQuery));
+
+        $reviews = $reviewQuery->paginate(4);
+
+
+        // query the bookings and booking stats
+        $bookingQuery = Booking::whereHas('service.serviceProvider', fn($q) => $q->whereId($serviceProvider->id))
+            ->when(
+                $request->has('date'),
+                fn($q) => $q->whereDate('date', $request->input('date'))
+            )
+            ->latest();
+
+        $bookings = $bookingQuery->paginate(4);
+
+        $default_bookings_stats = [
+            'total'         => $bookingQuery->count(),
+            'canceled'      => 0,
+            'confirmed'    => 0,
+            'done'          => 0,
+        ];
+
+        $actualBookingStats = $bookingQuery->get()
+            ->groupBy('status')
+            ->map(fn($group) => $group->count())
+            ->toArray();
+
+        $bookings_stats = collect($default_bookings_stats)->map(function ($value, $key) use ($actualBookingStats) {
+            return $actualBookingStats[$key] ?? $value;
+        })->toArray();
+
+
+        $data = [
+            'id'             => $serviceProvider->id,
+            'photo'          => $serviceProvider->getFirstMediaUrl('photo'),
+            'user_id'        => $serviceProvider->user_id,
+            'name'           => $serviceProvider->user->name,
+            'phone'          => $serviceProvider->phone,
+            'rating'         => $serviceProvider->rating,
+            'reviews_cstats' => $reviews_stats,
+            'reviews'        => ReviewCollection::make($reviews),
+            'bookings_stats' => $bookings_stats,
+            'bookings'       =>  BookingCollection::make(
+                $bookings
+            ),
+            'services'       => ServiceCollection::make(
+                $serviceProvider->services()->latest()->paginate(4)
+            ),
         ];
 
         return $data;

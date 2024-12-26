@@ -43,7 +43,9 @@ class UsersSeeder extends Seeder
         $dev_user->assignRole('Admin');
 
 
-        /*$users = [
+        
+
+        $users = [
             //1
             ['name' => 'أحمد علي', 'email' => 'ahmed.ali@example.com', 'account_type' => 'service-provider'],
             //2
@@ -52,7 +54,7 @@ class UsersSeeder extends Seeder
             ['name' => 'خالد حسن', 'email' => 'khaled.hassan@example.com', 'account_type' => 'service-provider'],
             // 4
             ['name' => 'منى محمود', 'email' => 'mona.mahmoud@example.com', 'account_type' => 'service-provider'],
-            
+
             ['name' => 'يوسف إبراهيم', 'email' => 'youssef.ibrahim@example.com', 'account_type' => 'client'],
             ['name' => 'هدى أحمد', 'email' => 'hoda.ahmed@example.com', 'account_type' => 'client'],
             ['name' => 'علي سعيد', 'email' => 'ali.saeed@example.com', 'account_type' => 'client'],
@@ -60,18 +62,17 @@ class UsersSeeder extends Seeder
             ['name' => 'عمر فؤاد', 'email' => 'omar.fouad@example.com', 'account_type' => 'client'],
             ['name' => 'ليلى سمير', 'email' => 'laila.samir@example.com', 'account_type' => 'client'],
         ];
-        
+
 
         foreach ($users as $user) {
             DB::table('users')->insert([
                 'name' => $user['name'],
                 'email' => $user['email'],
-                'password' => Hash::make('password'), 
+                'password' => Hash::make('password'),
                 'account_type' => $user['account_type'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }*/
-
+        }
     }
 }

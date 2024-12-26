@@ -22,6 +22,7 @@ use App\Http\Controllers\SystemTrashController;
 // Route::get('/test', [HomeController::class, 'index']);
 // Route::get('/test', [JoinRequestController::class, 'index']);
 // Route::get('/test', [ServiceProviderController::class, 'index']);
+Route::get('/test/{id}', [ServiceProviderController::class, 'show']);
 // Route::get('/test', [ClientController::class, 'index']);
 // Route::get('/test', [PricingController::class, 'index']);
 // Route::get('/test', [ServiceController::class, 'index']);
