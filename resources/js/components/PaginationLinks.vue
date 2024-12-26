@@ -13,8 +13,10 @@ const props = defineProps({
   <div>
     <div class="pagination">
       <template v-for="(link, key) in links" :key="key">
-        <div v-if="link.url === null" class="mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded" v-html="link.label" />
-        <Link v-else class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-white focus:border-indigo-500 focus:text-indigo-500" :class="{ 'bg-white': link.active }" :href="link.url" v-html="link.label" />
+        <div v-if="link.url === null" class="mr-1 mb-1 px-5 py-3 text-sm leading-4 text-gray-400 rounded" v-html="link.label" style="background-color: #fff; color:#140208;border: 1px solid #E55175;" />
+        <Link v-else class="mr-1 mb-1 px-5 py-3 text-sm leading-4  rounded hover:bg-white focus:border-indigo-500 focus:text-indigo-500" 
+        style="background-color: #fff; color:#140208;border: 1px solid #E55175;"
+        :style="link.active ? {'backgroundColor': '#E55175','color': '#fff'} : '' " :href="link.url" v-html="link.label" />
       </template>
     </div>
   </div>

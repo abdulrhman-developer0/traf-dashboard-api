@@ -18,7 +18,8 @@ use App\Http\Controllers\Dashboard\ServiceController;
 use App\Http\Controllers\Dashboard\ServiceProviderController;
 use App\Http\Controllers\SystemTrashController;
 
-Route::get('/test', [HomeController::class, 'index']);
+
+// Route::get('/test', [HomeController::class, 'index']);
 // Route::get('/test', [JoinRequestController::class, 'index']);
 // Route::get('/test', [ServiceProviderController::class, 'index']);
 // Route::get('/test', [ClientController::class, 'index']);
@@ -27,17 +28,23 @@ Route::get('/test', [HomeController::class, 'index']);
 // Route::get('/test', [BookingController::class, 'index']);
 // Route::get('/test', [CategoryController::class, 'index']);
 
+
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return redirect('/');
 });
 
 
-Route::group(['middleware' => ['auth', 'can:dashboard-dashboard-view'],'prefix' => 'dashboard'], function() {
+Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:dashboard-dashboard-view'],'prefix' => ''], function() {
 
-    Route::get('/', [DashboardController::class, 'index'])->name('index');
+    Route::get('/', [HomeController::class, 'index'])->name('index');
+
+    Route::get('/requests', [JoinRequestController::class, 'index']);
+
+    
+
 
     Route::middleware(['admin'])->group(function () {
-
+ 
         Route::resource('users', UsersController::class);
 
         Route::resource('roles', RolesController::class);

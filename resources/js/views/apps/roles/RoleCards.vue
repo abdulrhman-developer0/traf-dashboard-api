@@ -3,6 +3,8 @@ import girlUsingMobile from '@images/pages/girl-using-mobile.png'
 import { useForm, router, usePage } from "@inertiajs/vue3";
 const page = usePage()
 const permissions = computed(() => page.props.user.permissions)
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n() 
 
 const props = defineProps({
   roles: Array,
@@ -10,7 +12,6 @@ const props = defineProps({
 });
 
 const isRoleDialogVisible = ref(false)
-const isUsersDialogVisible = ref(false)
 const roleDetail = ref(null)
 
 const editPermission = value => {
@@ -24,15 +25,9 @@ const actionReturn = () => {
 
 }
 
-const showRoleUsers = (role) => {
-  isUsersDialogVisible.value = true
-  roleDetail.value = role
-
-}
-
 const deleteRecord = (id) => {
   // This is a simple confirmation message, to be enhanced later with a confirmation model - Abed Said
-  if(confirm("Do you really want to delete?")){
+  if(confirm(t('"Do you really want to delete?"'))){
 
     router.delete(`/dashboard/roles/${id}`);
  
@@ -54,7 +49,7 @@ const deleteRecord = (id) => {
       <VCard>
         <VCardText class="d-flex align-center pb-4">
           <div class="text-body-1">
-            Total {{ item.users?.length }} users
+            {{ $t('Total users:') }} {{ item.users_count }} 
           </div>
 
           <VSpacer />
@@ -72,33 +67,35 @@ const deleteRecord = (id) => {
                 <a
                   href="javascript:void(0)"
                   @click="editPermission(item)"
-                  v-if="permissions.includes('roles-and-permissions-roles-edit')"
+                  v-if="item.name == 'Admin'"
 
                 >
-                  Edit Role
+                  
+                  {{ $t('View Role') }} (<span class="errortext"> {{ $t('This role cannot be edited') }}</span>)
                 </a>
+                <a
+                  href="javascript:void(0)"
+                  @click="editPermission(item)"
+                  v-else
+
+                >
+                  
+                  {{ $t('Edit Role') }}
+                </a>
+                
               </div>
+              
             </div>
-            <div>
-              <IconBtn>
-                <VIcon
-                  icon="tabler-trash"
-                  class="text-high-emphasis"
-                  color="error"
-                  @click="deleteRecord(item.id)"
-                  v-if="permissions.includes('roles-and-permissions-roles-delete')"
+            <IconBtn>
+              <VIcon
+                icon="tabler-trash"
+                class="text-high-emphasis"
+                color="error"
+                @click="deleteRecord(item.id)"
+                v-if="item.name != 'Admin'"
 
-                />
-              </IconBtn>
-              <IconBtn>
-                <VIcon
-                  icon="tabler-users"
-                  color="info"
-                  @click="showRoleUsers(item)"
-
-                />
-              </IconBtn>
-            </div>
+              />
+            </IconBtn>
           </div>
         </VCardText>
       </VCard>
@@ -123,30 +120,20 @@ const deleteRecord = (id) => {
           class="h-100"
         >
           <VCol
-            cols="5"
+            cols="12"
             class="d-flex flex-row justify-center align-center "
           >
-            <VIcon
-              icon="tabler-plus"
-              size="xx-large"
-              class="mx-1"
-            />
+            
             <VBtn
-              size="small"
+              size="large"
+              variant="flat"
             >
-                Add New Role
+                
+                {{ $t('Add New Role') }}
             </VBtn>
             
           </VCol>
 
-          <VCol cols="7">
-            <VCardText class="d-flex flex-column align-end justify-end gap-4">
-              
-              <div class="text-end mt-5">
-                Add new role,<br> if it doesn't exist.
-              </div>
-            </VCardText>
-          </VCol>
         </VRow>
       </VCard>
     </VCol>
@@ -156,10 +143,6 @@ const deleteRecord = (id) => {
     v-model:selectedRole="roleDetail"
     :permissionsList="permissionsList"
     @action-return="actionReturn"
-  />
-  <ShowRoleUsersDialog
-    v-model:isUsersDialogVisible="isUsersDialogVisible"
-    :role="roleDetail"
 
   />
 </template>

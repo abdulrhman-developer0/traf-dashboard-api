@@ -26,11 +26,27 @@ const props = defineProps({
 })
 
 const markRead = notificationId => {
-  console.log(notificationId)
+
   router.put('/dashboard/notifications/'+notificationId, {}, {
+    preserveState: false,
     onSuccess: () => {
     },
   });
+}
+
+const viewAll = () => {
+  let url = null
+  if(page.props.user.type == 'Admin') {
+    url = '/dashboard/admin/notifications'
+  }else if(page.props.user.type == 'Instructor'){
+    url = '/dashboard/notifications'
+
+  }else{
+    url = '/dashboard'
+
+  }
+
+  router.get(url)
 }
 
 </script>
@@ -41,13 +57,13 @@ const markRead = notificationId => {
     <VBadge
       v-bind="props.badgeProps"
       :model-value="notifications.some(n => !n.read)"
-      color="error"
+      color="#3269D3"
       dot
-      offset-x="2"
-      offset-y="3"
+      offset-x="-3"
+      offset-y="-3"
       class="bounce"
     >
-      <VIcon icon="tabler-bell" />
+      <VIcon icon="tabler-bell-filled" size="32" color="#9A9A9A"/>
     </VBadge>
 
     <VMenu
@@ -61,7 +77,8 @@ const markRead = notificationId => {
         <!-- 👉 Header -->
         <VCardItem class="notification-section">
           <VCardTitle class="text-h6">
-            Notifications
+            
+            {{ $t('Notifications') }}
           </VCardTitle>
 
           
@@ -109,14 +126,11 @@ const markRead = notificationId => {
                   </VAvatar>
 
                   <div>
-                    <p class="text-sm font-weight-medium mb-1">
-                      {{ notification.title }}
-                    </p>
                     <p
                       class="text-body-2 mb-2"
                       style=" letter-spacing: 0.4px !important; line-height: 18px;"
                     >
-                      {{ notification.body }}
+                      {{ notification.data.message }}
                     </p>
                     <p
                       class="text-sm text-disabled mb-0"
@@ -156,7 +170,7 @@ const markRead = notificationId => {
               class="text-center text-medium-emphasis"
               style="block-size: 56px;"
             >
-              <VListItemTitle>No Notification Found!</VListItemTitle>
+              <VListItemTitle>{{ $t('No Notification Found!') }}</VListItemTitle>
             </VListItem>
           </VList>
         </PerfectScrollbar>
@@ -171,8 +185,10 @@ const markRead = notificationId => {
           <VBtn
             block
             size="small"
+            @click="viewAll()"
           >
-            View All Notifications
+            
+            {{ $t('View All Notifications') }}
           </VBtn>
         </VCardText>
       </VCard>

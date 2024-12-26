@@ -6,27 +6,19 @@ import { usePage, router } from '@inertiajs/vue3'
 const page = usePage()
 
 const user = computed(() => page.props.user)
-
 const logout = () => {
   router.post(route('logout'))
 }
 </script>
 
 <template>
-  <VBadge
-    dot
-    location="bottom right"
-    offset-x="3"
-    offset-y="3"
-    bordered
-    color="success"
-  >
-    <VAvatar
-      class="cursor-pointer"
-      color="primary"
-      variant="tonal"
-    >
-      <VImg :src="user.photo ? user.photo : defaultavatar" />
+
+  <VBtn variant="default" >
+    <div class="d-flex flex-row gap-3" style="align-items: center;">
+      <VImg :src="user.avatar ? user.avatar : defaultavatar" style="border-radius: 50%; width: 40px;height: 40px;" />
+      <span class="avatar-name">{{ user.name }}</span>
+      <VIcon color="#140208"icon="tabler-caret-down-filled" size="15" />
+    </div>
 
       <!-- SECTION Menu -->
       <VMenu
@@ -52,7 +44,7 @@ const logout = () => {
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="user.photo ? user.photo : defaultavatar" />
+                    <VImg :src="user.avatar ? user.avatar : defaultavatar" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -72,7 +64,7 @@ const logout = () => {
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <VListItem link>
+          <VListItem link @click="router.get('/dashboard/my-profile')">
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -81,11 +73,11 @@ const logout = () => {
               />
             </template>
 
-            <VListItemTitle @click="router.get('/dashboard/my-profile')">Profile</VListItemTitle>
+            <VListItemTitle >{{ $t('Profile') }}</VListItemTitle>
           </VListItem>
 
           <!-- 👉 Settings -->
-          <VListItem link>
+          <VListItem link @click="router.get('/dashboard/my-settings')">
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -94,7 +86,7 @@ const logout = () => {
               />
             </template>
 
-            <VListItemTitle>Settings</VListItemTitle>
+            <VListItemTitle >{{ $t('Settings') }}</VListItemTitle>
           </VListItem>
 
           
@@ -114,11 +106,10 @@ const logout = () => {
 
             
 
-            <VListItemTitle>Logout</VListItemTitle>
+            <VListItemTitle>{{ $t('Logout') }}</VListItemTitle>
           </VListItem>
         </VList>
       </VMenu>
       <!-- !SECTION -->
-    </VAvatar>
-  </VBadge>
+    </VBtn>
 </template>

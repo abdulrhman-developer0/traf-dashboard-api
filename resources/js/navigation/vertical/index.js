@@ -1,21 +1,5 @@
-import { usePage } from '@inertiajs/vue3'
+import admin from './partials/admin';
 
-
-import dashboard from './partials/dashboard';
-import roles from './partials/roles';
-import systemLogs from './partials/systemLogs';
-
-
-const page = usePage()
-
-const user = page.props.user
-
-let nav = []
-
-    nav = [...dashboard, 
-            ...roles,
-            ...systemLogs
-        ];
-
+let nav = [...admin]
 
 export default nav

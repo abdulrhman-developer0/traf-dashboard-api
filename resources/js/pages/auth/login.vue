@@ -39,7 +39,7 @@ const isPasswordVisible = ref(false)
 </script>
 
 <template>
-  <Head title="Login" /> 
+  <Head title="تسجيل الدخول" /> 
   <BlankLayout>
     <div class="auth-wrapper d-flex align-center justify-center pa-4">
       
@@ -74,11 +74,8 @@ const isPasswordVisible = ref(false)
           </VCardItem>
 
           <VCardText>
-            <h4 class="text-h4 mb-1">
-              Welcome to <span class="text-capitalize">{{ themeConfig.app.title }}</span>
-            </h4>
-            <p class="mb-0">
-              Please sign-in to your account.
+            <p class="mb-0 text-lg">
+              فضلا تسجيل الدخول إلى حسابك
             </p>
           </VCardText>
 
@@ -92,7 +89,7 @@ const isPasswordVisible = ref(false)
                   <AppTextField
                     v-model="form.email"
                     autofocus
-                    label="Email"
+                    label="البريد الألكتروني"
                     type="email"
                     placeholder="johndoe@email.com"
                   />
@@ -102,7 +99,7 @@ const isPasswordVisible = ref(false)
                 <VCol cols="12">
                   <AppTextField
                     v-model="form.password"
-                    label="Password"
+                    label="كلمة المرور"
                     placeholder="············"
                     :type="isPasswordVisible ? 'text' : 'password'"
                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
@@ -113,13 +110,13 @@ const isPasswordVisible = ref(false)
                   <div class="d-flex align-center justify-space-between flex-wrap my-6">
                     <VCheckbox
                       v-model="form.remember"
-                      label="Remember me"
+                      label="تذكرني"
                     />
 
                     <RouterLink
                       class="text-primary"
                     >
-                      Forgot Password?
+                      نسيت كلمة المرور؟
                     </RouterLink>
                   </div>
 
@@ -129,7 +126,7 @@ const isPasswordVisible = ref(false)
                     type="submit"
                     :loading="form.processing"
                   >
-                    Login
+                    دخول
                   </VBtn>
                 </VCol>
 
@@ -147,4 +144,3 @@ const isPasswordVisible = ref(false)
 <style lang="scss">
 @use "../../../styles/@core/template/pages/page-auth";
 </style>
-

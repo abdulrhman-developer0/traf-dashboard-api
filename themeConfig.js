@@ -2,36 +2,29 @@ import { defineThemeConfig } from '@core'
 import { Skins } from '@core/enums'
 import { breakpointsVuetifyV3 } from '@vueuse/core'
 import { VIcon } from 'vuetify/components/VIcon'
+import logo from './resources/images/traf-logo.png'
 
 // ❗ Logo SVG must be imported with ?raw suffix
 import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
 
 export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
-    title: 'Traf Dashoard',
-    logo: h('div', { innerHTML: '', style: 'line-height:0; color: rgb(var(--v-global-theme-primary))' }),
+    title: 'لوحة تحكم ترف',
+    logo: h('img', { src: logo, alt: 'app-logo' }),
     contentWidth: ContentWidth.Fluid, 
     contentLayoutNav: AppContentLayoutNav.Vertical,
     overlayNavFromBreakpoint: breakpointsVuetifyV3.lg - 1, // 1 for matching with vuetify breakpoint. Docs: https://next.vuetifyjs.com/en/features/display-and-platform/
     i18n: {
       enable: true,
-      defaultLocale: 'en',
+      defaultLocale: 'ar',
       langConfig: [
-        {
-          label: 'English',
-          i18nLang: 'en',
-          isRTL: false,
-        },
+
         {
           label: 'عربي',
           i18nLang: 'ar',
           isRTL: true,
         },
-        {
-          label: 'کوردی',
-          i18nLang: 'ku',
-          isRTL: true,
-        },
+        
       ],
     },
     theme: 'light',
