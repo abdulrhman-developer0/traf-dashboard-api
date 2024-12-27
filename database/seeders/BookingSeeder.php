@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Booking;
 use App\Models\Client;
 use App\Models\Payment;
+use App\Models\Review;
 use App\Models\Service;
 use App\Models\ServiceProvider;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,17 +30,28 @@ class BookingSeeder extends Seeder
                     'client_id' => $clientId,
                     'service_id' => $serviceId,
                     'date'       => now()->format('m/d/Y'),
-                    'status'     => 'confirmed',
+                    'status'     => fake()->randomElement(['done', 'confirmed', 'canceled']),
                 ]);
 
                 $service = $booking->service;
 
-                Payment::create([
-                   'booking_id'  => $booking->id,
-                   'payment_status' => 'paid',
-                   'amount' =>  $service->is_offer ? $service->price_after : $service->price_before,
-                   'transaction_reference' => '1f2s135d'
-                ]);
+                if (in_array($booking->status, ['done', 'canceled'])) {
+                    Payment::create([
+                        'booking_id'  => $booking->id,
+                        'payment_status' => 'paid',
+                        'amount' =>  $service->is_offer ? $service->price_after : $service->price_before,
+                        'transaction_reference' => '1f2s135d'
+                    ]);
+                }
+
+                if ($booking->status == 'done') {
+                    Review::create([
+                        'reviewable_type' => Client::class,
+                        'reviewable_id'   => $booking->client_id,
+                        'booking_id'     => $booking->id,
+                        'rating'          => random_int(1, 5)
+                    ]);
+                }
             }
         }
     }

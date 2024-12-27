@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Laravel\Reverb\Protocols\Pusher\Server;
 
 class SubscriptionController extends Controller
 {
@@ -103,15 +104,25 @@ class SubscriptionController extends Controller
         try {
             DB::beginTransaction();
 
-            $subscription = Subscription::create([
-                'service_provider_id' => $serviceProvider->id,
-                'package_id' => $package->id,
-                'payment_status' => 'paid',
-                'amount' => $package->price,
-                'start_date' => Carbon::now(),  // Set current timestamp as the start date
-                'end_date' => Carbon::now()->addDays($package->duration_in_days),
-                'transaction_reference'=> $validated["transaction_id"]
-            ]);
+            if (! $serviceProvider->currentSubscription()->exists() ) {
+                $subscription = Subscription::create([
+                    'service_provider_id' => $serviceProvider->id,
+                    'package_id' => $package->id,
+                    'payment_status' => 'paid',
+                    'amount' => $package->price,
+                    'start_date' => Carbon::now(),  // Set current timestamp as the start date
+                    'end_date' => Carbon::now()->addDays($package->duration_in_days),
+                    'transaction_reference'=> $validated["transaction_id"]
+                ]);
+            } else {
+                $subscription = $serviceProvider->currentSubscription;
+
+                // $leftDays =  round(now()->diffInDays($subscription->end_date));
+                
+                $subscription->end_date = $subscription->end_date->addDays($package->duration_in_days);
+                $subscription->save();
+            }
+
 
             DB::commit();
 
