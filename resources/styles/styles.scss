@@ -802,8 +802,214 @@ body .layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky .layout-page-
     }
 }
 
+.avcategorylist {
+
+    h5 {
+        font-size: 12px;
+        font-weight: 400;
+        color: #140208;
+    }
+}
 
 
-.body .apexcharts-canvas .apexcharts-text, body .apexcharts-canvas .apexcharts-tooltip-text, body .apexcharts-canvas .apexcharts-datalabel-label, body .apexcharts-canvas .apexcharts-datalabel, body .apexcharts-canvas .apexcharts-xaxistooltip-text, body .apexcharts-canvas .apexcharts-yaxistooltip-text, body .apexcharts-canvas .apexcharts-legend-text  {
-    font-family: "Cairo", sans-serif !important; 
+
+.serviceBlock {
+
+    .imagdiv {
+        background-color: #EAA0A1;
+        border-radius: 8px;
+        width: auto;
+        height: 170px;
+        align-content: center;
+        text-align: center;
+
+        span {
+            font-size: 14px;
+            font-weight: 400;
+            color: #4E0920
+        }
+    }
+    img {
+        width: auto;
+        height: 170px;
+        gap: 0px;
+        object-fit: cover;
+        
+    }
+
+    h3 {
+        font-size: 14px;
+        font-weight: 500;
+        color: #140208
+    }
+
+    h4 {
+        font-size: 12px;
+        font-weight: 400;
+        color: #4E0920
+    }
+
+    span {
+        font-size: 14px;
+        font-weight: 500;
+        color: #140208
+    }
+
+    .rating {
+        font-size: 12px;
+        font-weight: 400;
+        color: #140208
+
+    }
+}
+
+.servicecatblock {
+    text-align: center;
+    padding: 10px;
+    box-shadow: 0px 1px 2px 0px #00000040;
+    height: 232px;
+    align-content: center;
+
+    img {
+        height: 100px;
+        width: auto;
+    }
+    h3 {
+        font-size: 24px;
+        font-weight: 400;
+        color: #4E0920;
+    }
+}
+
+.bookingTimeLine {
+
+    .v-timeline-item__body {
+        padding: 23px 20px 23px 20px !important;
+        border-radius: 20px;
+        margin: 0 5px;
+    }
+
+    .app-timeline-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #140208
+    }
+
+    h3 {
+        font-size: 16px;
+        font-weight: 400;
+        color: #4E0920
+    }
+
+    h4 {
+        font-size: 14px;
+        font-weight: 400;
+        color: #140208
+    }
+
+    .rating {
+        font-size: 12px;
+        font-weight: 400;
+        color: #140208
+    }
+
+    .app-timeline-text {
+        font-size: 16px;
+        font-weight: 400;
+        text-align: right;
+        direction: rtl;
+        color: #140208;
+    }
+
+    .app-timeline-meta {
+        font-size: 12px;
+        font-weight: 400;
+        color: #9D123F;
+
+    }
+
+    .v-timeline--vertical .v-timeline-divider {
+
+    }
+}
+
+.pendingService {
+    .v-timeline-item__body {
+        background: #FFF2C8
+    }
+}
+
+.canceledService {
+    .v-timeline-item__body {
+        background: #FFF2C8
+    }
+}
+
+.confirmedService {
+    .v-timeline-item__body {
+        background: #CCE4FFA3
+    }
+}
+
+.doneService {
+    .v-timeline-item__body {
+        background: #E8F5F3
+    }
+}
+
+.dayCard {
+    background-color: #fff;
+    box-shadow: 0px 2px 2px 0px #00000040;
+    border-radius: 15px;
+    height: 60px;
+    width: 60px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    h4 {
+        font-size: 22px;
+        font-weight: 500;
+        color: #140208;
+    }
+
+    span {
+        font-size: 8px;
+        font-weight: 400;
+        color: #760E2F;
+    }
+
+}
+
+.selectedDay {
+    background-color: #C4174F;
+
+    h4, span {
+        color: #fff !important;
+
+    }
+}
+
+.v-slide-group__container {
+    padding-bottom: 4px;
+}
+
+.dateshow {
+
+    span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #726569;
+    }
+
+    h3 {
+        font-size: 24px;
+        font-weight: 400;
+        color: #140208;
+    }
+}
+
+.monthbutton {
+    font-size: 20px;
+    font-weight: 400;
+    color: #140208;
 }

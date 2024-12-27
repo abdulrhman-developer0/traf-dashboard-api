@@ -23,6 +23,7 @@ class BookingCollection extends ResourceCollection
                 
                 return [
                     'id'                => $item->id,
+                    'service_name'      => $item->service->name,
                     'provider_photo'    => $item->service->serviceProvider->getFirstMediaUrl('photo'),
                     'provider_name'     => $item->service?->serviceProvider->user->name,
                     'provider_rating'     => $item->service?->serviceProvider->rating,
@@ -33,6 +34,8 @@ class BookingCollection extends ResourceCollection
                     'to'                  => $item->date->addHour()->startOfHour()->format('h:i A'),
                     'date'                => $item->date->format('Y-m-dTH:i'),
                     'status'              => $item->status,
+                    'created_at'              => $item->created_at,
+
                 ];
             })
         ];

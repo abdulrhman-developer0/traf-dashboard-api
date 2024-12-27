@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ServiceController extends Controller
 {
@@ -74,6 +75,9 @@ class ServiceController extends Controller
             'services' => LatestServiceCollection::make($services_paginated),
         ];
 
-        return $data;
+        return Inertia::render('services/index', [
+            'data' => $data,
+            'title' => 'Services'
+        ]);
     }
 }

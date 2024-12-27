@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ClientController extends Controller
 {
@@ -70,6 +71,9 @@ class ClientController extends Controller
             'clients' => LatestClientCollection::make($clients_paginated),
         ];
 
-        return $data;
+        return Inertia::render('clients/index', [
+            'data' => $data,
+            'title' => 'Clients'
+        ]);
     }
 }

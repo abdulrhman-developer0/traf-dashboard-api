@@ -28,7 +28,31 @@ const headers = [
   },
 ]
 
+const bufferValue = ref(20)
 
+
+const statsCards = [
+  {
+    title: 'المستخدمين',
+    key: 'users_count',
+    icon: 'tabler-users-group',
+  },
+  {
+    title: 'متوسط الزائرين',
+    key: 'visitors_count',
+    icon: 'tabler-users',
+  },
+  {
+    title: 'مقدمي الخدمة',
+    key: 'providers_count',
+    icon: 'tabler-user-dollar',
+  },
+  {
+    title: 'مجموع الحجوزات',
+    key: 'bookings_count',
+    icon: 'tabler-cash',
+  },
+]
 
 </script>
 
@@ -36,166 +60,16 @@ const headers = [
   <Head title="الرئيسية" />  
   <section class="admindashboard">
     <VRow>
-      <VCol cols="12" sm="6" md="4" lg="3">
-        <VCard class="statecard py-5">
-          <VCardText class="d-flex flex-row gap-4 py-0 px-0 pr-2 pl-5">
-            
-            <div style="border-left: 3px solid #C4174F;height: 53px"></div>
-
-            <div class="d-flex flex-column gap-5">
-              <h4 class="mt-2">
-                المستخدمين
-              </h4>
-              <h5>
-                {{ data.stats.users_count }}
-              </h5>
-              
-            </div>
-            <VSpacer/>
-            <VAvatar
-              rounded-0
-              size="28"
-              style="background: #F9E8ED;border-radius: 0;"
-            >
-              <VIcon
-                icon="tabler-users-group"
-                size="18"
-                style="color: #C4174F"
-              />
-            </VAvatar>
-            
-          </VCardText>
-          <VCardText class="py-0 px-0 pr-6 ">
-            <p class="mb-0  pt-5">
-                منذ أسبوع
-                <VIcon class="tabler-arrow-up mx-1" color="#4DC80C" size="20"/>
-                <span>+4.5%</span>
-                
-              </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="4" lg="3">
-        <VCard class="statecard py-5">
-          <VCardText class="d-flex flex-row gap-4 py-0 px-0 pr-2 pl-5">
-            
-            <div style="border-left: 3px solid #C4174F;height: 53px"></div>
-
-            <div class="d-flex flex-column gap-5">
-              <h4 class="mt-2">
-                متوسط الزائرين
-              </h4>
-              <h5>
-                {{ data.stats.visitors_count }}
-              </h5>
-            </div>
-            <VSpacer/>
-            <VAvatar
-              rounded-0
-              size="28"
-              style="background: #F9E8ED;border-radius: 0;"
-            >
-              <VIcon
-                icon="tabler-users"
-                size="18"
-                style="color: #C4174F"
-              />
-            </VAvatar>
-            
-          </VCardText>
-          <VCardText class="py-0 px-0 pr-6 ">
-            <p class="mb-0  pt-5">
-                منذ أسبوع
-                <VIcon class="tabler-arrow-up mx-1" color="#4DC80C" size="20"/>
-                <span>+4.5%</span>
-                
-              </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="4" lg="3">
-        <VCard class="statecard py-5">
-          <VCardText class="d-flex flex-row gap-4 py-0 px-0 pr-2 pl-5">
-            
-            <div style="border-left: 3px solid #C4174F;height: 53px"></div>
-
-            <div class="d-flex flex-column gap-5">
-              <h4 class="mt-2">
-                مقدمي الخدمة
-              </h4>
-              <h5>
-                {{ data.stats.providers_count }}
-              </h5>
-            </div>
-            <VSpacer/>
-            <VAvatar
-              rounded-0
-              size="28"
-              style="background: #F9E8ED;border-radius: 0;"
-            >
-              <VIcon
-                icon="tabler-user-dollar"
-                size="18"
-                style="color: #C4174F"
-              />
-            </VAvatar>
-            
-          </VCardText>
-          <VCardText class="py-0 px-0 pr-6 ">
-            <p class="mb-0  pt-5">
-                منذ أسبوع
-                <VIcon class="tabler-arrow-up mx-1" color="#4DC80C" size="20"/>
-                <span>+4.5%</span>
-                
-              </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="4" lg="3">
-        <VCard class="statecard py-5">
-          <VCardText class="d-flex flex-row gap-4 py-0 px-0 pr-2 pl-5">
-            
-            <div style="border-left: 3px solid #C4174F;height: 53px"></div>
-
-            <div class="d-flex flex-column gap-5">
-              <h4 class="mt-2">
-                مجموع الحجوزات
-              </h4>
-              <h5>
-                {{ data.stats.bookings_count }}
-              </h5>
-            </div>
-            <VSpacer/>
-            <VAvatar
-              rounded-0
-              size="28"
-              style="background: #F9E8ED;border-radius: 0;"
-            >
-              <VIcon
-                icon="tabler-cash"
-                size="18"
-                style="color: #C4174F"
-              />
-            </VAvatar>
-            
-          </VCardText>
-          <VCardText class="py-0 px-0 pr-6 ">
-            <p class="mb-0  pt-5">
-                منذ أسبوع
-                <VIcon class="tabler-arrow-up mx-1" color="#4DC80C" size="20"/>
-                <span>+4.5%</span>
-                
-              </p>
-          </VCardText>
-        </VCard>
+      <VCol cols="12" sm="6" md="4" lg="3" v-for="card in statsCards">
+        <StatisticsCard :title="card.title" :value="data.stats[card.key]" :icon="card.icon" />
       </VCol>
     </VRow>
 
     <VRow class="match-height">
-      <VCol cols="8">
+      <VCol cols="9">
         <VCard flat class="px-0 tablemaincard">
           <VCardItem
-            class="py-3 px-3"
+            class="py-3 px-3 mb-6"
             title="عدد الخدمات"
             :subtitle="data.stats.services_count"
           >
@@ -209,8 +83,39 @@ const headers = [
             </template>
           </VCardItem>
 
-          <VCardText class="py-0 ">
-            <IndexChart />
+          <VCardText class="py-0 " >
+            <MainChart :chart="props.data.chart" :title="'خدمات مقدمة'" />
+          </VCardText>
+
+        </VCard>
+      </VCol>
+
+      <VCol cols="3">
+        <VCard flat class="pa-4 tablemaincard">
+          <VCardItem
+            class="py-3 px-6 mb-4"
+            title="متوسط استخدام الخدمة"
+          >
+            
+          </VCardItem>
+
+          <VCardText class="px-8 avcategorylist" >
+            <VRow v-for="cat in props.data.category_stats" class="match-height">
+              <VCol cols="6">
+                <h5>{{ cat.name }}</h5>
+              </VCol>
+              <VCol cols="6" style="align-content: center;">
+                <VProgressLinear
+                  v-model="cat.percentage"
+                  color="primary"
+                  :buffer-value="bufferValue"
+                  height="2"
+                  :rounded="false"
+                  
+
+                />
+              </VCol>
+            </VRow>
           </VCardText>
 
         </VCard>

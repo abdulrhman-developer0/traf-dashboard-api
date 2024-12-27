@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\UpdateUserLastActivity;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\LoginSecurityCheck;
 use App\Http\Middleware\CheckAccountType;
 use App\Http\Middleware\TwoFactor;
 use App\Http\Middleware\ValidSubscription;
@@ -34,7 +35,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin'     => AdminMiddleware::class,
             'account'   => CheckAccountType::class,
             'Inertia' => HandleInertiaRequests::class,
-            'UserLastActivity' => UpdateUserLastActivity::class
+            'UserLastActivity' => UpdateUserLastActivity::class,
+            'LoginSecurityCheck' => LoginSecurityCheck::class
+
         ]);
     })
 

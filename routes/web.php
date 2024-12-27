@@ -40,7 +40,17 @@ Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:das
 
     Route::get('/requests', [JoinRequestController::class, 'index']);
 
-    
+    Route::get('/clients', [ClientController::class, 'index']);
+
+    Route::get('/service-providers', [ServiceProviderController::class, 'index']);
+
+    Route::get('/pricing', [PricingController::class, 'index']);
+
+    Route::get('/bookings', [BookingController::class, 'index']);
+
+    Route::get('/services', [ServiceController::class, 'index']);
+
+    Route::get('/services-categories', [CategoryController::class, 'index']);
 
 
     Route::middleware(['admin'])->group(function () {

@@ -8,6 +8,7 @@ use App\Models\ServiceProvider;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ServiceProviderController extends Controller
 {
@@ -71,6 +72,11 @@ class ServiceProviderController extends Controller
             'providers' => LatestServiceProviderCollection::make($providers_paginated),
         ];
 
-        return $data;
+
+        return Inertia::render('providers/index', [
+            'data' => $data,
+            'title' => 'Providers'
+        ]);
+
     }
 }

@@ -23,7 +23,7 @@ class HomeController extends Controller
         $visitors_count = 2100;
         $providers_count = ServiceProvider::whereYear('created_at', '=', $year)->count();
         $bookings_count = Booking::whereYear('created_at', '=', $year)->count();
-        $services_count = Service::whereYear('created_at', $year)->count();
+        $services_count = Booking::whereYear('created_at', $year)->count();
 
         $stats = [
             'users_count' => $users_count,
@@ -84,7 +84,6 @@ class HomeController extends Controller
             'chart' => $chart,
             'bookings' => LatestBookingsCollection::make($bookings_paginated),
         ];
-
 
         return Inertia::render('index', [
             'data' => $data,

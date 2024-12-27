@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\CategoryResource;
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,11 @@ class CategoryController extends Controller
         $data = [
             'categories'    => CategoryResource::collection($categories),
         ];
+        
+        return Inertia::render('services-categories/index', [
+            'data' => $data,
+            'title' => 'Services types'
+        ]);
 
-        return $data;
     }
 }

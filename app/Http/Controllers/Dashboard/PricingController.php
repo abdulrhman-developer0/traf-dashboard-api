@@ -7,6 +7,7 @@ use App\Http\Resources\Dashboard\LatestPackageCollection;
 use App\Models\Package;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PricingController extends Controller
 {
@@ -63,6 +64,9 @@ class PricingController extends Controller
             'packages' => LatestPackageCollection::make($packages_paginated),
         ];
 
-        return $data;
+        return Inertia::render('pricing/index', [
+            'data' => $data,
+            'title' => 'Pricing'
+        ]);
     }
 }

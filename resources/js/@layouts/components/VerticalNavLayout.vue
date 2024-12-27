@@ -103,9 +103,19 @@ const verticalNavAttrs = computed(() => {
 
           <div class="flex-shrink-1 flex-grow-0 align-self-stretch">
             <div class="notificationsSidebar pt-4 px-3">
-              <h3>الإشعارات</h3>
-
+              <div class="mb-6">
+                <h3>الإشعارات</h3>
+                <VListItem class="border px-1 mt-3 text-center">
+                  لا يوجد اشعارات جديدة
+                </VListItem>
+              </div>
+              
+              <div class="mb-6">
               <h3>الأنشطة</h3>
+                <VListItem class="border px-1 mt-3 text-center">
+                  لا يوجد أنشطة جديدة
+                </VListItem>
+              </div>
             </div>
           </div>
 

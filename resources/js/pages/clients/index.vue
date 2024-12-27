@@ -12,18 +12,10 @@ const props = defineProps({
 const headers = [
   {
     title: 'الأسم',
-    key: 'provider_name',
+    key: 'client_name',
   },
   {
-    title: 'النوع',
-    key: 'type',
-  },
-  {
-    title: 'رقم التسجيل الضريبي',
-    key: 'tax_number',
-  },
-  {
-    title: 'التاريخ',
+    title: 'تاريخ التسجيل',
     key: 'created_at',
   },
   {
@@ -34,24 +26,24 @@ const headers = [
 
 const statsCards = [
   {
-    title: 'طلبات الانضمام',
-    key: 'total_requests',
-    icon: 'tabler-user-plus',
+    title: 'عدد المستخدمين',
+    key: 'clients_count',
+    icon: 'tabler-users-group',
   },
   {
-    title: 'الطلبات المرفوضة',
-    key: 'rejected_count',
-    icon: 'tabler-user-x',
+    title: 'مستخدمين جدد',
+    key: 'new_clients',
+    icon: 'tabler-users-plus',
   },
   {
-    title: 'الطلبات المقبولة',
-    key: 'approved_count',
-    icon: 'tabler-user-check',
+    title: 'تسجيل خروج',
+    key: 'logouts_count',
+    icon: 'tabler-logout',
   },
   {
-    title: 'طلبات قيد الإنتظار',
-    key: 'pending_count',
-    icon: 'tabler-user-question',
+    title: 'حسابات ممسوحة',
+    key: 'deleted_accounts',
+    icon: 'tabler-trash',
   },
 ]
 
@@ -59,7 +51,7 @@ const statsCards = [
 </script>
 
 <template>
-  <Head title="طلبات الإنضمام" />  
+  <Head title="العملاء" />  
   <section class="admindashboard">
     <VRow>
       <VCol cols="12" sm="6" md="4" lg="3" v-for="card in statsCards">
@@ -72,8 +64,8 @@ const statsCards = [
         <VCard flat class="px-0 tablemaincard">
           <VCardItem
             class="py-3 px-3 mb-6"
-            title="طلبات الأنضمام"
-            :subtitle="data.stats.total_requests"
+            title="عدد العملاء"
+            :subtitle="data.stats.total_clients"
           >
             <template #append>
               <VBtn
@@ -86,7 +78,7 @@ const statsCards = [
           </VCardItem>
 
           <VCardText class="py-0 " >
-            <MainChart :chart="props.data.chart" :title="'طلبات انضمام'" />
+            <MainChart :chart="props.data.chart" :title="'عملاء'" />
           </VCardText>
 
         </VCard>
@@ -101,7 +93,7 @@ const statsCards = [
         <VCard flat class="px-5 tablemaincard">
           <VCardText class="py-0 px-0">
             <VDataTable
-              :items="data.providers.data.items"
+              :items="data.clients.data.items"
               item-value="id"
               :headers="headers"
               :items-per-page="100"
@@ -112,14 +104,6 @@ const statsCards = [
                 {{ moment(item.created_at).format("DD MMMM, YYYY") }}
               </template>
               
-              <template #item.tax_number="{ item }">
-                {{ item.tax_number ? item.tax_number : 'غير متوفر' }}
-              </template>
-
-              <template #item.type="{ item }">
-                <span v-if="item.is_personal">مقدم خدمة</span>
-                <span v-else>مشغل</span>
-              </template>
 
               <template #item.actions="{ item }">
                 {{ moment(item.created_at).format("DD MMMM, YYYY") }}
@@ -134,7 +118,7 @@ const statsCards = [
             </VDataTable>
           </VCardText>
         </VCard>
-        <PaginationLinks :links="data.providers.meta.links" />
+        <PaginationLinks :links="data.clients.meta.links" />
       </VCol>
     </VRow>
   </section>

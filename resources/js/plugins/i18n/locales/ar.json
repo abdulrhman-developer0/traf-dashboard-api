@@ -13,10 +13,15 @@
   "Services types" : "أنواع الخدمات",
   "Payments" : "الدفع",
   "Polices" : "السياسات",
+  "Ads" : "الإعلانات",
 
   "pending" : "قيد الإنتظار",
   "canceled" : "مُلغاه",
   "confirmed" : "مؤكدة",
-  "done" : "تمت"
+  "done" : "تمت",
+
+  "Profile" : "الملف الشخصي",
+  "Settings" : "الإعدادات",
+  "Logout" : "تسجيل الخروج"
 
 }

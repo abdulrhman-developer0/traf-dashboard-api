@@ -86,10 +86,10 @@ const isPasswordVisible = ref(false)
               <VRow>
                 <!-- email -->
                 <VCol cols="12">
+                  <VLabel text="البريد الألكتروني" class="mb-1" />
                   <AppTextField
                     v-model="form.email"
                     autofocus
-                    label="البريد الألكتروني"
                     type="email"
                     placeholder="johndoe@email.com"
                   />
@@ -97,9 +97,10 @@ const isPasswordVisible = ref(false)
 
                 <!-- password -->
                 <VCol cols="12">
+                  <VLabel text="كلمة المرور" class="mb-1" />
+
                   <AppTextField
                     v-model="form.password"
-                    label="كلمة المرور"
                     placeholder="············"
                     :type="isPasswordVisible ? 'text' : 'password'"
                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"

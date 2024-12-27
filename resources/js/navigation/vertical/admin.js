@@ -16,55 +16,62 @@ export default [
     
     {
         title: 'Clients',
-        to: '/admin/transactions',
+        to: '/clients',
         icon: { icon: 'tabler-cash-register' },
-        path: '/admin/transactions',
+        path: '/clients',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Providers',
-        to: { name: 'index' },
+        to: { name: '/service-providers' },
         icon: { icon: 'tabler-home-question' },
-        path: '/admin/questions-bank',
+        path: '/service-providers',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Pricing',
-        to: { name: 'index' },
+        to: { name: 'pricing' },
         icon: { icon: 'tabler-calendar-time' },
-        path: '/admin/schedule',
+        path: '/pricing',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Services',
-        to: { name: 'index' },
+        to: { name: 'services' },
         icon: { icon: 'tabler-bell' },
-        path: '/admin/notifications',
+        path: '/services',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Bookings',
-        to: { name: 'index' },
+        to: { name: 'bookings' },
         icon: { icon: 'tabler-a-b-2' },
-        path: '/admin/languages-management',
+        path: '/bookings',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Services types',
-        to: { name: 'index' },
+        to: { name: 'services-categories' },
         icon: { icon: 'tabler-settings' },
-        path: '/admin/settings',
+        path: '/services-categories',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Payments',
+        to: { name: 'payments' },
+        icon: { icon: 'tabler-settings' },
+        path: '/payments',
+        permission: 'dashboard-dashboard-view'
+    },
+    {
+        title: 'Polices',
         to: { name: 'index' },
         icon: { icon: 'tabler-settings' },
         path: '/admin/settings',
         permission: 'dashboard-dashboard-view'
     },
     {
-        title: 'Polices',
+        title: 'Ads',
         to: { name: 'index' },
         icon: { icon: 'tabler-settings' },
         path: '/admin/settings',

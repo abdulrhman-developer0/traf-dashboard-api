@@ -34,24 +34,24 @@ const headers = [
 
 const statsCards = [
   {
-    title: 'طلبات الانضمام',
-    key: 'total_requests',
-    icon: 'tabler-user-plus',
+    title: 'عدد مقدمي الخدمة',
+    key: 'providers_count',
+    icon: 'tabler-users-group',
   },
   {
-    title: 'الطلبات المرفوضة',
-    key: 'rejected_count',
-    icon: 'tabler-user-x',
+    title: 'مقدمي خدمة جدد',
+    key: 'new_providers',
+    icon: 'tabler-users-plus',
   },
   {
-    title: 'الطلبات المقبولة',
-    key: 'approved_count',
-    icon: 'tabler-user-check',
+    title: 'تسجيل خروج',
+    key: 'logouts_count',
+    icon: 'tabler-logout',
   },
   {
-    title: 'طلبات قيد الإنتظار',
-    key: 'pending_count',
-    icon: 'tabler-user-question',
+    title: 'حسابات ممسوحة',
+    key: 'deleted_accounts',
+    icon: 'tabler-trash',
   },
 ]
 
@@ -59,7 +59,7 @@ const statsCards = [
 </script>
 
 <template>
-  <Head title="طلبات الإنضمام" />  
+  <Head title="مقدمي الخدمات" />  
   <section class="admindashboard">
     <VRow>
       <VCol cols="12" sm="6" md="4" lg="3" v-for="card in statsCards">
@@ -72,8 +72,8 @@ const statsCards = [
         <VCard flat class="px-0 tablemaincard">
           <VCardItem
             class="py-3 px-3 mb-6"
-            title="طلبات الأنضمام"
-            :subtitle="data.stats.total_requests"
+            title="مقدمي الخدمات"
+            :subtitle="data.stats.total_providers"
           >
             <template #append>
               <VBtn
@@ -86,7 +86,7 @@ const statsCards = [
           </VCardItem>
 
           <VCardText class="py-0 " >
-            <MainChart :chart="props.data.chart" :title="'طلبات انضمام'" />
+            <MainChart :chart="props.data.chart" :title="'مقدمي الخدمات'"/>
           </VCardText>
 
         </VCard>

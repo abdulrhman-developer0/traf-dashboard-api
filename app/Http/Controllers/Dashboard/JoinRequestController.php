@@ -55,7 +55,7 @@ class JoinRequestController extends Controller
         })->toArray();
 
         $providers_paginated = ServiceProvider::query()
-            ->select(['id', 'user_id', 'is_personal', 'status', 'created_at'])
+            ->select(['id', 'user_id', 'tax_registeration_number','is_personal', 'status', 'created_at'])
             ->whereStatus('pending')
             ->whereYear('created_at', '=', $year)
             ->latest()
@@ -69,7 +69,7 @@ class JoinRequestController extends Controller
             'providers' => LatestServiceProviderCollection::make($providers_paginated),
         ];
 
-        // return $data;
+        //dd($data);
 
         return Inertia::render('requests/index', [
             'data' => $data,

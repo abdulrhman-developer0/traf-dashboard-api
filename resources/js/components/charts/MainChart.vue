@@ -1,6 +1,11 @@
 <script setup>
 import ar from 'apexcharts/dist/locales/ar.json'
 
+const props = defineProps({
+  chart: Array,
+  title: String,
+})
+
 const chartColors = {
   line: {
     series1: '#E55175',
@@ -16,22 +21,9 @@ const borderColor = 'rgba(var(--v-border-color), var(--v-border-opacity))'
 const series = [
 
   {
+    name: props.title,
     type: 'line',
-    data: [
-      23,
-      28,
-      23,
-      32,
-      25,
-      42,
-      32,
-      32,
-      26,
-      24,
-      26,
-      24,
-
-    ],
+    data: props.chart,
   },
 ]
 
@@ -42,11 +34,15 @@ const shipmentConfig = {
     parentHeightOffset: 0,
     toolbar: { show: false },
     zoom: { enabled: false },
-    locales: [
-    {
-      name: "ar",
+    locales: [{
+      "name": "ar",
+      "options": {
+        "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      }
     }],
-    defaultLocale: 'ar'
+    defaultLocale: "ar",
+    fontFamily: "Cairo, sans-serif"
+
   },
   markers: {
     size: 0,
@@ -90,12 +86,10 @@ const shipmentConfig = {
   },
   colors: [
     chartColors.line.series1,
-    chartColors.line.series2,
   ],
   fill: {
     opacity: [
-      1,
-      1,
+      1
     ],
   },
   plotOptions: {
@@ -114,7 +108,7 @@ const shipmentConfig = {
       'مارس',
       'ابريل',
       'مايو',
-      'يونيه',
+      'يونيو',
       'يوليو',
       'اغسطس',
       'سبتمبر',
@@ -144,7 +138,7 @@ const shipmentConfig = {
         fontWeight: 400,
       },
       formatter(val) {
-        return `${ val }%`
+        return `${ val }`
       },
     },
   },
@@ -190,7 +184,7 @@ const shipmentConfig = {
   <VueApexCharts
     id="index-chart"
     type="line"
-    height="320"
+    height="269"
     :options="shipmentConfig"
     :series="series"
     />
