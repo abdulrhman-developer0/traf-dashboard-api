@@ -66,7 +66,7 @@ class ServiceController extends Controller
             ->whereYear('created_at', '=', $year)
             ->latest()
             ->with(['category'])
-            ->paginate(4);
+            ->paginate(8);
 
 
         $data = [
