@@ -47,9 +47,10 @@ class Ad extends Model
      */
     public const STATUSES = [
         'under-review',
-        'approved',
         'rejected',
         'pending-payment',
+        'approved',
+        'waiting',
     ];
 
     public function adPrice(): BelongsTo
