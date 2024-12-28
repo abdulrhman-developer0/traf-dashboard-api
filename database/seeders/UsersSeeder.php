@@ -45,7 +45,7 @@ class UsersSeeder extends Seeder
 
         
 
-        $users = [
+        /*$users = [
             //1
             ['name' => 'أحمد علي', 'email' => 'ahmed.ali@example.com', 'account_type' => 'service-provider'],
             //2
@@ -73,6 +73,6 @@ class UsersSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }
+        }*/
     }
 }
