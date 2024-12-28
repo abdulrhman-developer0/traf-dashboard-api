@@ -1044,13 +1044,13 @@ body .layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky .layout-page-
     }
 }
 
-.addpolicybtn {
+.addbtn {
     font-size: 18px;
     font-weight: 400;
 
 }
 
-.addpolicypage {
+.addpolicypage, .addpackagecard {
 
     .v-field  {
         border: 1px solid #EFA1AF !important;
@@ -1067,4 +1067,33 @@ body .layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky .layout-page-
         border-radius: 8px;
         background-color: #fff;
     }
+}
+
+.packageCard {
+
+    padding: 16px 16px 16px 16px;
+    border-radius: 8px;
+    border: 1px solid #C4174F;
+    background-color: transparent;
+
+    
+    h3 {
+        font-size: 18px;
+        font-weight: 400;
+        color: #000000;
+
+        
+    }
+
+    h4 {
+        font-size: 16px;
+        font-weight: 400;
+        color: #000000;
+    }
+
+    span {
+        font-size: 16px;
+        color: #DC7495;
+    }
+
 }

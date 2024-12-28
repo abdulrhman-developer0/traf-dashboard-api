@@ -25,7 +25,7 @@ const deleteRecord = (id) => {
   <section class="admindashboard">
     <VRow>
       <VCol cols="12">
-        <VBtn color="#E55175" variant="default" class="addpolicybtn" @click="router.get('/policies/create')" >
+        <VBtn color="#E55175" variant="default" class="addbtn" @click="router.get('/policies/create')" >
           <VIcon icon="tabler-plus" class="ml-2" />
 
           اضافة سياسة جديدة

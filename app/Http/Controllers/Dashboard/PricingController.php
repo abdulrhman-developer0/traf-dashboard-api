@@ -69,4 +69,49 @@ class PricingController extends Controller
             'title' => 'Pricing'
         ]);
     }
+
+    public function store(Request $request)
+    {
+        //dd($request);
+
+        $request->validate([
+            'name'    => 'required',
+            'price'    => 'required',
+            'duration_in_days'    => 'required',
+
+        ]);
+
+        Package::create($request->only(['name','price','duration_in_days']));
+
+        return back()->with('status', ['type' => 'success', 'action' => 'تم اضافة الباقة بنجاح', 'text' => '']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        
+        $request->validate([
+            'name'    => 'required',
+            'price'    => 'required',
+            'duration_in_days'    => 'required',
+
+        ]);
+
+        $package = Package::find($id);
+
+        $package->update($request->only(['name','price','duration_in_days']));
+
+        return back()->with('status', ['type' => 'success', 'action' => 'تم تعديل الباقة بنجاح', 'text' => '']);
+
+    }
+
+
+    public function destroy($id)
+    {
+        $package = Package::find($id);
+        
+        $package->delete();
+
+        return back()->with('status', ['type' => 'success', 'action' => 'تم حذف الباقة بنجاح', 'text' => '']);
+
+    }
 }

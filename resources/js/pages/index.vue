@@ -9,6 +9,7 @@ const props = defineProps({
   data: Array,
 })
 
+
 const headers = [
   {
     title: 'مقدم الخدمة',
@@ -54,6 +55,8 @@ const statsCards = [
   },
 ]
 
+
+
 </script>
 
 <template>
@@ -67,27 +70,13 @@ const statsCards = [
 
     <VRow class="match-height">
       <VCol cols="9">
-        <VCard flat class="px-0 tablemaincard">
-          <VCardItem
-            class="py-3 px-3 mb-6"
-            title="عدد الخدمات"
-            :subtitle="data.stats.services_count"
-          >
-            <template #append>
-              <VBtn
-                variant="tonal"
-                append-icon="tabler-chevron-down"
-              >
-                2024
-              </VBtn>
-            </template>
-          </VCardItem>
+        <MainChart 
+          :chart="props.data.chart"
+          :mainTitle="'عدد الخدمات'"
+          :title="'خدمات مقدمة'" 
+        />
 
-          <VCardText class="py-0 " >
-            <MainChart :chart="props.data.chart" :title="'خدمات مقدمة'" />
-          </VCardText>
-
-        </VCard>
+        
       </VCol>
 
       <VCol cols="3">
