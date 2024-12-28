@@ -1098,3 +1098,64 @@ body .layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky .layout-page-
     }
 
 }
+
+.showpage {
+
+    .maindata {
+        h3 {
+
+            font-size: 32px;
+            font-weight: 400;
+            line-height: 59.97px;
+            color: #000000;
+        }
+    
+        h4 {
+    
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 37.48px;
+            color: #140208;
+    
+        }
+    
+        h5 {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 37.48px;
+            text-align: center;
+            color:#4E0920;
+        }
+    
+        span {
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 44.98px;
+            color: #140208;
+        }
+    }
+
+    .v-tabs.v-tabs--horizontal:not(.v-tabs-pill) {
+        border-block-end: 1px solid #00000033;
+        height: 48px;
+    }
+    .v-tab.v-tab.v-btn {
+        color: #374557;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .v-tab.v-tab--selected {
+        background: transparent;
+        color: #1582A5 !important;
+        border-bottom: 1px solid #C4174F
+    }
+
+    .v-btn__content {
+        color: #49454F;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 29.98px;
+
+    }
+}

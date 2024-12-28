@@ -46,7 +46,7 @@ class HomeController extends Controller
             $start->addMonth();
         }
 
-        $actualData = Payment::query()
+        $actualData = Booking::query()
             ->selectRaw('
                 DATE_FORMAT(created_at, "%m") as month
             ')
