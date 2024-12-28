@@ -7,7 +7,9 @@ const props = defineProps({
   chart: Array,
   title: String,
   mainTitle: String,
-  subtitle: String
+  subtitle: String,
+  year: Number,
+  targetRoute: String,
 })
 
 const chartColors = {
@@ -132,9 +134,9 @@ const chartConfig = {
   },
   yaxis: {
     show: false,
-    tickAmount: 4,
+    tickAmount: 5,
     min: 0,
-    max: 50,
+    max: 10000,
     labels: {
       style: {
         colors: labelColor,
@@ -194,11 +196,10 @@ function updateYear(selectedyear) {
 
 
 const getData = () => {
-  router.get('/', {
+  router.get(props.targetRoute, {
     year: year.value,
     }, {
-      preserveState : true,
-      only: ['data'],
+      preserveState : false,
       onSuccess: () => {
 
       
@@ -207,8 +208,8 @@ const getData = () => {
 }
 
 onMounted(() => {
-    let date = new Date()
-    year.value = date.getFullYear()
+    //let date = new Date()
+    year.value = props.year
 })
 
 </script>

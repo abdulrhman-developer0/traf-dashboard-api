@@ -21,7 +21,7 @@ class PricingController extends Controller
         $new_subscriptions   = $packagesQuery->where('end_date', '>', now())->whereDay('created_at', now())->count();
         $expired_subscriptions = $packagesQuery->where('end_date', '<', now())->count();
 
-        $total_subscriptions = Subscription::whereYear('created_at', $year)->sum('amount');
+        $year_total_amount_subscriptions = Subscription::whereYear('created_at', $year)->sum('amount');
 
         $total_packages = Package::count();
 
@@ -30,7 +30,7 @@ class PricingController extends Controller
             'new_subscriptions'   => $new_subscriptions,
             'expired_subscriptions'   => $expired_subscriptions,
             'total_packages'       => $total_packages,
-            'total_subscriptions'  => $total_subscriptions,
+            'year_total_amount_subscriptions'  => $year_total_amount_subscriptions,
         ];
 
         $start = now()->startOfYear();
@@ -69,6 +69,8 @@ class PricingController extends Controller
 
         return Inertia::render('pricing/index', [
             'data' => $data,
+            'year' => $year,
+
             'title' => 'Pricing'
         ]);
     }

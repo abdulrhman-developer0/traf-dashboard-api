@@ -30,14 +30,14 @@ class ClientController extends Controller
             ->whereAccountType('client')
             ->count();
 
-        $total_clients = Client::whereYear('created_at', $year)->count();
+        $year_total_clients = Client::whereYear('created_at', $year)->count();
 
         $stats = [
             'clients_count' => $clients_count,
             'new_clients'   => $new_clients,
             'logouts_count'   => $logouts_count,
             'deleted_accounts' => $deleted_accounts,
-            'total_clients'  => $total_clients,
+            'year_total_clients'  => $year_total_clients,
         ];
 
         $start = now()->startOfYear();
@@ -64,7 +64,6 @@ class ClientController extends Controller
 
         $clients_paginated = Client::query()
             ->select(['id', 'user_id', 'phone' ,'created_at'])
-            ->whereYear('created_at', '=', $year)
             ->latest()
             ->with(['user'])
             ->paginate(4);
@@ -78,6 +77,8 @@ class ClientController extends Controller
 
         return Inertia::render('clients/index', [
             'data' => $data,
+            'year' => $year,
+
             'title' => 'Clients'
         ]);
     }

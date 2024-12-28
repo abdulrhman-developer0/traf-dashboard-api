@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, router, usePage } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import moment from 'moment'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n() 
@@ -7,7 +7,10 @@ import "moment/dist/locale/ar"
 moment.locale('ar_SA')
 const props = defineProps({
   data: Array,
+  year: Number,
 })
+
+const year = ref(null)
 
 
 const headers = [
@@ -39,8 +42,8 @@ const statsCards = [
     icon: 'tabler-users-group',
   },
   {
-    title: 'متوسط الزائرين',
-    key: 'visitors_count',
+    title: 'العملاء',
+    key: 'clients_count',
     icon: 'tabler-users',
   },
   {
@@ -54,7 +57,6 @@ const statsCards = [
     icon: 'tabler-cash',
   },
 ]
-
 
 
 </script>
@@ -74,6 +76,9 @@ const statsCards = [
           :chart="props.data.chart"
           :mainTitle="'عدد الخدمات'"
           :title="'خدمات مقدمة'" 
+          :subtitle="data.stats.year_bookings_count"
+          :year="props.year"
+          :targetRoute="'/'"
         />
 
         

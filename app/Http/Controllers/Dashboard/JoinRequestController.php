@@ -17,19 +17,23 @@ class JoinRequestController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $requestsQuery = ServiceProvider::query();
+        //$requestsQuery = ServiceProvider::query();
 
-        $approved_count = $requestsQuery->where('status', 'approved')->count();
-        $rejected_count = $requestsQuery->where('status', 'rejected')->count();
-        $pending_count = $requestsQuery->where('status', 'pending')->count();
+        $total_requests = ServiceProvider::count();
+        $approved_count = ServiceProvider::where('status', 'approved')->count();
+        $rejected_count = ServiceProvider::where('status', 'rejected')->count();
+        $pending_count = ServiceProvider::where('status', 'pending')->count();
 
-        $total_requests = ServiceProvider::whereYear('created_at', $year)->count();
+        $year_total_requests = ServiceProvider::whereYear('created_at', $year)->count();
 
         $stats = [
+            'total_requests' => $total_requests,
             'approved_count' => $approved_count,
             'rejected_count' => $rejected_count,
             'pending_count' => $pending_count,
-            'total_requests' => $total_requests,
+
+            'year_total_requests' => $year_total_requests,
+
         ];
 
         $start = now()->startOfYear();
@@ -57,7 +61,6 @@ class JoinRequestController extends Controller
         $providers_paginated = ServiceProvider::query()
             ->select(['id', 'user_id', 'tax_registeration_number','is_personal', 'status', 'created_at'])
             ->whereStatus('pending')
-            ->whereYear('created_at', '=', $year)
             ->latest()
             ->with(['user'])
             ->paginate(4);
@@ -73,6 +76,8 @@ class JoinRequestController extends Controller
 
         return Inertia::render('requests/index', [
             'data' => $data,
+            'year' => $year,
+
             'title' => 'Join requests'
         ]);
     }

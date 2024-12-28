@@ -7,6 +7,8 @@ import "moment/dist/locale/ar"
 moment.locale('ar_SA')
 const props = defineProps({
   data: Array,
+  year: Number,
+
 })
 
 
@@ -19,27 +21,14 @@ const props = defineProps({
 
     <VRow class="match-height">
       <VCol cols="9">
-        <VCard flat class="px-0 tablemaincard">
-          <VCardItem
-            class="py-3 px-3 mb-6"
-            title="عدد الخدمات"
-            :subtitle="data.stats.total_services"
-          >
-            <template #append>
-              <VBtn
-                variant="tonal"
-                append-icon="tabler-chevron-down"
-              >
-                2024
-              </VBtn>
-            </template>
-          </VCardItem>
-
-          <VCardText class="py-0 " >
-            <MainChart :chart="props.data.chart" :title="'عدد الخدمات'" />
-          </VCardText>
-
-        </VCard>
+        <MainChart 
+          :chart="props.data.chart"
+          :mainTitle="'عدد الخدمات'"
+          :title="'عدد الخدمات'" 
+          :subtitle="data.stats.year_total_services"
+          :year="props.year"
+          :targetRoute="'/services'"
+        />
       </VCol>
 
       <VCol cols="3">

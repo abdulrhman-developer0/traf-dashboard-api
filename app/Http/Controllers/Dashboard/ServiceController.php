@@ -16,10 +16,10 @@ class ServiceController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $total_services = Service::whereYear('created_at', $year)->count();
+        $year_total_services = Service::whereYear('created_at', $year)->count();
 
         $stats = [
-            'total_services'  => $total_services,
+            'year_total_services'  => $year_total_services,
         ];
 
         $category_stats = ServiceCategory::query()
@@ -64,7 +64,6 @@ class ServiceController extends Controller
 
 
         $services_paginated = Service::query()
-            ->whereYear('created_at', '=', $year)
             ->latest()
             ->with(['category'])
             ->paginate(8);
@@ -79,6 +78,8 @@ class ServiceController extends Controller
 
         return Inertia::render('services/index', [
             'data' => $data,
+            'year' => $year,
+
             'title' => 'Services'
         ]);
     }

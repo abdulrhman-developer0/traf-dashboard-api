@@ -18,11 +18,11 @@ class PaymentController extends Controller
 
         $paymentsQuery = Payment::query();
 
-        $total_in_payments = $paymentsQuery->count();
-        $in_payments_amount = $paymentsQuery->sum('amount');
+        $total_in_payments = Payment::count();
+        $in_payments_amount = Payment::sum('amount');
         $total_out_payments = 10;
         $out_payments_amount = 459;
-        $year_in_payments_amount = $paymentsQuery->whereYear('created_at', $year)->sum('amount');
+        $year_in_payments_amount = Payment::whereYear('created_at', $year)->sum('amount');
 
         $stats = [
             'total_in_payments' => $total_in_payments,
@@ -66,6 +66,8 @@ class PaymentController extends Controller
 
         return Inertia::render('payments/index', [
             'data' => $data,
+            'year' => $year,
+
             'title' => 'Payments'
         ]);
     }

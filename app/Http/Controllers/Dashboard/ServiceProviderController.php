@@ -30,14 +30,14 @@ class ServiceProviderController extends Controller
             ->whereAccountType('service-provider')
             ->count();
 
-        $total_providers = ServiceProvider::whereYear('created_at', $year)->count();
+        $year_total_providers = ServiceProvider::whereYear('created_at', $year)->count();
 
         $stats = [
             'providers_count' => $providers_count,
             'new_providers'   => $new_providers,
             'logouts_count'   => $logouts_count,
             'deleted_accounts' => $deleted_accounts,
-            'total_providers'  => $total_providers,
+            'year_total_providers'  => $year_total_providers,
         ];
 
         $start = now()->startOfYear();
@@ -65,7 +65,6 @@ class ServiceProviderController extends Controller
         $providers_paginated = ServiceProvider::query()
             ->select(['id', 'user_id', 'is_personal', 'status', 'created_at'])
             ->whereStatus('pending')
-            ->whereYear('created_at', '=', $year)
             ->latest()
             ->with(['user'])
             ->paginate(4);
@@ -80,6 +79,7 @@ class ServiceProviderController extends Controller
 
         return Inertia::render('providers/index', [
             'data' => $data,
+            'year' => $year,
             'title' => 'Providers'
         ]);
 
@@ -156,7 +156,10 @@ class ServiceProviderController extends Controller
             ),
         ];
 
-        return $data;
+        return Inertia::render('providers/show', [
+            'data' => $data,
+            'title' => 'Providers'
+        ]);
     }
 
     public function destroy($id)
