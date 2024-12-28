@@ -72,7 +72,7 @@ class HomeController extends Controller
                 (SELECT COUNT(*) FROM bookings WHERE bookings.service_id = services.id) as bookings_count,
                 ((SELECT COUNT(*) FROM bookings WHERE bookings.service_id = services.id) / (SELECT COUNT(*) FROM bookings) * 100) as percentage
             ")
-            ->take(5)
+            ->take(6)
             ->get()
             ->map(function ($category) {
                 $category['percentage'] = (float) $category['percentage'];
