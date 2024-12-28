@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\BookingCollection;
+use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -57,10 +58,18 @@ class PaymentController extends Controller
             return $actual->sum('amount');
         })->toArray();
 
+        $bookings_paginated = Booking::query()
+            ->whereIn('status', ['confirmed', 'refound'])
+            ->select(['id', 'client_id', 'service_id', 'date', 'status'])
+            ->latest()
+            ->with('client.user', 'service.serviceProvider.user')
+            ->paginate(3);;
+
 
         $data = [
             'stats' => $stats,
-            'chart' => $chart,
+            'chart'         => $chart,
+            'bookings'      => BookingCollection::make($bookings_paginated),
         ];
 
 

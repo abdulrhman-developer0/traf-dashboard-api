@@ -12,16 +12,17 @@ use App\Models\ServiceProvider;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        
-        $year = $request->input('year', now()->year);
 
-        $users_count = User::where('account_type','!=','admin')->count();
+        $year = $request->input('year', now());
+
+        $users_count = User::where('account_type', '!=', 'admin')->count();
         $clients_count = Client::count();
         $providers_count = ServiceProvider::count();
         $bookings_count = Booking::count();

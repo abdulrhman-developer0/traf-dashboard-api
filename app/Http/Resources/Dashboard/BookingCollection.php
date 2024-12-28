@@ -18,9 +18,9 @@ class BookingCollection extends ResourceCollection
             'current_page'  => $this->currentPage(),
             'last_page'     => $this->lastPage(),
             'next_page_url' => $this->nextPageUrl(),
-            'items'     => $this->collection->map(function($item) {
+            'items'     => $this->collection->map(function ($item) {
 
-                
+
                 return [
                     'id'                => $item->id,
                     'service_name'      => $item->service->name,
@@ -34,6 +34,7 @@ class BookingCollection extends ResourceCollection
                     'to'                  => $item->date->addHour()->startOfHour()->format('h:i A'),
                     'date'                => $item->date->format('Y-m-dTH:i'),
                     'status'              => $item->status,
+                    'paid_amount'         => $item->payments?->amount,
                     'created_at'              => $item->created_at,
 
                 ];
