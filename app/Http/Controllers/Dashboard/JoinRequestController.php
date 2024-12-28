@@ -76,4 +76,18 @@ class JoinRequestController extends Controller
             'title' => 'Join requests'
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+
+        $request->validate([
+            'status'    => 'required',
+        ]);
+
+        $provider = ServiceProvider::find($id);
+        $provider->status = $request->status;
+        $provider->save();
+
+        return back();
+    }
 }

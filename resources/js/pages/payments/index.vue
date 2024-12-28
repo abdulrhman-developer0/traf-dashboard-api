@@ -13,24 +13,24 @@ const props = defineProps({
 
 const statsCards = [
   {
-    title: 'عدد الإشتراكات الاجمالي',
-    key: 'subscriptions_count',
-    icon: 'tabler-packages',
+    title: 'عدد التحويلات',
+    key: 'total_in_payments',
+    icon: 'tabler-credit-card-refund',
   },
   {
-    title: 'إشتراكات جديدة',
-    key: 'new_subscriptions',
-    icon: 'tabler-package-import',
+    title: 'المبلغ الكلي',
+    key: 'in_payments_amount',
+    icon: 'tabler-cash-banknote',
   },
   {
-    title: 'إشتراكات منتهية',
-    key: 'expired_subscriptions',
-    icon: 'tabler-package-off',
+    title: 'عدد الإرسالات',
+    key: 'total_out_payments',
+    icon: 'tabler-credit-card-pay',
   },
   {
-    title: 'عدد الباقات',
-    key: 'total_packages',
-    icon: 'tabler-box',
+    title: 'المبلغ الكلي المرسل',
+    key: 'out_payments_amount',
+    icon: 'tabler-cash-banknote',
   },
 ]
 
@@ -40,7 +40,7 @@ const statsCards = [
 <template>
   <Head title="الدفع" />  
   <section class="admindashboard">
-    <VRow>
+    <VRow class="match-height">
       <VCol cols="12" sm="6" md="4" lg="3" v-for="card in statsCards">
         <StatisticsCard :title="card.title" :value="data.stats[card.key]" :icon="card.icon" />
       </VCol>
@@ -51,7 +51,7 @@ const statsCards = [
         <VCard flat class="px-0 tablemaincard">
           <VCardItem
             class="py-3 px-3 mb-6"
-            title="الإشتراكات"
+            title="المبلغ الكلي"
             :subtitle="data.stats.total_subscriptions"
           >
             <template #append>
@@ -65,7 +65,7 @@ const statsCards = [
           </VCardItem>
 
           <VCardText class="py-0 " >
-            <MainChart :chart="props.data.chart" :title="'إشتراكات'" />
+            <MainChart :chart="props.data.chart" :title="'المبلغ الكلي'" />
           </VCardText>
 
         </VCard>

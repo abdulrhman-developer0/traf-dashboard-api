@@ -54,6 +54,8 @@ class User extends Authenticatable implements HasMedia, HasAccounts
         'remember_token',
     ];
 
+    protected $appends = ['avatar'];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -66,6 +68,14 @@ class User extends Authenticatable implements HasMedia, HasAccounts
             'password' => 'hashed',
         ];
     }
+
+    public function getAvatarAttribute()
+    {
+
+        return $this->getFirstMediaUrl('avatar');
+
+    }
+
 
     public function getActivitylogOptions(): LogOptions
     {

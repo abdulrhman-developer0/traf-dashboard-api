@@ -9,7 +9,7 @@ export default [
     {
         title: 'Join requests',
         to: '/requests',
-        icon: { icon: 'tabler-users' },
+        icon: { icon: 'tabler-user-plus' },
         path: '/requests', 
         permission: 'dashboard-dashboard-view'
     },
@@ -17,63 +17,63 @@ export default [
     {
         title: 'Clients',
         to: '/clients',
-        icon: { icon: 'tabler-cash-register' },
+        icon: { icon: 'tabler-users-group' },
         path: '/clients',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Providers',
         to: { name: '/service-providers' },
-        icon: { icon: 'tabler-home-question' },
+        icon: { icon: 'tabler-users' },
         path: '/service-providers',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Pricing',
         to: { name: 'pricing' },
-        icon: { icon: 'tabler-calendar-time' },
+        icon: { icon: 'tabler-packages' },
         path: '/pricing',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Services',
         to: { name: 'services' },
-        icon: { icon: 'tabler-bell' },
+        icon: { icon: 'tabler-cut' },
         path: '/services',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Bookings',
         to: { name: 'bookings' },
-        icon: { icon: 'tabler-a-b-2' },
+        icon: { icon: 'tabler-calendar-week' },
         path: '/bookings',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Services types',
         to: { name: 'services-categories' },
-        icon: { icon: 'tabler-settings' },
+        icon: { icon: 'tabler-category' },
         path: '/services-categories',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Payments',
         to: { name: 'payments' },
-        icon: { icon: 'tabler-settings' },
+        icon: { icon: 'tabler-cash' },
         path: '/payments',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Polices',
-        to: { name: 'index' },
-        icon: { icon: 'tabler-settings' },
-        path: '/admin/settings',
+        to: { name: 'policies' },
+        icon: { icon: 'tabler-license' },
+        path: '/policies',
         permission: 'dashboard-dashboard-view'
     },
     {
         title: 'Ads',
         to: { name: 'index' },
-        icon: { icon: 'tabler-settings' },
+        icon: { icon: 'tabler-speakerphone' },
         path: '/admin/settings',
         permission: 'dashboard-dashboard-view'
     },

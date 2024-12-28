@@ -45,7 +45,14 @@ import { VerticalNavLayout } from '@layouts'
           مرحبًا بعودتك، {{ page.props.user.name }}
         </h3>
         <VSpacer />
-        <NavSearchBar />
+        <AppTextField
+          type="text"
+          placeholder="ابحث هنا"
+          prepend-inner-icon="tabler-search"
+          class="searchbar"
+
+        />
+
         <VSpacer />
 
         <UserProfile class="ml-4" />

@@ -23,6 +23,7 @@ class LatestClientCollection extends ResourceCollection
                     'id'                => $item->id,
                     'user_id'           => $item->user->id,
                     'client_name'     => $item->user->name,
+                    'phone'     => $item->phone,
                     'created_at'        => $item->created_at->format('Y-m-dTH:i')
                 ];
             })

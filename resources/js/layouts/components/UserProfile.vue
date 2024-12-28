@@ -54,9 +54,6 @@ const logout = () => {
               {{ user.name }}
             </VListItemTitle>
             <VListItemSubtitle>
-              <span v-for="role in user.roles" :key="role" class="text-capitalize">{{ role }}</span>
-            </VListItemSubtitle>
-            <VListItemSubtitle>
               <span class="">{{ user.email }}</span>
             </VListItemSubtitle>
           </VListItem>
@@ -64,7 +61,7 @@ const logout = () => {
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <VListItem link @click="router.get('/dashboard/my-profile')">
+          <VListItem link @click="router.get('/my-profile')">
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -77,7 +74,7 @@ const logout = () => {
           </VListItem>
 
           <!-- 👉 Settings -->
-          <VListItem link @click="router.get('/dashboard/my-settings')">
+          <VListItem link @click="router.get('/my-settings')">
             <template #prepend>
               <VIcon
                 class="me-2"

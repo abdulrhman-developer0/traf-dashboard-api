@@ -869,7 +869,7 @@ body .layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky .layout-page-
     box-shadow: 0px 1px 2px 0px #00000040;
     height: 232px;
     align-content: center;
-
+    border-radius: 8px;
     img {
         height: 100px;
         width: auto;
@@ -1012,4 +1012,59 @@ body .layout-wrapper.layout-nav-type-vertical.layout-navbar-sticky .layout-page-
     font-size: 20px;
     font-weight: 400;
     color: #140208;
+}
+
+.searchbar {
+    .v-field  {
+        border: 1px solid #896A74;
+        border-radius: 8px;
+        height: 40px;
+        align-items: center;
+        padding-right: 11px;
+        box-shadow: none;
+    }
+}
+
+.policyCard {
+    padding: 16px;
+    box-shadow: 1px 1px 2px 0px #00000040;
+    border-radius: 16px;
+
+    h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #140208;
+    }
+
+    p {
+        font-size: 16px;
+        font-weight: 400;
+        color: #140208;
+        line-height: 30px;
+    }
+}
+
+.addpolicybtn {
+    font-size: 18px;
+    font-weight: 400;
+
+}
+
+.addpolicypage {
+
+    .v-field  {
+        border: 1px solid #EFA1AF !important;
+        border-radius: 8px;
+        //height: 56px;
+        //padding-right: 20px;
+        padding-top: 0px;
+        box-shadow: none;
+        font-size: 20px;
+    }
+
+    .contentcard {
+        box-shadow: 0px 4px 4px 0px #00000040;
+        border-radius: 8px;
+        background-color: #fff;
+    }
 }

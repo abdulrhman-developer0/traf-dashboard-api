@@ -158,4 +158,13 @@ class ServiceProviderController extends Controller
 
         return $data;
     }
+
+    public function destroy($id)
+    {
+        $provider = ServiceProvider::find($id);
+
+        $provider->delete();
+
+        back();
+    }
 }

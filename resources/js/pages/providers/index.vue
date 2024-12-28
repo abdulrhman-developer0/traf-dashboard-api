@@ -55,6 +55,11 @@ const statsCards = [
   },
 ]
 
+const deleteRecord = (id) => {
+  if(confirm('هل انت متأكد من الحذف؟')){
+    router.delete(`/service-providers/${id}`);
+  }
+}
 
 </script>
 
@@ -122,12 +127,14 @@ const statsCards = [
               </template>
 
               <template #item.actions="{ item }">
-                {{ moment(item.created_at).format("DD MMMM, YYYY") }}
+                <VBtn color="#C4174F" variant="flat" @click="deleteRecord(item.id)" >مسح</VBtn>
+
               </template>
 
               <!-- pagination -->
               <template #bottom>
                 
+
                 
               </template>
 

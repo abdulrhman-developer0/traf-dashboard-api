@@ -1,6 +1,9 @@
 <script setup>
-import { Head, Link, router, usePage } from '@inertiajs/vue3'
+import { Head, useForm, router, usePage } from '@inertiajs/vue3'
 import moment from 'moment'
+import { useToast } from "vue-toastification";
+const toast = useToast();
+
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n() 
 import "moment/dist/locale/ar"
@@ -54,6 +57,29 @@ const statsCards = [
     icon: 'tabler-user-question',
   },
 ]
+
+const form = useForm({
+    status: null,
+});
+
+
+const changeStatus = (status,id) => {
+    form.status = status
+    form.put('/requests/'+id, {
+        preserveState: false,
+        onSuccess: () => {
+            if(status == 'approved'){
+                toast.success('تم قبول طلب الانضمام');
+
+            }else {
+                toast.success('تم رفض طلب الانضمام');
+
+            }
+            form.reset()
+        },
+    });
+    
+};
 
 
 </script>
@@ -122,7 +148,10 @@ const statsCards = [
               </template>
 
               <template #item.actions="{ item }">
-                {{ moment(item.created_at).format("DD MMMM, YYYY") }}
+
+                <VBtn color="#C4174F" variant="flat" @click="changeStatus('approved',item.id)" >قبول</VBtn>
+                <VBtn color="#C4174F" class="mx-2" variant="outlined" @click="changeStatus('rejected',item.id)">رفض</VBtn>
+
               </template>
 
               <!-- pagination -->

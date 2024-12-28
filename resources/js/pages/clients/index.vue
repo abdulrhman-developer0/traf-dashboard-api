@@ -15,6 +15,10 @@ const headers = [
     key: 'client_name',
   },
   {
+    title: 'رقم التليفون',
+    key: 'phone',
+  },
+  {
     title: 'تاريخ التسجيل',
     key: 'created_at',
   },
@@ -47,6 +51,11 @@ const statsCards = [
   },
 ]
 
+const deleteRecord = (id) => {
+  if(confirm('هل انت متأكد من الحذف؟')){
+    router.delete(`/clients/${id}`);
+  }
+}
 
 </script>
 
@@ -106,7 +115,7 @@ const statsCards = [
               
 
               <template #item.actions="{ item }">
-                {{ moment(item.created_at).format("DD MMMM, YYYY") }}
+                <VBtn color="#C4174F" variant="flat" @click="deleteRecord(item.id)" >مسح</VBtn>
               </template>
 
               <!-- pagination -->

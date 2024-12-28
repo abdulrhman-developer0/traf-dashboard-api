@@ -16,7 +16,11 @@ use App\Http\Controllers\Dashboard\JoinRequestController;
 use App\Http\Controllers\Dashboard\PricingController;
 use App\Http\Controllers\Dashboard\ServiceController;
 use App\Http\Controllers\Dashboard\ServiceProviderController;
-use App\Http\Controllers\SystemTrashController;
+use App\Http\Controllers\Dashboard\PaymentController;
+use App\Http\Controllers\Dashboard\PolicyController;
+
+use App\Http\Controllers\Dashboard\UserSettingsController;
+use App\Http\Controllers\Dashboard\UserProfileController;
 
 
 // Route::get('/test', [HomeController::class, 'index']);
@@ -40,11 +44,11 @@ Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:das
 
     Route::get('/', [HomeController::class, 'index'])->name('index');
 
-    Route::get('/requests', [JoinRequestController::class, 'index']);
+    Route::resource('/requests', JoinRequestController::class);
 
-    Route::get('/clients', [ClientController::class, 'index']);
+    Route::resource('/clients', ClientController::class);
 
-    Route::get('/service-providers', [ServiceProviderController::class, 'index']);
+    Route::resource('/service-providers', ServiceProviderController::class);
 
     Route::get('/pricing', [PricingController::class, 'index']);
 
@@ -54,31 +58,14 @@ Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:das
 
     Route::get('/services-categories', [CategoryController::class, 'index']);
 
+    Route::get('/payments', [PaymentController::class, 'index']);
 
-    Route::middleware(['admin'])->group(function () {
- 
-        Route::resource('users', UsersController::class);
-
-        Route::resource('roles', RolesController::class);
-        Route::resource('permissions', PermissionsController::class);
-
-        Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log');
-
-        Route::get('/system-log', [SystemLogController::class, 'index'])->name('system-log');
-
-        Route::get('/system-trash', [SystemTrashController::class, 'index'])->name('system-trash');
+    Route::resource('/policies', PolicyController::class);
 
 
-        Route::get('/under-development', function () {
-            return Inertia::render('under-development');
-        })->name('under-development');
-        
-
-        Route::get('/testing-abed', function () {
-            return Inertia::render('testing');
-        })->name('testing-abed');
-    });
-    
+    Route::resource('my-profile', UserProfileController::class);
+    Route::get('/my-settings', [UserSettingsController::class, 'index'])->name('my-settings');
+    Route::put('/my-settings/change-password', [UserSettingsController::class, 'changePassword'])->name('change-password');
 
 
 });
