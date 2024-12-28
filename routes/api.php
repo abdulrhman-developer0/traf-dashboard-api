@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AdController;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Auth\ForgetPassswordController;
 use App\Http\Controllers\API\Auth\ProfileController;
@@ -56,6 +57,8 @@ Route::prefix('auth')->group(function () {
        
     });
 });
+
+Route::get('/ads', [AdController::class, 'index']);
 
 Route::apiResource('/clients', ClientController::class);
 

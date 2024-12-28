@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionsGroupsSeeder::class);
         $this->call(UsersSeeder::class);
 
+        // ads
+        $this->call(AdsSeeder::class);
 
         // production seeders
         $this->call(PackagesSeeder::class);

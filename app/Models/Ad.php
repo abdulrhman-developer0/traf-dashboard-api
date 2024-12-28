@@ -20,6 +20,7 @@ class Ad extends Model
         'duration_in_days',
         'total_price',
         'status',
+        'notes',
         'start_date',
         'end_date',
     ];
