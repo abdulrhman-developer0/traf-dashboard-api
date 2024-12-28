@@ -15,12 +15,13 @@ class PricingController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $packages_this_week = Subscription::where('created_at', '>=', now()->subWeek());
+        $packagesQuery = Subscription::query();
 
-        $subscriptions_count = $packages_this_week->where('end_date', '>', now())->count();
-        $new_subscriptions   = $packages_this_week->where('end_date', '>', now())->whereDay('created_at', now())->count();
-        $expired_subscriptions = $packages_this_week->where('end_date', '<', now())->count();
-        $total_subscriptions = Subscription::count();
+        $subscriptions_count = $packagesQuery->where('end_date', '>', now())->count();
+        $new_subscriptions   = $packagesQuery->where('end_date', '>', now())->whereDay('created_at', now())->count();
+        $expired_subscriptions = $packagesQuery->where('end_date', '<', now())->count();
+
+        $total_subscriptions = Subscription::whereYear('created_at', $year)->sum('amount');
 
         $total_packages = Package::count();
 
@@ -42,6 +43,7 @@ class PricingController extends Controller
         }
 
         $actualData = Subscription::query()
+            ->select()
             ->selectRaw('
                 DATE_FORMAT(created_at, "%m") as month
             ')
@@ -51,8 +53,9 @@ class PricingController extends Controller
 
         $chart = collect($months)->map(function ($month) use ($actualData) {
             $actual = $actualData[$month] ?? collect();
-            return $actual->count();
+            return $actual->sum('amount');
         })->toArray();
+
 
         $packages_paginated = Package::query()
             ->paginate(4);

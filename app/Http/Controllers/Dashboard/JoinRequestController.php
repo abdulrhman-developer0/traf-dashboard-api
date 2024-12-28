@@ -17,11 +17,11 @@ class JoinRequestController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $requests_this_week = ServiceProvider::where('created_at', '>=', now()->subWeek())->get();
+        $requestsQuery = ServiceProvider::query();
 
-        $approved_count = $requests_this_week->where('status', 'approved')->count();
-        $rejected_count = $requests_this_week->where('status', 'rejected')->count();
-        $pending_count = $requests_this_week->where('status', 'pending')->count();
+        $approved_count = $requestsQuery->where('status', 'approved')->count();
+        $rejected_count = $requestsQuery->where('status', 'rejected')->count();
+        $pending_count = $requestsQuery->where('status', 'pending')->count();
 
         $total_requests = ServiceProvider::whereYear('created_at', $year)->count();
 

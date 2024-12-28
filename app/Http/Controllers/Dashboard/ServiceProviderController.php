@@ -21,9 +21,9 @@ class ServiceProviderController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $providerss_this_week = ServiceProvider::where('created_at', '>=', now()->subWeek())->get();
+        $providerssQuery = ServiceProvider::query();
 
-        $providers_count = $providerss_this_week->count();
+        $providers_count = $providerssQuery->count();
         $new_providers   = ServiceProvider::whereDay('created_at', now())->count();
         $logouts_count = 0;
         $deleted_accounts = User::onlyTrashed()

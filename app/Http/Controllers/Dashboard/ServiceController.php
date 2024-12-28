@@ -37,30 +37,31 @@ class ServiceController extends Controller
             ->map(function ($category) {
                 $category['percentage'] = (float) $category['percentage'];
                 return $category;
-            });
+            })->sortByDesc('percentage')
+            ->toArray();
 
-            $start = now()->startOfYear();
-            $end = now()->endOfYear();
-    
-            $months = [];
-            while ($start <= $end) {
-                $months[] = $start->format('m');
-                $start->addMonth();
-            }
-    
-            $actualData = Payment::query()
-                ->selectRaw('
+        $start = now()->startOfYear();
+        $end = now()->endOfYear();
+
+        $months = [];
+        while ($start <= $end) {
+            $months[] = $start->format('m');
+            $start->addMonth();
+        }
+
+        $actualData = Payment::query()
+            ->selectRaw('
                     DATE_FORMAT(created_at, "%m") as month
                 ')
-                ->whereYear('created_at', '=', $year)
-                ->get()
-                ->groupBy('month');
-    
-            $chart = collect($months)->map(function ($month) use ($actualData) {
-                $actual = $actualData[$month] ?? collect();
-                return $actual->count();
-            })->toArray();
-            
+            ->whereYear('created_at', '=', $year)
+            ->get()
+            ->groupBy('month');
+
+        $chart = collect($months)->map(function ($month) use ($actualData) {
+            $actual = $actualData[$month] ?? collect();
+            return $actual->count();
+        })->toArray();
+
 
         $services_paginated = Service::query()
             ->whereYear('created_at', '=', $year)
