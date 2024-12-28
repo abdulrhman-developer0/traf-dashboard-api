@@ -19,11 +19,12 @@ class HomeController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $users_count = User::whereYear('created_at', '=', $year)->count();
-        $visitors_count = 2100;
-        $providers_count = ServiceProvider::whereYear('created_at', '=', $year)->count();
-        $bookings_count = Booking::whereYear('created_at', '=', $year)->count();
-        $services_count = Booking::whereYear('created_at', $year)->count();
+        $users_count = User::count();
+        $visitors_count = 0;
+        $providers_count = ServiceProvider::count();
+        $bookings_count = Booking::count();
+
+        $services_count = Service::whereYear('created_at', $year)->count();
 
         $stats = [
             'users_count' => $users_count,
@@ -77,7 +78,7 @@ class HomeController extends Controller
             ->map(function ($category) {
                 $category['percentage'] = (float) $category['percentage'];
                 return $category;
-            });
+            })->sortByDesc('percentage');
 
         $data = [
             'stats' => $stats,

@@ -7,7 +7,7 @@ use App\Http\Resources\Dashboard\BookingCollection;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use Twilio\TwiML\Voice\Pay;
 
 class PaymentController extends Controller
 {
@@ -16,11 +16,13 @@ class PaymentController extends Controller
 
         $year = $request->input('year', now()->year);
 
-        $total_in_payments = 100;
-        $in_payments_amount = 1309;
+        $paymentsQuery = Payment::query();
+
+        $total_in_payments = $paymentsQuery->count();
+        $in_payments_amount = $paymentsQuery->sum('amount');
         $total_out_payments = 10;
         $out_payments_amount = 459;
-        $year_in_payments_amount = 5080;
+        $year_in_payments_amount = $paymentsQuery->whereYear('created_at', $year)->sum('amount');
 
         $stats = [
             'total_in_payments' => $total_in_payments,
@@ -31,7 +33,29 @@ class PaymentController extends Controller
         ];
 
 
-        $chart = [];
+        $start = now()->startOfYear();
+        $end = now()->endOfYear();
+
+        $months = [];
+        while ($start <= $end) {
+            $months[] = $start->format('m');
+            $start->addMonth();
+        }
+
+        $actualData = Payment::query()
+            ->select()
+            ->selectRaw('
+                DATE_FORMAT(created_at, "%m") as month
+            ')
+            ->whereYear('created_at', '=', $year)
+            ->get()
+            ->groupBy('month');
+
+
+        $chart = collect($months)->map(function ($month) use ($actualData) {
+            $actual = $actualData[$month] ?? collect();
+            return $actual->sum('amount');
+        })->toArray();
 
 
         $data = [

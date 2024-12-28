@@ -22,7 +22,6 @@ return new class extends Migration
             $table->float('rating', 2, 1)->default(0.0);
             $table->string('area')->nullable();
             $table->string('city')->nullable();
-            $table->enum('status', ['pending', 'rejected', 'approved'])->default('pending');
             $table->timestamps();
         });
     }

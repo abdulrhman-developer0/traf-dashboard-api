@@ -21,9 +21,9 @@ class ClientController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $clients_this_week = Client::where('created_at', '>=', now()->subWeek())->get();
+        $clientsQuery = Client::query();
 
-        $clients_count = $clients_this_week->count();
+        $clients_count = $clientsQuery->count();
         $new_clients   = Client::whereDay('created_at', now())->count();
         $logouts_count = 0;
         $deleted_accounts = User::onlyTrashed()
