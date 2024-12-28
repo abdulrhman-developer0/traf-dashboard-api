@@ -21,7 +21,7 @@ class PricingController extends Controller
         $new_subscriptions   = $packagesQuery->where('end_date', '>', now())->whereDay('created_at', now())->count();
         $expired_subscriptions = $packagesQuery->where('end_date', '<', now())->count();
 
-        $total_subscriptions = Subscription::whereYear('created_at', $year)->sum('amount');
+        $year_total_amount_subscriptions = Subscription::whereYear('created_at', $year)->sum('amount');
 
         $total_packages = Package::count();
 
@@ -30,7 +30,7 @@ class PricingController extends Controller
             'new_subscriptions'   => $new_subscriptions,
             'expired_subscriptions'   => $expired_subscriptions,
             'total_packages'       => $total_packages,
-            'total_subscriptions'  => $total_subscriptions,
+            'year_total_amount_subscriptions'  => $year_total_amount_subscriptions,
         ];
 
         $start = now()->startOfYear();
@@ -69,7 +69,54 @@ class PricingController extends Controller
 
         return Inertia::render('pricing/index', [
             'data' => $data,
+            'year' => $year,
+
             'title' => 'Pricing'
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        //dd($request);
+
+        $request->validate([
+            'name'    => 'required',
+            'price'    => 'required',
+            'duration_in_days'    => 'required',
+
+        ]);
+
+        Package::create($request->only(['name','price','duration_in_days']));
+
+        return back()->with('status', ['type' => 'success', 'action' => 'تم اضافة الباقة بنجاح', 'text' => '']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        
+        $request->validate([
+            'name'    => 'required',
+            'price'    => 'required',
+            'duration_in_days'    => 'required',
+
+        ]);
+
+        $package = Package::find($id);
+
+        $package->update($request->only(['name','price','duration_in_days']));
+
+        return back()->with('status', ['type' => 'success', 'action' => 'تم تعديل الباقة بنجاح', 'text' => '']);
+
+    }
+
+
+    public function destroy($id)
+    {
+        $package = Package::find($id);
+        
+        $package->delete();
+
+        return back()->with('status', ['type' => 'success', 'action' => 'تم حذف الباقة بنجاح', 'text' => '']);
+
     }
 }

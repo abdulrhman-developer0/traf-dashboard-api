@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\ServiceProvider;
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,21 +18,22 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
+        
         $year = $request->input('year', now()->year);
 
-        $users_count = User::count();
-        $visitors_count = 0;
+        $users_count = User::where('account_type','!=','admin')->count();
+        $clients_count = Client::count();
         $providers_count = ServiceProvider::count();
         $bookings_count = Booking::count();
 
-        $services_count = Service::whereYear('created_at', $year)->count();
+        $year_bookings_count = Booking::whereYear('created_at', $year)->count();
 
         $stats = [
             'users_count' => $users_count,
-            'visitors_count' => $visitors_count,
+            'clients_count' => $clients_count,
             'providers_count' => $providers_count,
             'bookings_count' => $bookings_count,
-            'services_count' => $services_count,
+            'year_bookings_count' => $year_bookings_count,
         ];
 
         $start = now()->startOfYear();
@@ -58,7 +60,6 @@ class HomeController extends Controller
 
         $bookings_paginated = Booking::query()
             ->select(['id', 'client_id', 'service_id', 'date', 'status'])
-            ->whereYear('created_at', '=', $year)
             ->latest()
             ->with('client.user', 'service.serviceProvider.user')
             ->paginate(3);
@@ -89,6 +90,7 @@ class HomeController extends Controller
 
         return Inertia::render('index', [
             'data' => $data,
+            'year' => $year,
             'title' => 'Dashboard'
         ]);
     }

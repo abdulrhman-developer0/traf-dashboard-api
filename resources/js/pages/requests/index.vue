@@ -10,6 +10,8 @@ import "moment/dist/locale/ar"
 moment.locale('ar_SA')
 const props = defineProps({
   data: Array,
+  year: Number,
+
 })
 
 const headers = [
@@ -95,27 +97,15 @@ const changeStatus = (status,id) => {
 
     <VRow class="match-height">
       <VCol cols="12">
-        <VCard flat class="px-0 tablemaincard">
-          <VCardItem
-            class="py-3 px-3 mb-6"
-            title="طلبات الأنضمام"
-            :subtitle="data.stats.total_requests"
-          >
-            <template #append>
-              <VBtn
-                variant="tonal"
-                append-icon="tabler-chevron-down"
-              >
-                2024
-              </VBtn>
-            </template>
-          </VCardItem>
-
-          <VCardText class="py-0 " >
-            <MainChart :chart="props.data.chart" :title="'طلبات انضمام'" />
-          </VCardText>
-
-        </VCard>
+        <MainChart 
+          :chart="props.data.chart"
+          :mainTitle="'طلبات الأنضمام'"
+          :title="'طلبات انضمام'" 
+          :subtitle="data.stats.year_total_requests"
+          :year="props.year"
+          :targetRoute="'/requests'"
+        />
+        
       </VCol>
 
       

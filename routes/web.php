@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:das
 
     Route::resource('/service-providers', ServiceProviderController::class);
 
-    Route::get('/pricing', [PricingController::class, 'index']);
+    Route::resource('/pricing', PricingController::class);
 
     Route::get('/bookings', [BookingController::class, 'index']);
 

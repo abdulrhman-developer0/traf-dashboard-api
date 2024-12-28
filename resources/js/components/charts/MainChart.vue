@@ -1,9 +1,15 @@
 <script setup>
+import { router } from '@inertiajs/vue3'
+
 import ar from 'apexcharts/dist/locales/ar.json'
 
 const props = defineProps({
   chart: Array,
   title: String,
+  mainTitle: String,
+  subtitle: String,
+  year: Number,
+  targetRoute: String,
 })
 
 const chartColors = {
@@ -27,7 +33,7 @@ const series = [
   },
 ]
 
-const shipmentConfig = {
+const chartConfig = {
   chart: {
     type: 'line',
     stacked: false,
@@ -128,9 +134,9 @@ const shipmentConfig = {
   },
   yaxis: {
     show: false,
-    tickAmount: 4,
+    tickAmount: 5,
     min: 0,
-    max: 50,
+    max: 10000,
     labels: {
       style: {
         colors: labelColor,
@@ -178,16 +184,83 @@ const shipmentConfig = {
     },
   ],
 }
+
+const year = ref(null)
+const viewMode = ref('year')
+
+
+function updateYear(selectedyear) {
+  year.value = selectedyear
+  getData()
+}
+
+
+const getData = () => {
+  router.get(props.targetRoute, {
+    year: year.value,
+    }, {
+      preserveState : false,
+      onSuccess: () => {
+
+      
+    },
+  });
+}
+
+onMounted(() => {
+    //let date = new Date()
+    year.value = props.year
+})
+
 </script>
 
 <template>
-  <VueApexCharts
-    id="index-chart"
-    type="line"
-    height="269"
-    :options="shipmentConfig"
-    :series="series"
-    />
+  <VCard flat class="px-0 tablemaincard">
+    <VCardItem
+      class="py-3 px-3 mb-6"
+      :title="props.mainTitle"
+      :subtitle="props.subtitle"
+    >
+      <template #append>
+        <VBtn
+          variant="tonal"
+          append-icon="tabler-chevron-down"
+        >
+          {{ year }}
+          <VMenu
+            activator="parent"
+            width="230"
+            location="bottom end"
+            offset="5px"
+            :close-on-content-click='true'
+          >
+          <v-locale-provider locale="ar">
+            <v-date-picker 
+              @update:year="updateYear"
+              scrollable
+              :view-mode="viewMode"
+              :hide-header="true"
+              border="md"
+            ></v-date-picker>
+          </v-locale-provider>
+
+          </VMenu>
+        </VBtn>
+      </template>
+    </VCardItem>
+
+    <VCardText class="py-0 " >
+      <VueApexCharts
+        id="index-chart"
+        type="line"
+        height="269"
+        :options="chartConfig"
+        :series="series"
+      />
+
+    </VCardText>
+
+  </VCard>
 </template>
 
 <style lang="scss">

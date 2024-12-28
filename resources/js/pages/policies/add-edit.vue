@@ -39,6 +39,8 @@ if(props.policy){
 <template>
   <Head title="السياسات" />  
   <section class="admindashboard">
+    <ErrorMessages :errors="form.errors" />
+
     <VRow class="addpolicypage">
       <VCol cols="12">
         
@@ -52,8 +54,9 @@ if(props.policy){
         
       </VCol>
       <VCol cols="12"  v-for="(item,index) in form.content" class="pb-1">
-        <VCard flat class="contentcard px-6 py-4">
+        <VCard flat class="addpackagecard px-6 py-4">
           <VCardText class="d-flex flex-row gap-2" style="align-items: center;">
+            
             <div class="flex-fill">
               <VRow>
                 <VCol cols="12" class="py-0">

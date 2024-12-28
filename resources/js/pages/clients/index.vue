@@ -7,6 +7,8 @@ import "moment/dist/locale/ar"
 moment.locale('ar_SA')
 const props = defineProps({
   data: Array,
+  year: Number,
+
 })
 
 const headers = [
@@ -70,31 +72,16 @@ const deleteRecord = (id) => {
 
     <VRow class="match-height">
       <VCol cols="12">
-        <VCard flat class="px-0 tablemaincard">
-          <VCardItem
-            class="py-3 px-3 mb-6"
-            title="عدد العملاء"
-            :subtitle="data.stats.total_clients"
-          >
-            <template #append>
-              <VBtn
-                variant="tonal"
-                append-icon="tabler-chevron-down"
-              >
-                2024
-              </VBtn>
-            </template>
-          </VCardItem>
-
-          <VCardText class="py-0 " >
-            <MainChart :chart="props.data.chart" :title="'عملاء'" />
-          </VCardText>
-
-        </VCard>
+        <MainChart 
+          :chart="props.data.chart"
+          :mainTitle="'عدد العملاء'"
+          :title="'عملاء'" 
+          :subtitle="data.stats.year_total_clients"
+          :year="props.year"
+          :targetRoute="'/clients'"
+        />
+        
       </VCol>
-
-      
-
     </VRow>
 
     <VRow>
