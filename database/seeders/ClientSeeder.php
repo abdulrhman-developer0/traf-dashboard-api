@@ -30,12 +30,14 @@ class ClientSeeder extends Seeder
             ['user_id' => 7, 'city_id' => 103, 'phone' => '01234567890', 'address' => 'مدينة نصر، القاهرة', 'rating' => 3.8],
         ];
 
-        foreach ($clients as $client) {
+        foreach (User::whereAccountType('client')->pluck('id') as $index => $userId) {
+            if (! isset($clients[$index]) ) continue;
+
             DB::table('clients')->insert([
-                'user_id' => $client['user_id'],
-                'phone' => $client['phone'],
-                'address' => $client['address'],
-                'rating' => $client['rating'],
+                'user_id' => $userId,
+                'phone' => $clients[$index]['phone'],
+                'address' => $clients[$index]['address'],
+                'rating' => $clients[$index]['rating'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

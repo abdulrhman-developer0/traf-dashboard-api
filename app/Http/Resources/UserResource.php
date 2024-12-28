@@ -5,6 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use function GuzzleHttp\default_ca_bundle;
+
 class UserResource extends JsonResource
 {
     /**
@@ -38,7 +40,10 @@ class UserResource extends JsonResource
             'reviews_count'     => $account->reviews_count ?? 0,
             'rating_stats'      => $account->rating_stats,
             'booking_stats'     => $account->booking_stats,
-            'subscription'      => SubscriptionResource::make(optional($account->currentSubscription))
+            'subscription'      => match($this->account_type) {
+                'service-provider' => SubscriptionResource::make(optional($account->currentSubscription)),
+                default => null,
+            }
         ];
     }
 }
