@@ -40,10 +40,7 @@ class UserResource extends JsonResource
             'reviews_count'     => $account->reviews_count ?? 0,
             'rating_stats'      => $account->rating_stats,
             'booking_stats'     => $account->booking_stats,
-            'subscription'      => match($this->account_type) {
-                'service-provider' => SubscriptionResource::make(optional($account->currentSubscription)),
-                default => null,
-            }
+            'subscription'      => $account->currentSubscription ? SubscriptionResource::make($account->currentSubscription) : null,
         ];
     }
 }
