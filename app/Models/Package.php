@@ -13,6 +13,7 @@ class Package extends Model
         'name',
         'price',
         'duration_in_days',
+        'ads_discount'
     ];
     public function subscriptions()
     {

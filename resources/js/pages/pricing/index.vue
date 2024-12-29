@@ -89,7 +89,7 @@ const actionReturn = () => {
         <VCard flat class="packageCard">
           <VCardText class="d-flex flex-row pa-0 ma-0" style="align-items: center;">
             <div>
-              <h3 class="mb-1">{{ item.name }} <span>(وفر 15%)</span></h3>
+              <h3 class="mb-1">{{ item.name }} <span>(وفر {{item.ads_discount}}%)</span></h3>
               <h4 class=""><span class="ml-2">{{ item.duration_in_days }} يوم</span>بقيمة {{ item.price }} ر.س</h4>
             </div>
             <VSpacer/>

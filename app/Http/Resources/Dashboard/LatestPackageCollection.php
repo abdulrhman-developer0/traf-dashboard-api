@@ -24,6 +24,7 @@ class LatestPackageCollection extends ResourceCollection
                     'name'              => $item->name,
                     'price'              => $item->price,
                     'duration_in_days'              => $item->duration_in_days,
+                    'ads_discount'              => $item->ads_discount,
                 ];
             })
         ];

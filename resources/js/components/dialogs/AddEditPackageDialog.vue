@@ -23,7 +23,8 @@ const emit = defineEmits([
 const form = useForm({
     name: null,
     price: null,
-    duration_in_days: null
+    duration_in_days: null,
+    ads_discount: null,
 });
 
 
@@ -69,11 +70,13 @@ watch(props, () => {
         form.name = props.package.name
         form.price = props.package.price
         form.duration_in_days = props.package.duration_in_days
+        form.ads_discount = props.package.ads_discount
     }
     else {
         form.name = null
         form.price = null
         form.duration_in_days = null
+        form.ads_discount = null
     }
 })
 
@@ -123,6 +126,16 @@ watch(props, () => {
                             placeholder="عدد الأيام"
                             prepend-inner-icon="tabler-clock"
                             suffix="يوم"
+
+                        />
+                    </VCol>
+                    <VCol cols="12">
+                        <AppTextField
+                            v-model="form.ads_discount"
+                            type="number"
+                            placeholder="نسبة خصم الاعلان"
+                            prepend-inner-icon="tabler-percentage"
+                            suffix="%"
 
                         />
                     </VCol>

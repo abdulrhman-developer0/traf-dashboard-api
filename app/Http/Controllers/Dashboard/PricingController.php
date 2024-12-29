@@ -83,10 +83,11 @@ class PricingController extends Controller
             'name'    => 'required',
             'price'    => 'required',
             'duration_in_days'    => 'required',
+            'ads_discount'    => 'required',
 
         ]);
 
-        Package::create($request->only(['name','price','duration_in_days']));
+        Package::create($request->only(['name','price','duration_in_days','ads_discount']));
 
         return back()->with('status', ['type' => 'success', 'action' => 'تم اضافة الباقة بنجاح', 'text' => '']);
     }
@@ -98,12 +99,13 @@ class PricingController extends Controller
             'name'    => 'required',
             'price'    => 'required',
             'duration_in_days'    => 'required',
+            'ads_discount'    => 'required',
 
         ]);
 
         $package = Package::find($id);
 
-        $package->update($request->only(['name','price','duration_in_days']));
+        $package->update($request->only(['name','price','duration_in_days','ads_discount']));
 
         return back()->with('status', ['type' => 'success', 'action' => 'تم تعديل الباقة بنجاح', 'text' => '']);
 
