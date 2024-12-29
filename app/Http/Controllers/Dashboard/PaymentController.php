@@ -78,7 +78,6 @@ class PaymentController extends Controller
             'bookings'      => $bookings,
         ];
 
-        dd($data);
         
         return Inertia::render('payments/index', [
             'data' => $data,

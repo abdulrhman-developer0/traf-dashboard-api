@@ -79,17 +79,25 @@ const statsCards = [
           :touch="false"
         >
           <VWindowItem>
-            <AdsTable :data="data.ads"/>
+            <AdsTable :data="data.ads['under-review']"/>
+            <PaginationLinks :links="data.ads['under-review'].meta.links" />
+
           </VWindowItem>
 
           <VWindowItem>
+            <AdsTable :data="data.ads['waiting']"/>
+
           </VWindowItem>
 
 
           <VWindowItem>
+            <AdsTable :data="data.ads['approved']"/>
+
           </VWindowItem>
 
           <VWindowItem>
+            <AdsTable :data="data.ads['rejected']"/>
+
           </VWindowItem>
 
         </VWindow>

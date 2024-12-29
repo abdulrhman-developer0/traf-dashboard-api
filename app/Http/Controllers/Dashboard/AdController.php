@@ -41,13 +41,15 @@ class AdController extends Controller
                 ->latest()
                 ->paginate(6);
 
-            $ads[$stats] = AdCollection::make($paginator);
+            $ads[$status] = AdCollection::make($paginator);
         }
 
         $data = [
             'stats' => $stats,
             'ads'   => $ads
         ];
+
+        dd($data);
 
         return Inertia::render('ads/index', [
             'data' => $data,
