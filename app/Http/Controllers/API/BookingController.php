@@ -137,15 +137,6 @@ class BookingController extends Controller
     {
         $user = Auth::user();
 
-        $bookingCanceledToday = Booking::query()
-            ->when(
-                $user->account_type == 'client',
-                fn ($q) => $q
-            )
-            ->where('status', 'canceled')
-            ->whereDate('date', now())
-            ->count();
-
         $allowedStatuses = match ($user->account_type) {
             'client'            => 'canceled',
             'service-provider' => 'done,canceled',
@@ -162,11 +153,34 @@ class BookingController extends Controller
             'status' => "required|in:$allowedStatuses",
         ]);
 
+        $totalBookingCanceledToday = Booking::query()
+            ->when(
+                $user->account_type == 'service-provider',
+                fn($q) => $q->whereHas(
+                    'service',
+                    fn($q) => $q->where('service_provider_id', $user->serviceProvider->id)
+                )
+            )
+            ->when(
+                $user->account_type == 'client',
+                fn($q) => $q->where('client_id', $user->client->id)
+            )
+            ->where('status', 'canceled')
+            ->whereDate('date', now())
+            ->count();
+
+            
+
+        if ($booking->status == 'canceled' && $totalBookingCanceledToday >= 1) {
+            return $this->badResponse([
+                'reason'    => 'cancel_limitation'
+            ], "You can't cancel or change the current booking");
+        }
+
         $booking->status = $request->status;
         $booking->save();
 
         if ($booking->status == 'canceled') {
-
             $targetUser = match ($user->account_type) {
                 'client'            => $booking->service->serviceProvider->user,
                 'service-provider'  => $booking->client->user,

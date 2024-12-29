@@ -18,16 +18,19 @@ class PackagesSeeder extends Seeder
                 'name' => 'باقة الشهر الواحد',
                 'price' => 15.00,
                 'duration_in_days' => 30,
+                "ads_discount"     => 5,
             ],
             [
                 'name' => 'باقة 6 شهور',
                 'price' => 75.00,
                 'duration_in_days' => 180,
+                "ads_discount"     => 10,
             ],
             [
                 'name' => 'باقة 12 شهر',
                 'price' => 150.00,
                 'duration_in_days' => 365,
+                "ads_discount"     => 15,
             ],
         ];
 
