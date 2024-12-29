@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Dashboard\AdCollection;
 use App\Models\Ad;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,37 @@ class AdController extends Controller
      */
     public function index(Request $request)
     {
-        $ads = Ad::query();
+        $total_in_ads           = Ad::count();
+
+        $in_ads_mount           = Ad::sum('total_price');
+
+        $in_ads_today           = Ad::whereDay('created_at', now())->count();
+
+        $in_ads_today_amount    = Ad::whereDay('created_at', now())
+            ->whereIn('status', ['approved', 'waiting'])
+            ->sum('total_price');
+
+        $stats = [
+            'total_in_ads'          => $total_in_ads,
+            'in_ads_mount'          => $in_ads_mount,
+            'in_ads_today'          => $in_ads_today,
+            'in_ads_today_amount'   => $in_ads_today_amount,
+        ];
+
+
+        $ads = Ad::query()
+            ->when(
+                $request->has('status'),
+                fn($q) => $q->whereStatus($request->query('status'))
+            )
+            ->latest()
+            ->paginate(6);
+
+        $data = [
+            'title' => 'Ads',
+            'stats' => $stats,
+            'ads'   => AdCollection::make($ads)
+        ];
     }
 
     /**
