@@ -12,6 +12,14 @@ class Booking extends Model
 {
     use HasFactory;
 
+    public const SATUSES = [
+        'pending',
+        'canceled',
+        'refund',
+        'confirmed',
+        'done'
+    ];
+
     protected $fillable = [
         'client_id',
         'service_id',

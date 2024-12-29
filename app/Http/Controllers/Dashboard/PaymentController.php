@@ -58,18 +58,24 @@ class PaymentController extends Controller
             return $actual->sum('amount');
         })->toArray();
 
-        $bookings_paginated = Booking::query()
-            ->whereIn('status', ['confirmed', 'refound'])
-            ->select(['id', 'client_id', 'service_id', 'date', 'status'])
-            ->latest()
-            ->with('client.user', 'service.serviceProvider.user')
-            ->paginate(3);;
+        $bookings = [];
+
+        foreach (Booking::SATUSES as $status) {
+            $paginator = Booking::query()
+                ->whereStatus($status)
+                ->select(['id', 'client_id', 'service_id', 'date', 'status'])
+                ->latest()
+                ->with('client.user', 'service.serviceProvider.user')
+                ->paginate(3);;
+
+            $bookings[$status] = BookingCollection::make($paginator);
+        }
 
 
         $data = [
             'stats' => $stats,
             'chart'         => $chart,
-            'bookings'      => BookingCollection::make($bookings_paginated),
+            'bookings'      => $bookings,
         ];
 
 

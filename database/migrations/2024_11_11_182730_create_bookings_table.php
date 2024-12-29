@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Booking;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('reference_id')->nullable();
             $table->datetime('date');
             $table->string('address')->nullable();
-            $table->enum('status', ['pending', 'canceled', 'confirmed', 'done'])->default('pending');
+            $table->enum('status', Booking::SATUSES)->default('pending');
 
             $table->timestamps();
         });
