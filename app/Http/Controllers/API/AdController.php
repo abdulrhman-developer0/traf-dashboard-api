@@ -45,7 +45,7 @@ class AdController extends Controller
     {
         $request->validate([
             'photo'               => 'required|image|max:4096',
-            'duration_in_days'    => 'required|integer|min:1|max:30',
+            'duration_in_days'    => 'required|integer|min:1|max:3',
         ]);
 
         $user            = Auth::user();

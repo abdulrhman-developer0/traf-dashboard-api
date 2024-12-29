@@ -37,7 +37,7 @@ class Client extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    
+
     public function favoritServices(): BelongsToMany
     {
         return $this->belongsToMany(Service::class, 'favorits');
@@ -115,7 +115,9 @@ class Client extends Model implements HasMedia
     {
         return $this->hasMany(Payment::class);
     }
-    public function bookings() {
+    
+    public function bookings()
+    {
         return $this->hasMany(Booking::class);
     }
 }

@@ -133,55 +133,18 @@ class BookingController extends Controller
         ], 'Booking created successfully');
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $user = Auth::user();
-
-    //     $allowedStatuses = match ($user->account_type) {
-    //         'client'            => 'canceled',
-    //         'service-provider' => 'done,canceled',
-    //         'admin'             => '',
-    //     };
-
-    //     $booking = Booking::find($id);
-
-    //     if (! $booking) {
-    //         return $this->badResponse('Booking not found');
-    //     }
-
-    //     $request->validate([
-    //         'status' => "required|in:$allowedStatuses",
-    //     ]);
-
-    //     $booking->status = $request->status;
-    //     $booking->save();
-
-    //     $user = match ($user->account_type) {
-    //         'client'            => $booking->service->serviceProvider->user,
-    //         'service-provider'  => $booking->client->user,
-    //         default             => null
-    //     };
-
-    //     if ($booking->status == 'canceled') {
-    //         // Create the notification
-    //         $notification = new PushNotification(
-    //             $user,
-    //             BookingResource::make($booking)->toArray($request),
-    //         );
-
-    //         // Send the notification to the user (this will save it in the database)
-    //         $user->notify($notification);
-
-    //         // Broadcast the notification (for real-time updates)
-    //         broadcast($notification)->toOthers();
-    //     }
-
-    //     return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
-    // }
-
     public function update(Request $request, $id)
     {
         $user = Auth::user();
+
+        $bookingCanceledToday = Booking::query()
+            ->when(
+                $user->account_type == 'client',
+                fn ($q) => $q
+            )
+            ->where('status', 'canceled')
+            ->whereDate('date', now())
+            ->count();
 
         $allowedStatuses = match ($user->account_type) {
             'client'            => 'canceled',
