@@ -19,6 +19,7 @@ class AdController extends Controller
         $this->middleware('auth:sanctum')->except(['index']);
 
         $this->middleware('account:service-provider')->except(['index']);
+        $this->middleware('valid_subscribtion')->except(['index']);
     }
 
     public function index()
