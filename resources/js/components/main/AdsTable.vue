@@ -7,7 +7,12 @@ moment.locale('ar_SA')
 
 const props = defineProps({
   data: Array,
+  type: String,
 })
+
+const isDialogVisible = ref(false)
+const selectedItem = ref({})
+
 
 const headers = [
   {
@@ -54,6 +59,15 @@ const headers = [
                     {{ moment(item.created_at).format("DD MMMM, YYYY") }}
                 </template>
 
+                <template #item.actions="{ item }">
+                    <VBtn color="#C4174F" variant="flat" class="custbtn" @click="selectedItem = item, isDialogVisible = true">
+                        
+                        <span v-if="type == 'under-review'">مراجعة الطلب</span>
+                        <span v-else>عرض</span>
+                    </VBtn>
+
+                </template>
+
                 <!-- pagination -->
                 <template #bottom>
                 
@@ -63,6 +77,12 @@ const headers = [
             </VDataTable>
         </VCardText>
     </VCard>
+    <ViewAdDialog
+      v-model:isDialogVisible="isDialogVisible"
+      v-model:ad="selectedItem"
+
+    />
+
 </template>
 
 

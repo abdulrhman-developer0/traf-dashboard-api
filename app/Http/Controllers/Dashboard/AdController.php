@@ -49,7 +49,7 @@ class AdController extends Controller
             'ads'   => $ads
         ];
 
-        dd($data);
+        //dd($data);
 
         return Inertia::render('ads/index', [
             'data' => $data,
@@ -57,51 +57,18 @@ class AdController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function update(Request $request, Ad $ad)
     {
-        //
+        $request->validate([
+            'status'    => 'required',
+        ]);
+
+        $ad->update($request->only(['status','notes']));
+
+        return back()->with('status', ['type' => 'success', 'action' => 'تم تحديث الإعلان بنجاح', 'text' => '']);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

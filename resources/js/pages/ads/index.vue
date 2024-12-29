@@ -43,6 +43,8 @@ const statsCards = [
 
 <template>
   <Head title="الإعلانات" />  
+  <Alert v-if="$page?.props.flash?.status" :status="$page?.props.flash?.status" />
+
   <section class="admindashboard">
     <VRow class="match-height">
       <VCol cols="12" sm="6" md="4" lg="3" v-for="card in statsCards">
@@ -79,24 +81,24 @@ const statsCards = [
           :touch="false"
         >
           <VWindowItem>
-            <AdsTable :data="data.ads['under-review']"/>
+            <AdsTable :data="data.ads['under-review']" :type="'under-review'" />
             <PaginationLinks :links="data.ads['under-review'].meta.links" />
 
           </VWindowItem>
 
           <VWindowItem>
-            <AdsTable :data="data.ads['waiting']"/>
+            <AdsTable :data="data.ads['waiting']" :type="'waiting'" />
 
           </VWindowItem>
 
 
           <VWindowItem>
-            <AdsTable :data="data.ads['approved']"/>
+            <AdsTable :data="data.ads['approved']" :type="'approved'" />
 
           </VWindowItem>
 
           <VWindowItem>
-            <AdsTable :data="data.ads['rejected']"/>
+            <AdsTable :data="data.ads['rejected']" :type="'rejected'" />
 
           </VWindowItem>
 
