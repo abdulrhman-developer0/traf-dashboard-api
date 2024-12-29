@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Ad extends Model
+class Ad extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     /**
      * Mass assignable attributes.
@@ -16,9 +18,12 @@ class Ad extends Model
      * @var array
      */
     protected $fillable = [
+        'service_provider_id',
         'ad_price_id',
+        'package_id',
         'duration_in_days',
         'total_price',
+        'discount',
         'status',
         'notes',
         'start_date',
@@ -54,8 +59,24 @@ class Ad extends Model
         'waiting',
     ];
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('photo')
+            ->singleFile();
+    }
+
+    public function serviceProvider(): BelongsTo
+    {
+        return $this->belongsTo(ServiceProvider::class);
+    }
+
     public function adPrice(): BelongsTo
     {
         return $this->belongsTo(AdPrice::class);
+    }
+
+    public function package(): BelongsTo
+    {
+        return $this->belongsTo(Package::class);
     }
 }

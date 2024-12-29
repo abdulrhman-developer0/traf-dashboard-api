@@ -16,7 +16,7 @@ class AdController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['index']);
+        $this->middleware('auth:sanctum')->except(['index']);
 
         $this->middleware('account:service-provider')->except(['index']);
     }
@@ -24,15 +24,20 @@ class AdController extends Controller
     public function index()
     {
         $ads = Ad::query()
-            ->whereStatus('approved')
+            // ->whereStatus('approved')
             ->latest()
             ->limit(10)
-            ->get();
+            ->get()
+            ->map(function (AD $ad) {
+                return [
+                    'id'            => $ad->id,
+                    'provider_id'   => $ad->service_provider_id,
+                    'url'           => $ad->getFirstMediaUrl('photo')
+                ];
+            });
 
 
-        return $this->okResponse([
-            'items' => adResource::collection($ads)
-        ], "Ads retrieved successfuly");
+        return $this->okResponse($ads, "Ads retrieved successfuly");
     }
 
     public function store(Request $request)
@@ -48,17 +53,21 @@ class AdController extends Controller
 
         $currentSubscription = $serviceProvider->currentSubscription;
 
-        $adPrice = AdPrice::last();
+        $currentPackage = $currentSubscription->package;
 
-        $adDiscount = $currentSubscription->package->as_siscount;
-        $adDiscount = $adDiscount > 0 ? $adDiscount : 1;
+        $adPrice = AdPrice::latest()->first();
 
-        $totalPrice = ($adP->price * (int)$request->duration_in_days) * (1 - $adDiscount / 100);
+        $adsDiscount = $currentPackage->ads_discount;
+
+        $totalPrice = ($adPrice->price * (int)$request->duration_in_days) * (1 - $adsDiscount / 100);
 
         $ad = Ad::create([
             'service_provider_id'   => $serviceProvider->id,
             'ad_price_id'           => $adPrice->id,
+            'package_id'            => $currentPackage->id,
+            'duration_in_days'      => $request->duration_in_days,
             'total_price'           => $totalPrice,
+            'discount'              => $currentPackage->ads_discount,
         ]);
 
 
@@ -66,7 +75,29 @@ class AdController extends Controller
             ->toMediaCollection('photo');
 
         return $this->createdResponse([
-            'ad' => $ad,
+            'ad_id'     => $ad->id,
+            'status'    => $ad->status
         ], 'Ad created successfuly');
+    }
+
+    public function myAds(Request $request)
+    {
+        $user = Auth::user();
+
+        $serviceProvider = $user->serviceProvider;
+
+        $ads = Ad::whereHas('serviceProvider', fn($q) => $q->where('id', $serviceProvider->id))
+            ->when(
+                $request->has('status'),
+                fn($q) => $q->whereStatus($request->query('status'))
+            )
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        return $this->okResponse([
+            'count' => $ads->count(),
+            'items' => adResource::collection($ads)
+        ], 'My Ads retrived successfuly');
     }
 }
