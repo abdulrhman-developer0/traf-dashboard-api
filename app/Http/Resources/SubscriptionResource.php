@@ -25,6 +25,8 @@ class SubscriptionResource extends JsonResource
                 'id'                => $this->package->id,
                 'name'              => $this->package->name,
                 'duration_in_days'  => $this->package->duration_in_days,
+                'price'             => $this->package->price,
+                'price_after'             => $this->package->price_after,
                 'ads_discount'       => $this->package->ads_discount,
                 'ad_price'          => (AdPrice::latest()->first()?->price) ?? 0,
             ]
