@@ -23,6 +23,7 @@ const emit = defineEmits([
 const form = useForm({
     name: null,
     price: null,
+    price_after: null,
     duration_in_days: null,
     ads_discount: null,
 });
@@ -69,12 +70,14 @@ watch(props, () => {
 
         form.name = props.package.name
         form.price = props.package.price
+        form.price_after = props.package.price_after
         form.duration_in_days = props.package.duration_in_days
         form.ads_discount = props.package.ads_discount
     }
     else {
         form.name = null
         form.price = null
+        form.price_after = null
         form.duration_in_days = null
         form.ads_discount = null
     }
@@ -114,12 +117,21 @@ watch(props, () => {
                         <AppTextField
                             v-model="form.price"
                             type="number"
-                            placeholder="السعر"
+                            placeholder="السعر قبل"
                             prepend-inner-icon="tabler-cash"
                             suffix="ر.س"
                         />
                     </VCol>
                     <VCol cols="6">
+                        <AppTextField
+                            v-model="form.price_after"
+                            type="number"
+                            placeholder="السعر بعد"
+                            prepend-inner-icon="tabler-cash"
+                            suffix="ر.س"
+                        />
+                    </VCol>
+                    <VCol cols="12">
                         <AppTextField
                             v-model="form.duration_in_days"
                             type="number"
