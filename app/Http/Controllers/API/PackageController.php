@@ -13,7 +13,7 @@ class PackageController extends Controller
 
     public function __invoke(Request $request)
     {
-        $packages = Package::get(['id', 'name', 'price', 'duration_in_days']);
+        $packages = Package::get(['id', 'name', 'price', 'price_after', 'duration_in_days', 'ads_discount']);
 
         return $this->okResponse($packages, 'Packages retrieved successfuly');
     }

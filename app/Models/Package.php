@@ -12,9 +12,11 @@ class Package extends Model
     protected $fillable = [
         'name',
         'price',
+        'price_after',
         'duration_in_days',
         'ads_discount'
     ];
+    
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
