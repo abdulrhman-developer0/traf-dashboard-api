@@ -18,6 +18,7 @@ use App\Http\Controllers\Dashboard\ServiceController;
 use App\Http\Controllers\Dashboard\ServiceProviderController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PolicyController;
+use App\Http\Controllers\Dashboard\AdController;
 
 use App\Http\Controllers\Dashboard\UserSettingsController;
 use App\Http\Controllers\Dashboard\UserProfileController;
@@ -61,6 +62,8 @@ Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:das
     Route::get('/payments', [PaymentController::class, 'index']);
 
     Route::resource('/policies', PolicyController::class);
+
+    Route::resource('/ads', AdController::class);
 
 
     Route::resource('my-profile', UserProfileController::class);

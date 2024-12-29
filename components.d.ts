@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AddEditPackageDialog: typeof import('./resources/js/components/dialogs/AddEditPackageDialog.vue')['default']
+    AdsTable: typeof import('./resources/js/components/main/AdsTable.vue')['default']
     Alert: typeof import('./resources/js/components/Alert.vue')['default']
     AppAutocomplete: typeof import('./resources/js/@core/components/app-form-elements/AppAutocomplete.vue')['default']
     AppBarSearch: typeof import('./resources/js/@core/components/AppBarSearch.vue')['default']
@@ -40,7 +41,7 @@ declare module 'vue' {
     ErrorHeader: typeof import('./resources/js/components/ErrorHeader.vue')['default']
     ErrorMessages: typeof import('./resources/js/components/ErrorMessages.vue')['default']
     I18n: typeof import('./resources/js/@core/components/I18n.vue')['default']
-    MainChart: typeof import('./resources/js/components/charts/MainChart.vue')['default']
+    MainChart: typeof import('./resources/js/components/main/MainChart.vue')['default']
     MoreBtn: typeof import('./resources/js/@core/components/MoreBtn.vue')['default']
     Notifications: typeof import('./resources/js/@core/components/Notifications.vue')['default']
     PaginationLinks: typeof import('./resources/js/components/PaginationLinks.vue')['default']

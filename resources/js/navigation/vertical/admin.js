@@ -72,9 +72,9 @@ export default [
     },
     {
         title: 'Ads',
-        to: { name: 'index' },
+        to: { name: 'ads' },
         icon: { icon: 'tabler-speakerphone' },
-        path: '/admin/settings',
+        path: '/ads',
         permission: 'dashboard-dashboard-view'
     },
     

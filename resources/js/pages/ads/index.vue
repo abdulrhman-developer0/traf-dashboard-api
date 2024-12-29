@@ -11,30 +11,30 @@ const props = defineProps({
 
 })
 
-
-const tabs = ['الإستقبال','الإرسال']
+const tabs = ['قيد المراجعة','قيد الإنتظار','اعلانات فعالة','اعلانات مرفوضة']
 const activeTab = ref(0)
+
 
 const statsCards = [
   {
-    title: 'عدد التحويلات',
-    key: 'total_in_payments',
-    icon: 'tabler-credit-card-refund',
+    title: 'عدد الإعلانات',
+    key: 'total_in_ads',
+    icon: 'tabler-ad',
   },
   {
-    title: 'المبلغ الكلي',
-    key: 'in_payments_amount',
-    icon: 'tabler-cash-banknote',
+    title: 'الملبغ الكلي',
+    key: 'in_ads_amount',
+    icon: 'tabler-currency-dollar',
   },
   {
-    title: 'عدد الإرسالات',
-    key: 'total_out_payments',
-    icon: 'tabler-credit-card-pay',
+    title: 'اعلانات اليوم',
+    key: 'in_ads_today',
+    icon: 'tabler-ad',
   },
   {
-    title: 'المبلغ الكلي المرسل',
-    key: 'out_payments_amount',
-    icon: 'tabler-cash-banknote',
+    title: 'مبلغ اليوم',
+    key: 'in_ads_today_amount',
+    icon: 'tabler-currency-dollar',
   },
 ]
 
@@ -42,7 +42,7 @@ const statsCards = [
 </script>
 
 <template>
-  <Head title="الدفع" />  
+  <Head title="الإعلانات" />  
   <section class="admindashboard">
     <VRow class="match-height">
       <VCol cols="12" sm="6" md="4" lg="3" v-for="card in statsCards">
@@ -50,16 +50,12 @@ const statsCards = [
       </VCol>
     </VRow>
 
-    <VRow class="match-height">
+    <VRow>
       <VCol cols="12">
-        <MainChart 
-          :chart="props.data.chart"
-          :mainTitle="'المبلغ الكلي'"
-          :title="'المبلغ الكلي'" 
-          :subtitle="data.stats.year_in_payments_amount+' ر.س'"
-          :year="props.year"
-          :targetRoute="'/payments'"
-        />
+        <VBtn color="#E55175" variant="default" class="addbtn" @click="router.get('/policies/create')" >
+          تعديل الأسعار
+        </VBtn>
+
       </VCol>
     </VRow>
 
@@ -82,6 +78,13 @@ const statsCards = [
           v-model="activeTab"
           :touch="false"
         >
+          <VWindowItem>
+            <AdsTable :data="data.ads"/>
+          </VWindowItem>
+
+          <VWindowItem>
+          </VWindowItem>
+
 
           <VWindowItem>
           </VWindowItem>

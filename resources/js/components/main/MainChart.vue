@@ -12,6 +12,7 @@ const props = defineProps({
   targetRoute: String,
 })
 
+
 const chartColors = {
   line: {
     series1: '#E55175',
@@ -136,7 +137,7 @@ const chartConfig = {
     show: false,
     tickAmount: 5,
     min: 0,
-    max: 10000,
+    max: Math.max(...props.chart)+100,
     labels: {
       style: {
         colors: labelColor,
@@ -208,8 +209,8 @@ const getData = () => {
 }
 
 onMounted(() => {
-    //let date = new Date()
-    year.value = props.year
+  //chartMax.value = getMax()
+  year.value = props.year
 })
 
 </script>

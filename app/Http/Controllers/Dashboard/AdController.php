@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\AdCollection;
 use App\Models\Ad;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AdController extends Controller
 {
@@ -16,7 +17,7 @@ class AdController extends Controller
     {
         $total_in_ads           = Ad::count();
 
-        $in_ads_mount           = Ad::sum('total_price');
+        $in_ads_amount           = Ad::sum('total_price');
 
         $in_ads_today           = Ad::whereDay('created_at', now())->count();
 
@@ -26,7 +27,7 @@ class AdController extends Controller
 
         $stats = [
             'total_in_ads'          => $total_in_ads,
-            'in_ads_mount'          => $in_ads_mount,
+            'in_ads_amount'          => $in_ads_amount,
             'in_ads_today'          => $in_ads_today,
             'in_ads_today_amount'   => $in_ads_today_amount,
         ];
@@ -41,10 +42,14 @@ class AdController extends Controller
             ->paginate(6);
 
         $data = [
-            'title' => 'Ads',
             'stats' => $stats,
             'ads'   => AdCollection::make($ads)
         ];
+
+        return Inertia::render('ads/index', [
+            'data' => $data,
+            'title' => 'Ads'
+        ]);
     }
 
     /**

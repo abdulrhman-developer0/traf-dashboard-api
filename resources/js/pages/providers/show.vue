@@ -54,7 +54,7 @@ const activeTab = ref(0)
       </VCol>
     </VRow>
 
-    <VRow>
+    <VRow class="customTabs">
       <VCol cols="12">
         <VTabs
           v-model="activeTab"
