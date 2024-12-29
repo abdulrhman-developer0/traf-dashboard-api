@@ -24,6 +24,11 @@ class Payment extends Model
         'transaction_reference',
     ];
 
+    protected $casts = [
+        'amount'                => 'float',
+        'refunded_amount'       => 'float',
+    ];
+
     public function booking()
     {
         return $this->belongsTo(Booking::class);

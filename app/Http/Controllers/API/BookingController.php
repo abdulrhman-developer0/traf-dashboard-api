@@ -153,6 +153,8 @@ class BookingController extends Controller
             'status' => "required|in:$allowedStatuses",
         ]);
 
+        $status = $request->status;
+
         $totalBookingCanceledToday = Booking::query()
             ->when(
                 $user->account_type == 'service-provider',
@@ -165,22 +167,27 @@ class BookingController extends Controller
                 $user->account_type == 'client',
                 fn($q) => $q->where('client_id', $user->client->id)
             )
-            ->where('status', 'canceled')
-            ->whereDate('date', now())
+            ->whereDate('canceled_at', now())
             ->count();
 
-            
 
-        if ($booking->status == 'canceled' && $totalBookingCanceledToday >= 1) {
-            return $this->badResponse([
-                'reason'    => 'cancel_limitation'
-            ], "You can't cancel or change the current booking");
-        }
 
-        $booking->status = $request->status;
+        // if ($status == 'canceled' && $totalBookingCanceledToday >= 1) {
+        //     return $this->badResponse([
+        //         'reason'    => 'cancel_limitation_error'
+        //     ], "You can't cancel or change the current booking");
+        // }
+
+
+        $booking->status = $status;
         $booking->save();
 
+
         if ($booking->status == 'canceled') {
+
+            $booking->canceled_at = now();
+            $booking->save();
+
             $targetUser = match ($user->account_type) {
                 'client'            => $booking->service->serviceProvider->user,
                 'service-provider'  => $booking->client->user,
@@ -193,6 +200,7 @@ class BookingController extends Controller
                 'name' => $user->name,
                 'time' => $booking->date->format('h:i A')
             ], 'ar');
+
             $data = [
                 'status' => 'canceled',
                 'date' => $booking->date,
@@ -216,6 +224,33 @@ class BookingController extends Controller
                 $title,
                 $message
             );
+
+            $leftHours = now()->diffInHours($booking->date);
+            // $leftHours = 2;
+
+            $refundPenaltyPercentage = $leftHours < 2
+                ? 100
+                : 10;
+
+                $payment    = $booking->payments;
+
+                $refundedAmount = $payment->amount * (1 - $refundPenaltyPercentage / 100);
+                
+                if ( $refundedAmount > 0 ) {
+
+                    // call refund service here.
+                    // ??
+
+                    $payment->payment_status        = 'refund';
+                    $payment->refunded_amount     = $refundedAmount;
+                    $payment->save();
+                };
+
+                return $this->okResponse([
+                    'amount'                => $payment->amount,
+                    'refunded_amount'       => $refundedAmount,
+                    'penalty_percentage'    => $refundPenaltyPercentage
+                ], 'Booking canceled successfuly');
         }
 
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
