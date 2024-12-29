@@ -58,11 +58,15 @@ class PaymentController extends Controller
             return $actual->sum('amount');
         })->toArray();
 
-        $bookings = [];
+        $bookings  = [];
+        $statuses  = ['paid', 'refund'];
 
-        foreach (Booking::SATUSES as $status) {
+        foreach ($statuses as $status) {
             $paginator = Booking::query()
-                ->whereStatus($status)
+                ->whereHas(
+                    'payments',
+                    fn($q) => $q->where('payment_status', $status)
+                )
                 ->select(['id', 'client_id', 'service_id', 'date', 'status'])
                 ->latest()
                 ->with('client.user', 'service.serviceProvider.user')
@@ -78,8 +82,8 @@ class PaymentController extends Controller
             'bookings'      => $bookings,
         ];
 
-        dd($data);
-        
+        // dd($data);
+
         return Inertia::render('payments/index', [
             'data' => $data,
             'year' => $year,

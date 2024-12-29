@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Payment;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +16,7 @@ return new class extends Migration
             $table->id();
             
             $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade'); 
-            // $table->enum('status', ['pending', 'active', 'expired', 'failed'])->default('pending');
-            $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
+            $table->enum('payment_status', Payment::PAYMENT_STATUSES)->default('pending');
             $table->string('amount');
             $table->string('transaction_reference')->nullable();
             
