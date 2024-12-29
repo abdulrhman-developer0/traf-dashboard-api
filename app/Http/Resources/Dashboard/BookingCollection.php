@@ -34,7 +34,9 @@ class BookingCollection extends ResourceCollection
                     'to'                  => $item->date->addHour()->startOfHour()->format('h:i A'),
                     'date'                => $item->date->format('Y-m-dTH:i'),
                     'status'              => $item->status,
+                    'payment_status'      => $item->payments?->status,
                     'paid_amount'         => $item->payments?->amount,
+                    'refunded_amount'         => $item->payments?->refunded_amount,
                     'created_at'              => $item->created_at,
 
                 ];
