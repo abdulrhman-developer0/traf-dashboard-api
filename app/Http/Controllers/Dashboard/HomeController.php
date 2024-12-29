@@ -20,7 +20,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
 
-        $year = $request->input('year', now());
+        $year = $request->input('year', now()->year);
 
         $users_count = User::where('account_type', '!=', 'admin')->count();
         $clients_count = Client::count();
