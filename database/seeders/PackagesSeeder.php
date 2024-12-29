@@ -24,14 +24,14 @@ class PackagesSeeder extends Seeder
             [
                 'name' => 'باقة 6 شهور',
                 'price' => 75.00,
-                'price_after'   => 15 * (1 - 10 / 100),
+                'price_after'   => 75 * (1 - 10 / 100),
                 'duration_in_days' => 180,
                 "ads_discount"     => 10,
             ],
             [
                 'name' => 'باقة 12 شهر',
                 'price' => 150.00,
-                'price_after'   => 15 * (1 - 15 / 100),
+                'price_after'   => 150 * (1 - 15 / 100),
                 'duration_in_days' => 365,
                 "ads_discount"     => 15,
             ],
