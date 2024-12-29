@@ -15,7 +15,6 @@ class Booking extends Model
     public const SATUSES = [
         'pending',
         'canceled',
-        'refund',
         'confirmed',
         'done'
     ];
