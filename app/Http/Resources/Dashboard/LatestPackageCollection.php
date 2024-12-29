@@ -23,6 +23,7 @@ class LatestPackageCollection extends ResourceCollection
                     'id'                => $item->id,
                     'name'              => $item->name,
                     'price'              => $item->price,
+                    'price_after'        => $item->price_after,
                     'duration_in_days'              => $item->duration_in_days,
                     'ads_discount'                  => $item->ads_discount,
                 ];
