@@ -52,7 +52,9 @@ Route::prefix('auth')->group(function () {
       
         Route::get('/profile', [ProfileController::class, 'data']);
         Route::put('/profile', [ProfileController::class, 'update']);
+
         Route::get('/profile/reports', [ProfileController::class, 'reports']); 
+        
         Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
         Route::get('/profile/{id}', [ProfileController::class, 'dataFor']);
 
