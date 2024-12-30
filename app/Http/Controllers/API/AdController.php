@@ -81,6 +81,7 @@ class AdController extends Controller
         ], 'Ad created successfuly');
     }
 
+
     public function myAds(Request $request)
     {
         $user = Auth::user();
@@ -100,5 +101,52 @@ class AdController extends Controller
             'count' => $ads->count(),
             'items' => adResource::collection($ads)
         ], 'My Ads retrived successfuly');
+    }
+
+    public function payFor(Request $request)
+    {
+        $request->validate([
+            'ad_id'                 => 'required|integer|exists:ads,id',
+            'transaction_id'        => 'required|string|max:255'
+        ]);
+
+        $user = Auth::user();
+
+        $serviceProvider = $user->serviceProvider;
+
+        $ad = Ad::whereHas('serviceProvider', fn($q) => $q->where('id', $serviceProvider->id))
+            ->whereId($request->ad_id)
+            ->first();
+
+        if (! $ad ) {
+            return $this->badResponse([
+                'reason' => 'invalid_id'
+            ], "You not have an Ad with id {$request->ad_id}");
+        }
+
+        if ( in_array($ad->status, ['approved', 'waiting']) ) {
+            return $this->badResponse([
+                'reason' => 'ad_already_paid',
+                'status' => $ad->status,
+            ], "Invalid ad status");
+        }
+
+        if ( $ad->status != 'pending-payment' ) {
+            return $this->badResponse([
+                'reason' => 'ad_not_approved',
+                'status' => $ad->status,
+            ], "Invalid ad status");
+        }
+
+        $ad->transaction_id = $request->transaction_id;
+        $ad->status         = 'approved';
+
+        $ad->save();
+
+        return $this->createdResponse([
+            'ad_id'             => $ad->id,
+            'transaction_id'    => $ad->transaction_id,
+            'status'            => $ad->status
+        ], 'Your ad paid successfuly');
     }
 }

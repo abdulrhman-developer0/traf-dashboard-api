@@ -66,6 +66,7 @@ Route::prefix('auth')->group(function () {
 Route::get('/ads', [AdController::class, 'index']);
 Route::post('/ads', [AdController::class, 'store']);
 Route::get('/my-ads', [AdController::class, 'myAds']);
+Route::post('/my-ads/pay', [AdController::class, 'payFor']);
 
 Route::apiResource('/clients', ClientController::class);
 
