@@ -69,39 +69,39 @@ class AdController extends Controller
 
         $status = $request->status;
 
-        // if (in_array($status, ['rejected', 'pending-payment'])) {
-        //     $targetUser = $ad->serviceProvider->user;
+        if (in_array($status, ['rejected', 'pending-payment'])) {
+            $targetUser = $ad->serviceProvider->user;
 
-        //     $title = match ($status) {
-        //         'rejected'          => 'تم رفض اعلانك',
-        //         'pending-payment'   => 'تم مراجعة اعلانك',
-        //         default             => 'default'
-        //     };
+            $title = match ($status) {
+                'rejected'          => 'تم رفض اعلانك',
+                'pending-payment'   => 'تم مراجعة اعلانك',
+                default             => 'default'
+            };
 
-        //     $message = match ($stats) {
-        //         'rejected'          => 'يرجى مراجعة اسباب الرفض ثم المحاولة مرة اخرة',
-        //         'pending-payment'   => 'تم الموافقة على اعلانك يرجى متابعة عملية الدفع لنشر اعلانك',
-        //         default             => 'default'
-        //     };
+            $message = match ($stats) {
+                'rejected'          => 'يرجى مراجعة اسباب الرفض ثم المحاولة مرة اخرة',
+                'pending-payment'   => 'تم الموافقة على اعلانك يرجى متابعة عملية الدفع لنشر اعلانك',
+                default             => 'default'
+            };
 
-        //     $data = [
-        //         'title'             => $title,
-        //         'message'           => $message,
-        //         'ad_id'             => $ad->id,
-        //         'duration'          => $ad->duration_in_days,
-        //     ];
+            $data = [
+                'title'             => $title,
+                'message'           => $message,
+                'ad_id'             => $ad->id,
+                'duration'          => $ad->duration_in_days,
+            ];
 
-        //     // Notify the target user in the database.
-        //     $targetUser->notify(new DBNotification($data));
+            // Notify the target user in the database.
+            $targetUser->notify(new DBNotification($data));
 
-        //     // Notify the target user via FCM
-        //     app('App\Http\Controllers\API\FcmController')
-        //         ->sendFcmNotification(
-        //             $targetUser->id,
-        //             $title,
-        //             $message
-        //         );
-        // }
+            // Notify the target user via FCM
+            app('App\Http\Controllers\API\FcmController')
+                ->sendFcmNotification(
+                    $targetUser->id,
+                    $title,
+                    $message
+                );
+        }
 
         return back()->with('status', ['type' => 'success', 'action' => 'تم تحديث الإعلان بنجاح', 'text' => '']);
     }
