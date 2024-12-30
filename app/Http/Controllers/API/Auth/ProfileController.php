@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookingResource;
 use App\Http\Resources\UserResource;
 use App\Models\Booking;
 use App\Models\Client;
@@ -138,7 +139,7 @@ class ProfileController extends Controller
         $user       = Auth::user();
         $account    = $user->account();
 
-        $bookings = Booking::whereStatus('confirmed')
+        $bookings = Booking::whereHas('payments')
             ->with(['client.user', 'service.serviceProvider.user', 'payments'])
             ->when($user->isAccount('client'), function ($q) use ($account) {
                 $q->where('client_id', $account->id);
@@ -146,8 +147,13 @@ class ProfileController extends Controller
             ->when($user->isAccount('service-provider'), function ($q) use ($account) {
                 $q->whereHas('service.serviceProvider', fn($q) => $q->where('id', $account->id));
             })
+            ->latest()
+            ->limit(30)
             ->get();
 
-        return $this->okResponse($bookings, 'Profile reports retrieved successfuly.');
+        return $this->okResponse(
+            BookingResource::collection($bookings),
+            'Profile reports retrieved successfuly.'
+        );
     }
 }

@@ -25,6 +25,9 @@ class BookingResource extends JsonResource
             'rating'            => $this->service->serviceProvider->rating,
             'is_personal'       => $this->Service->serviceProvider->is_personal,
             'status'            => $this->status,
+            'payment_status'    =>  $this->payments?->payment_status ?? 'pending',
+            'paid_amount'       => $this->payments?->amount,
+            'refunded_amont'    => $this->payments?->amount,
             'date'              => $this->date->toDatetimeString(),
             'left_time'         => $this->getLeftTime(),
             // $this->status === 'confirmed' &&
