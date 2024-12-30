@@ -21,6 +21,7 @@ class adResource extends JsonResource
             'total_price'           => $this->total_price,
             'discount'              => $this->discount,
             'status'                => $this->status,
+            'notes'                 => $this->notes,
             'start_date'            => $this->start_date?->format('Y-m-d'),
             'end_date'            => $this->end_date?->format('Y-m-d'),
             'created_at'            => $this->created_at->format('Y-m-d')
