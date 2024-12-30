@@ -22,9 +22,9 @@ class adResource extends JsonResource
             'discount'              => $this->discount,
             'status'                => $this->status,
             'notes'                 => $this->notes,
-            'start_date'            => $this->start_date?->format('Y-m-d'),
-            'end_date'            => $this->end_date?->format('Y-m-d'),
-            'created_at'            => $this->created_at->format('Y-m-d')
+            'start_date'            => ($this->start_date ?? now())->format('Y-m-dTH:i'),
+            'end_date'            => ($this->end_date ?? now()->addDay($this->duration_in_days))->format('Y-m-dTH:i'),
+            'created_at'            => $this->created_at->format('Y-m-dTH:i')
         ];
     }
 }

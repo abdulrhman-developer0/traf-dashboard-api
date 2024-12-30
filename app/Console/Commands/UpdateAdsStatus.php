@@ -47,6 +47,6 @@ class UpdateAdsStatus extends Command
             ->limit($waitingAdsLimit)
             ->update([
                 'status' => 'approved'
-            ]));
+            ]);
     }
 }

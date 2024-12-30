@@ -69,6 +69,13 @@ class AdController extends Controller
 
         $status = $request->status;
 
+        if ($status == 'pending-payment') {
+            $ad->update([
+                'start_date' => now(),
+                'end_date'   => now()->addDay($ad->duration_in_days)
+            ]);
+        }
+
         if (in_array($status, ['rejected', 'pending-payment'])) {
             $targetUser = $ad->serviceProvider->user;
 
