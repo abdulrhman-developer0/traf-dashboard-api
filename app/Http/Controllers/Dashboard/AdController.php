@@ -78,7 +78,7 @@ class AdController extends Controller
                 default             => 'default'
             };
 
-            $message = match ($stats) {
+            $message = match ($status) {
                 'rejected'          => 'يرجى مراجعة اسباب الرفض ثم المحاولة مرة اخرة',
                 'pending-payment'   => 'تم الموافقة على اعلانك يرجى متابعة عملية الدفع لنشر اعلانك',
                 default             => 'default'
