@@ -29,10 +29,15 @@ use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\PaytabsController;
 use App\Http\Controllers\Webhooks\PaymobWebhook;
 use App\Http\Controllers\API\FcmController;
-
+use App\Http\Controllers\API\PolicyController;
 use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
+Route::get('policies', [PolicyController::class, 'index']);
+Route::get('policies/{id}', [PolicyController::class, 'show']);
+
 
 Route::prefix('auth')->group(function () {
 
