@@ -55,6 +55,7 @@ declare module 'vue' {
     TheCustomizer: typeof import('./resources/js/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/js/@core/components/ThemeSwitcher.vue')['default']
     TiptapEditor: typeof import('./resources/js/@core/components/TiptapEditor.vue')['default']
+    ViewAdDialog: typeof import('./resources/js/components/dialogs/ViewAdDialog.vue')['default']
     VueApexCharts: typeof import('vue3-apexcharts')['default']
   }
 }

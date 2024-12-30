@@ -31,6 +31,8 @@ class AdCollection extends ResourceCollection
                     'created_at'            => $item->created_at->format('Y-m-d'),
                     'provider_name'         => $item->serviceProvider->user->name,
                     'is_personal'         => $item->serviceProvider->is_personal,
+                    'notes'                 => $item->notes,
+
                 ];
             })
         ];
