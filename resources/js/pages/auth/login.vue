@@ -64,7 +64,6 @@ const isPasswordVisible = ref(false)
             <VCardTitle>
               <RouterLink to="/">
                 <div class="app-logo">
-                  <VNodeRenderer :nodes="themeConfig.app.logo" />
                   <h1 class="app-logo-title">
                     {{ themeConfig.app.title }}
                   </h1>
