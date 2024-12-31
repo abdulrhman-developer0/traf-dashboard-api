@@ -32,7 +32,7 @@ class AdController extends Controller
             ->map(function (AD $ad) {
                 return [
                     'id'            => $ad->id,
-                    'provider_id'   => $ad->service_provider_id,
+                    'user_id'   => $ad->serviceProvider->user->id,
                     'url'           => $ad->getFirstMediaUrl('photo')
                 ];
             });
