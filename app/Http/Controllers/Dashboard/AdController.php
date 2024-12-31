@@ -92,6 +92,7 @@ class AdController extends Controller
             };
 
             $data = [
+                'status'            => $status,
                 'title'             => $title,
                 'message'           => $message,
                 'sent_at'           => now(),
