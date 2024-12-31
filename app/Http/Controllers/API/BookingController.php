@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Enums\ActivityActions;
 use App\Events\PushNotification;
 use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
@@ -126,6 +127,9 @@ class BookingController extends Controller
 
         $booking = Booking::create($bookingData);
 
+
+        activities(ActivityActions::ServiceBooked, 'حجز جديد', "قام $user->name بحجز موعد {$booking->service->name}");
+
         return $this->createdResponse([
             'booking_id' => $booking->id,
             'date'       => $booking->date->toDatetimeString(),
@@ -189,11 +193,14 @@ class BookingController extends Controller
             $booking->canceled_at = now();
             $booking->save();
 
+
             $targetUser = match ($user->account_type) {
                 'client'            => $booking->service->serviceProvider->user,
                 'service-provider'  => $booking->client->user,
                 default             => null
             };
+
+            activities(ActivityActions::ServiceCanceled, 'الغاء حجز', "قام $user->name بالغاء {$booking->service->name} مع $targetUser->name");
 
             $title   = 'تم الغاء الموعد';
             $message = __('mobile.canceled_booking', [
@@ -242,6 +249,8 @@ class BookingController extends Controller
                 // call refund service here.
                 // ??
 
+                activities(ActivityActions::RefundProcessed, 'عملية استرجاع اموال', "تم ارجاع مبلغ $refundedAmount ريال الي {$booking->client->user->name}");
+
                 $payment->payment_status        = 'refund';
                 $payment->refunded_amount     = $refundedAmount;
                 $payment->save();
@@ -276,7 +285,7 @@ class BookingController extends Controller
             ->whereClientId($client->id)
             ->first();
 
-        if (! $booking ) {
+        if (! $booking) {
             return $this->badResponse([
                 'reason' => 'booking_not_created_by_account',
             ], "Can'Booking with id $request->booking_id not created by this account");

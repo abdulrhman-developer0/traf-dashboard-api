@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Enums\ActivityActions;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\UserResource;
@@ -82,6 +83,9 @@ class ClientController extends Controller
         //send mail 
         $user->notify(new TwoFactorNotification());
 
+        $time = now()->format('h:i a');
+        activities(ActivityActions::NewClientRegistered, 'مستخدم جديد', "فام $user->name بالتسجيل في التطبيق في $time");
+
 
 
         // send mobile
@@ -101,7 +105,7 @@ class ClientController extends Controller
 
 
         $data['user'] = UserResource::make($user);
-        
+
         // Return successful creation response
         return $this->createdResponse($data, 'Created Client Successfully');
     }
@@ -130,7 +134,7 @@ class ClientController extends Controller
     public function update(Request $request, string $id)
     {
         return; // disabled this action.
-        
+
         $client = Client::find($id);
 
         if (! $client) {
