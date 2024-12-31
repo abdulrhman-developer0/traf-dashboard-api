@@ -25,7 +25,9 @@ class Booking extends Model
         'reference_id',
         'date',
         'address',
-        'status'
+        'status',
+        'canceled_at',
+        'changed_at'
     ];
 
     protected $casts = [

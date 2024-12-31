@@ -19,7 +19,7 @@ trait IntractsWithAccount
         if (! $this->account_type || !in_array($this->account_type, array_keys($accountTypes) )) {
             return null;
         }
-
+        
         return $this->hasOne($accountTypes[$this->account_type])->first();
     }
 

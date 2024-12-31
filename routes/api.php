@@ -94,6 +94,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::apiResource('/bookings', BookingController::class);
+    Route::patch('/bookings/change', [BookingController::class, 'change']);
 
 
     Route::apiResource('/reviews', ReviewsController::class);

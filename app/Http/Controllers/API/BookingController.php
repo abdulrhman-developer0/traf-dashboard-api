@@ -30,6 +30,7 @@ class BookingController extends Controller
         // this methods are only for client
         $this->middleware('account:client')->only([
             'store',
+            'change'
         ]);
 
         $this->middleware('account:client,service-provider')->only([
@@ -232,28 +233,71 @@ class BookingController extends Controller
                 ? 100
                 : 10;
 
-                $payment    = $booking->payments;
+            $payment    = $booking->payments;
 
-                $refundedAmount = $payment->amount * (1 - $refundPenaltyPercentage / 100);
-                
-                if ( $refundedAmount > 0 ) {
+            $refundedAmount = $payment->amount * (1 - $refundPenaltyPercentage / 100);
 
-                    // call refund service here.
-                    // ??
+            if ($refundedAmount > 0) {
 
-                    $payment->payment_status        = 'refund';
-                    $payment->refunded_amount     = $refundedAmount;
-                    $payment->save();
-                };
+                // call refund service here.
+                // ??
 
-                return $this->okResponse([
-                    'amount'                => $payment->amount,
-                    'refunded_amount'       => $refundedAmount,
-                    'penalty_percentage'    => $refundPenaltyPercentage
-                ], 'Booking canceled successfuly');
+                $payment->payment_status        = 'refund';
+                $payment->refunded_amount     = $refundedAmount;
+                $payment->save();
+            };
+
+            return $this->okResponse([
+                'amount'                => $payment->amount,
+                'refunded_amount'       => $refundedAmount,
+                'penalty_percentage'    => $refundPenaltyPercentage
+            ], 'Booking canceled successfuly');
         }
 
         return $this->okResponse(BookingResource::make($booking), 'Booking updated successfully');
+    }
+
+    public function change(Request $request)
+    {
+        $validated = $request->validate([
+            'booking_id'   => 'required|integer|exists:bookings,id',
+            'date'         => 'required|date',
+            'address'      => 'nullable|string:max:255'
+        ]);
+
+
+        // get user
+        $user                   = Auth::user();
+
+        // get client form account.
+        $client = $user->account();
+
+        $booking = Booking::whereId($request->booking_id)
+            ->whereClientId($client->id)
+            ->first();
+
+        if (! $booking) {
+            return $this->badResponse([
+                'reason' => 'booking_not_created_by_account',
+            ], "Can'Booking with id $request->booking_id not created by this account");
+        }
+
+        // make array of updated data.
+        $bookingData = $request->only(['date', 'address']);
+
+        // inject changed at
+        $bookingData['changed_at'] = now();
+
+        // update the booking data
+        $booking->update($bookingData);
+
+        return $this->createdResponse([
+            'booking_id' => $booking->id,
+            'date'       => $booking->date->toDatetimeString(),
+            'now'        => now()->toDatetimeString(),
+            'address'    => $booking->address,
+            'changed_at' => $booking->changed_at
+        ], 'Booking changed successfully');
     }
 
     public function destroy($id)

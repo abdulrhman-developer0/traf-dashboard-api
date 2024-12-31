@@ -31,7 +31,7 @@ class AuthController extends Controller
         $data = [];
 
         if (! $user->code_verified) {
-            
+
             $user->generateCode();
 
             //send mail 
@@ -60,8 +60,8 @@ class AuthController extends Controller
         //      'code' => $user->code,  // Remove this in production
         //  ]);
 
-        if ( $user->account_type = 'client' || ($user->account_type == 'service-provider' && $user->serviceProvider->status == 'approved') ) {
-        $data['token'] = $user->createToken('api-user-login')->plainTextToken;
+        if ($user->account_type == 'client' || ($user->account_type == 'service-provider' && $user->serviceProvider->status == 'approved')) {
+            $data['token'] = $user->createToken('api-user-login')->plainTextToken;
         }
 
         $data['user'] = UserResource::make($user);
