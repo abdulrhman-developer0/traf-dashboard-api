@@ -110,11 +110,14 @@ const deleteRecord = (id) => {
                 
                 
               </template>
+              <template #no-data>
+                  لا يوجد بيانات
+              </template>
 
             </VDataTable>
           </VCardText>
         </VCard>
-        <PaginationLinks :links="data.clients.meta.links" />
+        <PaginationLinks :data="data.clients.meta" v-if="data.clients.data.items.length" />
       </VCol>
     </VRow>
   </section>

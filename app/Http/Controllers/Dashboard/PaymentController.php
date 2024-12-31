@@ -70,7 +70,7 @@ class PaymentController extends Controller
                 ->select(['id', 'client_id', 'service_id', 'date', 'status'])
                 ->latest()
                 ->with('client.user', 'service.serviceProvider.user')
-                ->paginate(3);;
+                ->paginate(4);
 
             $bookings[$status] = BookingCollection::make($paginator);
         }
@@ -82,7 +82,7 @@ class PaymentController extends Controller
             'bookings'      => $bookings,
         ];
 
-        // dd($data);
+        //dd($data);
 
         return Inertia::render('payments/index', [
             'data' => $data,

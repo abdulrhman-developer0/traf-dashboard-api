@@ -40,7 +40,7 @@ const headers = [
 </script>
 
 <template>
-    <VCard flat class="px-5 tablemaincard">
+    <VCard flat class="px-0 tablemaincard mb-2 mx-2">
         <VCardText class="py-0 px-0">
             <VDataTable
                 :items="data.data.items"
@@ -48,6 +48,7 @@ const headers = [
                 :headers="headers"
                 :items-per-page="100"
                 class="text-no-wrap"
+                locale="ar"
             >
 
 
@@ -72,6 +73,10 @@ const headers = [
                 <template #bottom>
                 
                 
+                </template>
+
+                <template #no-data>
+                  لا يوجد بيانات
                 </template>
 
             </VDataTable>

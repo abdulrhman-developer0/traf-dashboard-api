@@ -94,7 +94,6 @@ const verticalNavAttrs = computed(() => {
 
       <main class="layout-page-content pa-0">
 
-        <!-- Content -->
         <div class="container-xxl d-flex align-items-stretch flex-grow-1 ">
 
           <div class="flex-shrink-1 flex-grow-1 container-p-x container-p-y pa-7 ">
@@ -102,36 +101,21 @@ const verticalNavAttrs = computed(() => {
           </div>
 
           <div class="flex-shrink-1 flex-grow-0 align-self-stretch">
-            <div class="notificationsSidebar pt-4 px-3">
-              <div class="mb-6">
-                <h3>الإشعارات</h3>
-                <VListItem class="border px-1 mt-3 text-center">
-                  لا يوجد اشعارات جديدة
-                </VListItem>
-              </div>
-              
-              <div class="mb-6">
-              <h3>الأنشطة</h3>
-                <VListItem class="border px-1 mt-3 text-center">
-                  لا يوجد أنشطة جديدة
-                </VListItem>
-              </div>
-            </div>
+            <NotificationsAndActivities />
           </div>
 
         </div>
-        <!--/ Content -->
 
       </main>
       
       
 
 
-      <footer class="layout-footer"  v-if="title != 'Messages'">
+      <!--<footer class="layout-footer">
         <div class="footer-content-container">
           <slot name="footer" />
         </div>
-      </footer>
+      </footer>-->
     </div>
     <div
       class="layout-overlay"

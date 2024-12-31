@@ -5,6 +5,8 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n() 
 import "moment/dist/locale/ar"
 moment.locale('ar_SA')
+
+import paymentinimage from '../../../images/payment-in.png'
 const props = defineProps({
   data: Array,
   year: Number,
@@ -84,10 +86,78 @@ const statsCards = [
         >
 
           <VWindowItem>
+            <VRow>
+              <VCol cols="6" v-if="data.bookings['paid'].data.items.length"  v-for="item in data.bookings['paid'].data.items" class="pb-1">
+                <VCard flat class="paymentCard">
+                  <div class="d-flex flex-row gap-4">
+                    <div class="d-flex flex-column">
+                      <img :src="paymentinimage">
+                    </div>
+                    <div class="d-flex flex-column flex-fill gap-2" >
+                      <div class="d-flex flex-row" style="align-items: center;">
+                        <h3 class="mt-1">{{ item.service_name }} <span>{{ moment(item.date).format("DD MMMM, YYYY") }}</span></h3>
+                        <VSpacer/>
+                        <span class="paymentstatus">تمت</span>
+                      </div>
+                      <p class="mb-0">
+                        <span>اسم العميل: </span>
+                        <span class="ml-4 mr-1">{{ item.client_name }}</span>
+                        <span>{{ item.client_phone }}</span>
+                      </p>
+                      <h4>
+                        {{ item.paid_amount }} ر.س
+                      </h4>
+                    </div>
+                  </div>
+                </VCard>
+              </VCol>
+              <VCol cols="12" v-else>
+                <VListItem  class="border px-1 mt-3 text-center">
+                  لا يوجد بيانات
+                </VListItem>
+
+              </VCol>
+            </VRow>
+            <PaginationLinks v-if="data.bookings['paid'].data.items.length" :data="data.bookings['paid'].meta" />
+
 
           </VWindowItem>
 
           <VWindowItem>
+            <VRow>
+              <VCol cols="6" v-if="data.bookings['refund'].data.items.length"  v-for="item in data.bookings['refund'].data.items" class="pb-1">
+                <VCard flat class="paymentCard">
+                  <div class="d-flex flex-row gap-4">
+                    <div class="d-flex flex-column">
+                      <img :src="paymentinimage">
+                    </div>
+                    <div class="d-flex flex-column flex-fill gap-2" >
+                      <div class="d-flex flex-row" style="align-items: center;">
+                        <h3 class="mt-1">{{ item.service_name }} <span>{{ moment(item.date).format("DD MMMM, YYYY") }}</span></h3>
+                        <VSpacer/>
+                        <span class="paymentstatus">تمت</span>
+                      </div>
+                      <p class="mb-0">
+                        <span>اسم العميل: </span>
+                        <span class="ml-4 mr-1">{{ item.client_name }}</span>
+                        <span>{{ item.client_phone }}</span>
+                      </p>
+                      <h4>
+                        {{ item.paid_amount }} ر.س
+                      </h4>
+                    </div>
+                  </div>
+                </VCard>
+              </VCol>
+              <VCol cols="12" v-else>
+                <VListItem  class="border px-1 mt-3 text-center">
+                  لا يوجد بيانات
+                </VListItem>
+
+              </VCol>
+            </VRow>
+            <PaginationLinks v-if="data.bookings['refund'].data.items.length" :data="data.bookings['refund'].meta" />
+
           </VWindowItem>
 
         </VWindow>

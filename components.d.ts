@@ -44,6 +44,7 @@ declare module 'vue' {
     MainChart: typeof import('./resources/js/components/main/MainChart.vue')['default']
     MoreBtn: typeof import('./resources/js/@core/components/MoreBtn.vue')['default']
     Notifications: typeof import('./resources/js/@core/components/Notifications.vue')['default']
+    NotificationsAndActivities: typeof import('./resources/js/components/main/NotificationsAndActivities.vue')['default']
     PaginationLinks: typeof import('./resources/js/components/PaginationLinks.vue')['default']
     ProductDescriptionEditor: typeof import('./resources/js/@core/components/ProductDescriptionEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

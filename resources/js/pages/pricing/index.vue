@@ -101,7 +101,7 @@ const actionReturn = () => {
         </VCard>
       </VCol>
       <VCol cols="12">
-        <PaginationLinks :links="data.packages.meta.links" />
+        <PaginationLinks :data="data.packages.meta" v-if="data.packages.data.items.length" />
 
       </VCol>
     </VRow>

@@ -94,7 +94,7 @@ const props = defineProps({
             
           </VCol>
         </VRow>
-        <PaginationLinks :links="data.services.meta.links" />
+        <PaginationLinks :data="data.services.meta" v-if="data.services.data.items.length" />
       </VCol>
     </VRow>
   </section>

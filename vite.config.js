@@ -10,6 +10,7 @@ import { defineConfig } from 'vite'
 import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
 import svgLoader from 'vite-svg-loader'
+import ar from 'vuetify/lib/locale/ar'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -46,7 +47,11 @@ export default defineConfig({
       styles: {
         configFile: 'resources/styles/variables/_vuetify.scss',
       },
-      autoImport: true
+      autoImport: true,
+      lang: {
+        locales: { ar },
+        current: 'ar',
+      },
     }), // Docs: https://github.com/johncampionjr/vite-plugin-vue-layouts#vite-plugin-vue-layouts
     Layouts({
       layoutsDirs: './resources/js/layouts/',

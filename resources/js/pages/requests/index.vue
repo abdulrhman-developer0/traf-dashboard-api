@@ -149,11 +149,14 @@ const changeStatus = (status,id) => {
                 
                 
               </template>
+              <template #no-data>
+                  لا يوجد بيانات
+              </template>
 
             </VDataTable>
           </VCardText>
         </VCard>
-        <PaginationLinks :links="data.providers.meta.links" />
+        <PaginationLinks :data="data.providers.meta" v-if="data.providers.data.items.length" />
       </VCol>
     </VRow>
   </section>
