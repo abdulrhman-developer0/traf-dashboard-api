@@ -151,11 +151,15 @@ const statsCards = [
                 
                 
               </template>
+              
+              <template #no-data>
+                  لا يوجد بيانات
+              </template>
 
             </VDataTable>
           </VCardText>
         </VCard>
-        <PaginationLinks :links="data.bookings.meta.links" />
+        <PaginationLinks :data="data.bookings.meta" v-if="data.bookings.data.items.length" />
       </VCol>
     </VRow>
   </section>

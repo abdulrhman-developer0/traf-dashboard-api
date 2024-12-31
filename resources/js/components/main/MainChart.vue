@@ -30,7 +30,7 @@ const series = [
   {
     name: props.title,
     type: 'line',
-    data: props.chart,
+    data: props.chart.reverse(),
   },
 ]
 
@@ -122,7 +122,7 @@ const chartConfig = {
       'اكتوبر',
       'نوفمبر',
       'ديسمبر',
-    ],
+    ].reverse(),
     labels: {
       style: {
         colors: labelColor,
@@ -250,7 +250,8 @@ onMounted(() => {
       </template>
     </VCardItem>
 
-    <VCardText class="py-0 " >
+    <VCardItem class="py-0 " >
+      
       <VueApexCharts
         id="index-chart"
         type="line"
@@ -259,7 +260,7 @@ onMounted(() => {
         :series="series"
       />
 
-    </VCardText>
+    </VCardItem>
 
   </VCard>
 </template>

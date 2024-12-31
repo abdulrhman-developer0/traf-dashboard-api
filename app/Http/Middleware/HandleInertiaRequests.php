@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
+use App\Models\Activity;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -41,6 +42,8 @@ class HandleInertiaRequests extends Middleware
                 : null,
             'user.notifications' => $request->user() ? $request->user()->notifications()->orderBy('id','desc')->limit(10)->get() : [],
             'user.photo' => $request->user() ? ($request->user()->student ? $request->user()->student->photo : null) : null,
+            'activities' => Activity::latest()->take(6)->get(),
+            'notifications' => [],
 
             'flash' => [
                 'status'=> session('status')

@@ -38,6 +38,8 @@ class BookingCollection extends ResourceCollection
                     'paid_amount'         => $item->payments?->amount,
                     'refunded_amount'         => $item->payments?->refunded_amount,
                     'created_at'              => $item->created_at,
+                    'client_phone'         => $item->client->phone,
+
 
                 ];
             })

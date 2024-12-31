@@ -39,6 +39,7 @@ const statsCards = [
 ]
 
 
+
 </script>
 
 <template>
@@ -75,30 +76,33 @@ const statsCards = [
           </VTab>
         </VTabs>
       </VCol>
-      <VCol cols="12">
+      <VCol cols="12" class="px-2">
         <VWindow
           v-model="activeTab"
           :touch="false"
         >
-          <VWindowItem>
+          <VWindowItem >
             <AdsTable :data="data.ads['under-review']" :type="'under-review'" />
-            <PaginationLinks :links="data.ads['under-review'].meta.links" />
+            <PaginationLinks :data="data.ads['under-review'].meta" v-if="data.ads['under-review'].data.items.length" />
 
           </VWindowItem>
 
           <VWindowItem>
             <AdsTable :data="data.ads['waiting']" :type="'waiting'" />
+            <PaginationLinks :data="data.ads['waiting'].meta" v-if="data.ads['waiting'].data.items.length" />
 
           </VWindowItem>
 
 
           <VWindowItem>
             <AdsTable :data="data.ads['approved']" :type="'approved'" />
+            <PaginationLinks :data="data.ads['approved'].meta" v-if="data.ads['approved'].data.items.length" />
 
           </VWindowItem>
 
           <VWindowItem>
             <AdsTable :data="data.ads['rejected']" :type="'rejected'" />
+            <PaginationLinks :data="data.ads['rejected'].meta" v-if="data.ads['rejected'].data.items.length" />
 
           </VWindowItem>
 

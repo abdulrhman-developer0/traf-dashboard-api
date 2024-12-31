@@ -249,7 +249,7 @@ onMounted(() => {
       لا يوجد حجوزات لهذا اليوم
     </VListItem>
 
-    <PaginationLinks :links="data.bookings.meta.links" v-if="data.bookings.data.items.length" />
+    <PaginationLinks :data="data.bookings.meta" v-if="data.bookings.data.items.length" />
 
   </section>
 </template>

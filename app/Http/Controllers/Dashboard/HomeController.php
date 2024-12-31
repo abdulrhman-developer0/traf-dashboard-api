@@ -89,6 +89,8 @@ class HomeController extends Controller
             'bookings' => LatestBookingsCollection::make($bookings_paginated),
         ];
 
+        //dd($data['bookings']);
+
         return Inertia::render('index', [
             'data' => $data,
             'year' => $year,
