@@ -94,8 +94,9 @@ class AdController extends Controller
             $data = [
                 'title'             => $title,
                 'message'           => $message,
+                'sent_at'           => now(),
                 'ad_id'             => $ad->id,
-                'duration'          => $ad->duration_in_days,
+                'user'              => null,
             ];
 
             // Notify the target user in the database.
