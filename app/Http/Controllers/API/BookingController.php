@@ -276,10 +276,19 @@ class BookingController extends Controller
             ->whereClientId($client->id)
             ->first();
 
-        if (! $booking) {
+        if (! $booking ) {
             return $this->badResponse([
                 'reason' => 'booking_not_created_by_account',
             ], "Can'Booking with id $request->booking_id not created by this account");
+        }
+
+        if (now()->diffInHours($booking->date) < 2) {
+            return $this->badResponse(
+                [
+                    'reason' => 'booking_too_close',
+                ],
+                "Cannot modify booking with ID $request->booking_id because it is within 2 hours of the scheduled time."
+            );
         }
 
         // make array of updated data.

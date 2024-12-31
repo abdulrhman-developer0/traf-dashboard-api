@@ -60,9 +60,9 @@ class AuthController extends Controller
         //      'code' => $user->code,  // Remove this in production
         //  ]);
 
-        if ($user->account_type == 'client' || ($user->account_type == 'service-provider' && $user->serviceProvider->status == 'approved')) {
+        // if ($user->account_type == 'client' || ($user->account_type == 'service-provider' && $user->serviceProvider->status == 'approved')) {
             $data['token'] = $user->createToken('api-user-login')->plainTextToken;
-        }
+        // }
 
         $data['user'] = UserResource::make($user);
 

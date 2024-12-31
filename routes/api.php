@@ -93,8 +93,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/workers/{workerId}', [WorkerController::class, 'destroy']);
 
 
-    Route::apiResource('/bookings', BookingController::class);
     Route::patch('/bookings/change', [BookingController::class, 'change']);
+    Route::apiResource('/bookings', BookingController::class);
 
 
     Route::apiResource('/reviews', ReviewsController::class);
