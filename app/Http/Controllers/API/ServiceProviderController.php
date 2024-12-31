@@ -9,10 +9,12 @@ use App\Http\Resources\WorkerResource;
 use App\Models\ServiceProvider;
 use App\Models\User;
 use App\Models\Worker;
+use App\Notifications\JoinRequestNotification;
 use App\Notifications\TwoFactorNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class ServiceProviderController extends Controller
 {
@@ -184,6 +186,11 @@ class ServiceProviderController extends Controller
 
         //send mail 
         $user->notify(new TwoFactorNotification());
+
+        Notification::send(
+            User::whereAccountType('admin')->get(),
+            new JoinRequestNotification($user)
+        );
 
 
 

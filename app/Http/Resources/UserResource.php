@@ -26,6 +26,7 @@ class UserResource extends JsonResource
             'fcm_token'         => $this->fcm_token,
             'account_id'        => $account?->id,
             'type'              => $this->account_type,
+            'status'            => $account->status ?? 'approved',
             'photo'             => $account->getFirstMediaUrl('photo'),
             'name'              => $this->name,
             'job'               => $account->job,

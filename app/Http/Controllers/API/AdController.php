@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\adResource;
 use App\Models\Ad;
 use App\Models\AdPrice;
+use App\Models\User;
+use App\Notifications\NewAdCreatedNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class AdController extends Controller
 {
@@ -74,6 +77,11 @@ class AdController extends Controller
 
         $ad->addMedia($request->photo)
             ->toMediaCollection('photo');
+        
+            Notification::send(
+                User::whereAccountType('admin')->get(),
+                new NewAdCreatedNotification($ad)
+            );
 
         return $this->createdResponse([
             'ad_id'     => $ad->id,
