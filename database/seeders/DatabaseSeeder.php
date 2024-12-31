@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
         // production seeders
         $this->call(PackagesSeeder::class);
 
+        $this->call(ActivitiesForTestingSeeder::class);
+
         // $this->call(CitySeeder::class);
         $this->call(ClientSeeder::class);
         $this->call(ServiceProviderSeeder::class);
