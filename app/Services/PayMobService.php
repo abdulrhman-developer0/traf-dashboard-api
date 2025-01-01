@@ -15,7 +15,7 @@ class PayMobService
     public function __construct()
     {
         $this->apiKey = config('services.paymob.api_key');
-        $this->baseUrl = 'https://accept.paymob.com/api';
+        $this->baseUrl = 'https://ksa.paymob.com/api';
         $this->integrationId = config('services.paymob.integration_id');
         $this->hmacSecret = config('services.paymob.hmac_secret');
     }
@@ -29,6 +29,8 @@ class PayMobService
      */
     public function createPaymentOrder($data)
     {
+        //dd($this->apiKey);
+
         try {
             
             // Step 1: Authentication Request
