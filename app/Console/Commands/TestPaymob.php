@@ -29,15 +29,17 @@ class TestPaymob extends Command
         $paymob = new PayMobService;
 
         $response = $paymob->createPaymentOrder([
+            'currency'  => 'SAR',
             'amount'    => 15 *100,
             'order_id'  => 22,
             'customer'  => [
                 'first_name' => 'Abdulrhman',
                 'last_name'  => 'Ahmed',
-                'phone'      => 'EGP'
+                'email'      => 'test@gmail.com',
+                'phone'      => '01508373405'
             ]
         ]);
 
-        dd($response);
+        dd($response['payment_url']);
     }
 }

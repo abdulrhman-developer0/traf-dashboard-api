@@ -39,7 +39,6 @@ class PayMobService
             ])->throw()->json();
 
             $authToken = $authResponse['token'];
-            dd($authToken);
 
             // Step 2: Order Registration
             $orderResponse = Http::withToken($authToken)
