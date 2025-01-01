@@ -20,6 +20,12 @@ const resolvActivityIcon = (act) => {
 
 }
 
+const resolvNotificationIcon = (type) => {
+    if(type == 'App\\Notifications\\NewAdCreatedNotification') return 'tabler-speakerphone'
+    if(type == 'App\\Notifications\\JoinRequestNotification') return 'tabler-user-plus'
+
+}
+
 </script>
 
 <template>
@@ -27,7 +33,24 @@ const resolvActivityIcon = (act) => {
         <div class="mb-6">
         <h3>الإشعارات</h3>
             <VList v-if="notifications.length">
+                <VListItem v-for="item in notifications">
+                    
+                    <VListItemTitle>
+                        {{ item.data.title }}
+                    </VListItemTitle>
+                    <VListItemTitle class="secondTitle">
+                        {{ item.data.description }}
+                    </VListItemTitle>
+                    <VListItemSubtitle>
+                        {{ moment(item.created_at).fromNow() }}
+                    </VListItemSubtitle>
 
+                    <template #append>
+                        <VListItemAction start>
+                            <VIcon :icon="resolvNotificationIcon(item.type)" size="20"  />
+                        </VListItemAction>
+                    </template>
+                </VListItem>
             </VList>
             <VListItem v-else class="border px-1 mt-3 text-center">
                 لا يوجد اشعارات جديدة

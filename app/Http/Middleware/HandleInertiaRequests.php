@@ -40,10 +40,9 @@ class HandleInertiaRequests extends Middleware
             'user' => fn () => auth()->user()
                 ? auth()->user()->only('id', 'name', 'email')
                 : null,
-            'user.notifications' => $request->user() ? $request->user()->notifications()->orderBy('id','desc')->limit(10)->get() : [],
             'user.photo' => $request->user() ? ($request->user()->student ? $request->user()->student->photo : null) : null,
-            'activities' => Activity::latest()->take(6)->get(),
-            'notifications' => [],
+            'activities' => Activity::latest()->take(5)->get(),
+            'notifications' => $request->user() ? $request->user()->notifications()->latest()->limit(5)->get() : [],
 
             'flash' => [
                 'status'=> session('status')
