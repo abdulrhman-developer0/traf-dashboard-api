@@ -30,12 +30,14 @@ class PayMobService
     public function createPaymentOrder($data)
     {
         try {
+            
             // Step 1: Authentication Request
             $authResponse = Http::post($this->baseUrl . '/auth/tokens', [
                 'api_key' => $this->apiKey
             ])->throw()->json();
 
             $authToken = $authResponse['token'];
+            dd($authToken);
 
             // Step 2: Order Registration
             $orderResponse = Http::withToken($authToken)
