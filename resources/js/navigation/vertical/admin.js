@@ -64,19 +64,20 @@ export default [
         permission: 'dashboard-dashboard-view'
     },
     {
-        title: 'Polices',
-        to: { name: 'policies' },
-        icon: { icon: 'tabler-license' },
-        path: '/policies',
-        permission: 'dashboard-dashboard-view'
-    },
-    {
         title: 'Ads',
         to: { name: 'ads' },
         icon: { icon: 'tabler-speakerphone' },
         path: '/ads',
         permission: 'dashboard-dashboard-view'
     },
+    {
+        title: 'Polices',
+        to: { name: 'policies' },
+        icon: { icon: 'tabler-license' },
+        path: '/policies',
+        permission: 'dashboard-dashboard-view'
+    },
+    
     
   ]
   
