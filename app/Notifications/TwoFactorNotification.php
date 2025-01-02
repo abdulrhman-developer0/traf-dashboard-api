@@ -35,10 +35,7 @@ class TwoFactorNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('رسالة التحقق بخطوتين')
-                    ->line('كود التحقق الخاص بك هو'.$notifiable->code)
-                    ->action('Notification Action', url('/'))
-                    ->line('!شكرا لاستخدامكم الابليكيشن الخاص بنا');
+            ->line("مرحبا $notifiable->name رمز التحقق الخاص بك هو $notifiable->code");
     }
 
     /**
