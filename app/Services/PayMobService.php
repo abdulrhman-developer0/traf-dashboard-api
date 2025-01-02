@@ -73,7 +73,7 @@ class PayMobService
 
             return [
                 'id' => $orderResponse['id'],
-                'payment_url' => "https://accept.paymob.com/iframe/" . $paymentKeyResponse['token'],
+                'payment_url' => "https://ksa.paymob.com/iframe/" . $paymentKeyResponse['token'],
                 'token'       => $paymentKeyResponse['token']
             ];
         } catch (\Exception $e) {

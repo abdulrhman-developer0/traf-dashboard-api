@@ -25,6 +25,8 @@ class ServiceProvider extends Model implements HasMedia
         'rating',
         'area',
         'city',
+        'status',
+        'rejection_reason'
     ];
 
     protected $casts = [
