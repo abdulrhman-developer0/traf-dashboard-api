@@ -29,14 +29,17 @@ if (!function_exists('isTimeAvailable')) {
         // Check if the time is available
         foreach ($schedules as $schedule) {
             $existingBooking = DB::table('bookings')
-                ->where('service_id', $serviceId)
                 ->whereStatus('confirmed')
-                ->where('date', $datetime)
                 ->whereNotIn('id', $ignoredIds)
-                ->when(request()->has('reference_id'), fn($q) => $q->where('reference_id', request()->query('reference_id') ))
+                ->where(function ($query) use ($serviceId) {
+                    $query
+                        ->where('service_id', $serviceId)
+                        ->orWhere('reference_id', request()->query('reference_id'));
+                })
+                ->where('date', $datetime)
                 ->first();
 
-                dd($existingBooking->toArray());
+            dd($existingBooking->toArray());
 
             // dd($existingBooking);
 
