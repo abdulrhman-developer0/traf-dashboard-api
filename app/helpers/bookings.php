@@ -31,12 +31,13 @@ if (!function_exists('isTimeAvailable')) {
             $existingBooking = DB::table('bookings')
                 ->whereStatus('confirmed')
                 ->whereNotIn('id', $ignoredIds)
-                ->where(function ($query) use ($serviceId) {
-                    $query
-                        ->where('service_id', $serviceId)
-                        ->orWhere('reference_id', request()->query('reference_id'));
-                })
+                ->where('service_id', $serviceId)
                 ->where('date', $datetime)
+                ->when(
+                    request()->has('reference_id'),
+                    fn($query) => $query->Where('reference_id', request()->query('reference_id'))
+                )
+                ->latest()
                 ->first();
 
             dd($existingBooking->toArray());
