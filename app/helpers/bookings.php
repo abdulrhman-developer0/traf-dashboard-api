@@ -33,6 +33,7 @@ if (!function_exists('isTimeAvailable')) {
                 ->whereStatus('confirmed')
                 ->where('date', $datetime)
                 ->whereNotIn('id', $ignoredIds)
+                ->when(request()->has('reference_id'), fn($q) => $q->where('reference_id', request()->query('reference_id') ))
                 ->first();
 
             // dd($existingBooking);
