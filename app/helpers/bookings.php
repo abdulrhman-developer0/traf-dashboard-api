@@ -22,8 +22,6 @@ if (!function_exists('isTimeAvailable')) {
             ->where('end_date', '>=', $datetime)
             ->get();
 
-            dd($schedules->toArray(), request()->query() );
-
         // ignored ids
         $ignoredIds = [];
         // dd($schedules->toArray());
@@ -37,6 +35,8 @@ if (!function_exists('isTimeAvailable')) {
                 ->whereNotIn('id', $ignoredIds)
                 ->when(request()->has('reference_id'), fn($q) => $q->where('reference_id', request()->query('reference_id') ))
                 ->first();
+
+                dd($existingBooking->toArray());
 
             // dd($existingBooking);
 
