@@ -40,8 +40,6 @@ if (!function_exists('isTimeAvailable')) {
                 ->latest()
                 ->first();
 
-            dd($existingBooking->toArray());
-
             // dd($existingBooking);
 
             if (!$existingBooking) {
