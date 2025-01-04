@@ -22,7 +22,7 @@ if (!function_exists('isTimeAvailable')) {
             ->where('end_date', '>=', $datetime)
             ->get();
 
-            dd($schedules, request()->query() );
+            dd($schedules->toArray(), request()->query() );
 
         // ignored ids
         $ignoredIds = [];
