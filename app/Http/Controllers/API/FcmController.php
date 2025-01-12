@@ -37,7 +37,7 @@ class FcmController extends Controller
         $description = $body;
         $projectId = 'traf-e54b9'; # INSERT COPIED PROJECT ID
 
-        $credentialsFilePath = Storage::path('json/traf-e54b9-firebase-adminsdk-tfa1j-7be5db0f85.json');
+        $credentialsFilePath = Storage::path('json/traf-e54b9-firebase-adminsdk-tfa1j-5b8b0b6030.json');
         $client = new GoogleClient();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
