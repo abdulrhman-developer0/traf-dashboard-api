@@ -29,6 +29,7 @@ class FcmController extends Controller
         $user = \App\Models\User::find($user_id);
         $fcm = $user->fcm_token;
         // $fcm = 'fXLzfgZsS3ayB3MXY3PvPa:APA91bFfllla1yUDMFZwot6CLTY0Cf4orNI-SDLxTpcWnMTMK8ndbWmE2xyeOG4f7I2ARRnH64A6aSR3e5TrnRzunDX2lDmFldbWTGSukAMKVCUP1lBEmJw';
+        dd($user);
 
         if (!$fcm) {
             return response()->json(['message' => 'User does not have a device token'], 400);
