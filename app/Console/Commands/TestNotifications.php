@@ -46,14 +46,14 @@ class TestNotifications extends Command
         $firebaseToken = $user->fcm_token;
         $firebaseToken = 'fXLzfgZsS3ayB3MXY3PvPa:APA91bFfllla1yUDMFZwot6CLTY0Cf4orNI-SDLxTpcWnMTMK8ndbWmE2xyeOG4f7I2ARRnH64A6aSR3e5TrnRzunDX2lDmFldbWTGSukAMKVCUP1lBEmJw';
 
-        $this->send($firebaseToken, 'Test tile', 'Is here', 'Message', 1);
+        // $this->send($firebaseToken, 'Test tile', 'Is here', 'Message', 1);
 
-        // app('App\Http\Controllers\API\FcmController')
-        //     ->sendFcmNotification(
-        //         $user->id,
-        //         "Test",
-        //         "Body"
-        //     );
+        app('App\Http\Controllers\API\FcmController')
+            ->sendFcmNotification(
+                $user->id,
+                "Test",
+                "Body"
+            );
     }
 
     public static function send($fcm, $title, $body, $type, $id)
