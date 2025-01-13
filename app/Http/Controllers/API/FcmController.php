@@ -33,6 +33,15 @@ class FcmController extends Controller
             return response()->json(['message' => 'User does not have a device token'], 400);
         }
 
+        // dd(
+        //     [
+        //         $title,
+
+        //         $body,
+        //         $fcm
+        //     ]
+        // );
+
         $title = $title;
         $description = $body;
         $projectId = 'traf-e54b9'; # INSERT COPIED PROJECT ID
@@ -51,6 +60,7 @@ class FcmController extends Controller
             'Content-Type: application/json'
         ];
 
+        
         $data = [
             "message" => [
                 "token" => $fcm,

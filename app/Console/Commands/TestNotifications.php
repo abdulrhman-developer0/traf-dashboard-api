@@ -8,6 +8,7 @@ use App\Events\SendNotification;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Notifications\DBNotification;
+use Illuminate\Support\Facades\Storage;
 
 class TestNotifications extends Command
 {
@@ -43,20 +44,28 @@ class TestNotifications extends Command
 
         $user = \App\Models\User::firstWhere('id', $this->argument('user_id'));
         $firebaseToken = $user->fcm_token;
+        $firebaseToken = 'fXLzfgZsS3ayB3MXY3PvPa:APA91bFfllla1yUDMFZwot6CLTY0Cf4orNI-SDLxTpcWnMTMK8ndbWmE2xyeOG4f7I2ARRnH64A6aSR3e5TrnRzunDX2lDmFldbWTGSukAMKVCUP1lBEmJw';
 
         $this->send($firebaseToken, 'Test tile', 'Is here', 'Message', 1);
+
+        // app('App\Http\Controllers\API\FcmController')
+        //     ->sendFcmNotification(
+        //         $user->id,
+        //         "Test",
+        //         "Body"
+        //     );
     }
 
     public static function send($fcm, $title, $body, $type, $id)
     {
 
-        $credentialsFilePath = public_path('json/traf-e54b9-firebase-adminsdk-tfa1j-47937aae94.json');
+        $credentialsFilePath = Storage::path('json/traf-e54b9-firebase-adminsdk-tfa1j-5b8b0b6030.json');
         $client = new \Google_Client();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
         $client->refreshTokenWithAssertion();
         $token = $client->getAccessToken();
-
+        
         $access_token = $token['access_token'];
 
         $headers = [
@@ -80,7 +89,7 @@ class TestNotifications extends Command
         $payload = json_encode($data);
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/v1/projects/newsapp-ba299/messages:send");
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/v1/projects/traf-e54b9/messages:send");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -92,15 +101,12 @@ class TestNotifications extends Command
         curl_close($ch);
 
         if ($err) {
-            echo $err;
+            dd($err);
             /*return response()->json([
                 'message' => 'Curl Error: ' . $err
             ], 500);*/
         } else {
-            return response()->json([
-                'message' => 'Notification has been sent',
-                'response' => json_decode($response, true)
-            ]);
+            dd(json_decode($response, true));
         }
     }
 }
