@@ -48,11 +48,9 @@ class BookingReminderCommand extends Command
                 )
             );
 
-            // if (! in_array($minutes, [15, 30, 60, 120])) {
-            //     continue;
-            // }
-
-            dd($minutes);
+            if (! in_array($minutes, [15, 30, 60, 120])) {
+                continue;
+            }
 
             // notify the (client + provider)
             foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $targetUser) {
