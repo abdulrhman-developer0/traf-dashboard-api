@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Ad;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateAdsStatus extends Command
 {
@@ -40,7 +41,7 @@ class UpdateAdsStatus extends Command
             ? $activeAdsLimit - $activeAdsLimit
             : $waitingAdsLimit;
 
-            // activate new ads from waiting list
+        // activate new ads from waiting list
         Ad::whereStatus('waiting')
             ->where('end_date', '>', now())
             ->latest()
@@ -48,5 +49,7 @@ class UpdateAdsStatus extends Command
             ->update([
                 'status' => 'approved'
             ]);
+
+            Log::info("Update ads status proccessed");
     }
 }
