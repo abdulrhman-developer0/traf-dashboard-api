@@ -34,15 +34,29 @@ class BookingReminderCommand extends Command
     {
         $bookings =  Booking::query()
             ->whereStatus('confirmed')
-            ->whereBetween('date', [now(),  now()->addMinute(30)])
-            ->orWhereBetween('date', [now(),  now()->addMinute(60)])
+            // ->whereBetween('date', [now()->startOfDay(),  now()->endOfDay()])
+            // ->where('date', '>=', now())
+            ->orderByDesc('date')
             ->get();
 
         foreach ($bookings as $booking) {
 
+            $minutes = max(
+                0,
+                round(
+                    now()->diffInMinutes($booking->date)
+                )
+            );
+
+            if (! in_array($minutes, [15, 30, 60, 120])) {
+                continue;
+            }
+
+            dd($minutes);
+
             // notify the (client + provider)
             foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $targetUser) {
-                if (! $targetUser->fcm_token ) continue;
+                if (! $targetUser->fcm_token) continue;
 
                 $user = match ($targetUser->account_type) {
                     'client'            => $booking->client->user,
