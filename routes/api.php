@@ -35,7 +35,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/cron', function () {
+Route::post('/cron', function () {
     return response()->json([
         'message' => 'Cron running successfuly.'
     ]);
