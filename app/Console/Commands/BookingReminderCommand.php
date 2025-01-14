@@ -64,8 +64,8 @@ class BookingReminderCommand extends Command
                     'title' => $title,
                     'message' => $message,
                     'user' => [
-                        'id' => $user->id,
-                        'account_id' => $user->account()->id,
+                        'id' => (int) $user->id,
+                        'account_id' => (int) $user->account()->id,
                         'name' => $user->name
                     ]
                 ];

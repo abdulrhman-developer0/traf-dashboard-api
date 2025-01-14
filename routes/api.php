@@ -32,10 +32,16 @@ use App\Http\Controllers\API\FcmController;
 use App\Http\Controllers\API\PolicyController;
 use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/cron', function () {
+
+    Artisan::call('app:booking-reminder');
+
+    Artisan::call('app:update-ads-status');
+
     return response()->json([
         'message' => 'Cron running successfuly.'
     ]);
