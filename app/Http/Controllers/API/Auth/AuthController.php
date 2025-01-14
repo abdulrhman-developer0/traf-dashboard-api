@@ -42,6 +42,12 @@ class AuthController extends Controller
             }
         }
 
+        if ($user->isAccount('service-provider') && $user->account()->status != 'approved') {
+            return $this->badResponse([
+                'reason' => 'account_not_approved',
+            ], "حسابك قيد المراجعة من قبل المسؤل ");
+        }
+
 
 
 
@@ -61,7 +67,7 @@ class AuthController extends Controller
         //  ]);
 
         // if ($user->account_type == 'client' || ($user->account_type == 'service-provider' && $user->serviceProvider->status == 'approved')) {
-            $data['token'] = $user->createToken('api-user-login')->plainTextToken;
+        $data['token'] = $user->createToken('api-user-login')->plainTextToken;
         // }
 
         $data['user'] = UserResource::make($user);
