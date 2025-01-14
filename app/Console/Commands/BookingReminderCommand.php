@@ -34,8 +34,8 @@ class BookingReminderCommand extends Command
     {
         $bookings =  Booking::query()
             ->whereStatus('confirmed')
-            // ->whereBetween('date', [now()->startOfDay(),  now()->endOfDay()])
-            // ->where('date', '>=', now())
+            ->whereBetween('date', [now()->startOfDay(),  now()->endOfDay()])
+            ->where('date', '>=', now())
             ->orderByDesc('date')
             ->get();
 
@@ -48,9 +48,9 @@ class BookingReminderCommand extends Command
                 )
             );
 
-            if (! in_array($minutes, [15, 30, 60, 120])) {
-                continue;
-            }
+            // if (! in_array($minutes, [15, 30, 60, 120])) {
+            //     continue;
+            // }
 
             dd($minutes);
 
