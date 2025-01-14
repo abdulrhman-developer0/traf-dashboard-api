@@ -91,9 +91,9 @@ class PaymentController extends Controller
                 'title' => $title,
                 'message' => $message,
                 'user' => [
-                    'id' => $user->id,
-                    'account_id' => $user->account()->id,
-                    'name' => $user->name
+                    'id'         => (int) $user->id,
+                    'account_id' =>  (int) $user->account()->id,
+                    'name'       => $user->name
                 ]
             ];
 
