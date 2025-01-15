@@ -53,19 +53,25 @@ class BookingReminderCommand extends Command
             }
 
             // notify the (client + provider)
-            foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $targetUser) {
-                if (! $targetUser->fcm_token) continue;
+            foreach ([$booking->client->user, $booking->service->serviceProvider->user] as $user) {
+                if (! $user->fcm_token) continue;
 
-                $user = match ($targetUser->account_type) {
+                $targetUser = match ($user->account_type) {
                     'client'            => $booking->client->user,
                     'service-provider'  => $booking->service->serviceProvider->user,
                     default             => null
                 };
 
+                $otherUser = match ($targetUser->account_type) {
+                    'client'            => $booking->service->serviceProvider->user,
+                    'service-provider'  => $booking->client->user,
+                    default             => null
+                };
+
                 $title = 'تذكير';
-                $message = $message = __('mobile.confirmed_booking', [
+                $message = __('mobile.reminding_booking', [
                     'service_name' => $booking->service->name,
-                    'name' => $user->name,
+                    'name' => $otherUser->name,
                     'time' => $booking->date->format('h:i A')
                 ], 'ar');;
 
@@ -76,9 +82,9 @@ class BookingReminderCommand extends Command
                     'title' => $title,
                     'message' => $message,
                     'user' => [
-                        'id' => (int) $user->id,
-                        'account_id' => (int) $user->account()->id,
-                        'name' => $user->name
+                        'id' => (int) $otherUser->id,
+                        'account_id' => (int) $otherUser->account()->id,
+                        'name' => $otherUser->name
                     ]
                 ];
 
