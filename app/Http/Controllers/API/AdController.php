@@ -40,6 +40,8 @@ class AdController extends Controller
                     'status'        => $ad->status,
                     'duration_in_days' => $ad->duration_in_days,
                     'created_at'       => $ad->created_at,
+                    'start_date'       => $ad->start_date,
+                    'end_date'       => $ad->end_date,
                 ];
             });
 
