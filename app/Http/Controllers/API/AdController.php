@@ -36,7 +36,10 @@ class AdController extends Controller
                 return [
                     'id'            => $ad->id,
                     'user_id'   => $ad->serviceProvider->user->id,
-                    'url'           => $ad->getFirstMediaUrl('photo')
+                    'url'           => $ad->getFirstMediaUrl('photo'),
+                    'status'        => $ad->status,
+                    'duration_in_days' => $ad->duration_in_days,
+                    'created_at'       => $ad->created_at,
                 ];
             });
 
