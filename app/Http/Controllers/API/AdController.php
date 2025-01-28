@@ -29,6 +29,7 @@ class AdController extends Controller
     {
         $ads = Ad::query()
             ->whereStatus('approved')
+            ->where('end_date', '>',  now())
             ->latest()
             ->limit(10)
             ->get()
