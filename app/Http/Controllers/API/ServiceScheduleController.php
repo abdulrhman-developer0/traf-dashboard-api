@@ -308,8 +308,9 @@ class ServiceScheduleController extends Controller
             }
         }
 
+        $schedule->excludedDates()->delete();
+        
         if (! empty($excludedDates)) {
-            $schedule->excludedDates()->delete();
             $schedule->excludedDates()->createMany($excludedDates);
         }
 
