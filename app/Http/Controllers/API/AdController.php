@@ -29,7 +29,7 @@ class AdController extends Controller
     {
         $ads = Ad::query()
             ->whereStatus('approved')
-            // ->where('end_date', '>',  now())
+            ->where('end_date', '>',  now())
             ->latest()
             ->limit(10)
             ->get()
@@ -83,11 +83,11 @@ class AdController extends Controller
 
         $ad->addMedia($request->photo)
             ->toMediaCollection('photo');
-        
-            Notification::send(
-                User::whereAccountType('admin')->get(),
-                new NewAdCreatedNotification($ad)
-            );
+
+        Notification::send(
+            User::whereAccountType('admin')->get(),
+            new NewAdCreatedNotification($ad)
+        );
 
         return $this->createdResponse([
             'ad_id'     => $ad->id,
@@ -132,20 +132,20 @@ class AdController extends Controller
             ->whereId($request->ad_id)
             ->first();
 
-        if (! $ad ) {
+        if (! $ad) {
             return $this->badResponse([
                 'reason' => 'invalid_id'
             ], "You not have an Ad with id {$request->ad_id}");
         }
 
-        if ( in_array($ad->status, ['approved', 'waiting']) ) {
+        if (in_array($ad->status, ['approved', 'waiting'])) {
             return $this->badResponse([
                 'reason' => 'ad_already_paid',
                 'status' => $ad->status,
             ], "Invalid ad status");
         }
 
-        if ( $ad->status != 'pending-payment' ) {
+        if ($ad->status != 'pending-payment') {
             return $this->badResponse([
                 'reason' => 'ad_not_approved',
                 'status' => $ad->status,

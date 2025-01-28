@@ -28,17 +28,18 @@ class UpdateAdsStatus extends Command
     public function handle()
     {
 
-
+        //  The maxmum number of active ads in sametime.
         $activeAdsLimit  = 10;
 
+        //  The maxmum number of  ads in waiting list.
         $waitingAdsLimit = 10;
 
-        $actualActivAds = Ad::where('end_date', '>', now())
-            ->whereStatus('approved')
+        $actualActivAds = Ad::whereStatus('approved')
+            ->where('end_date', '>', now()) // Not ended
             ->count();
 
         $waitingAdsLimit = $actualActivAds < $activeAdsLimit
-            ? $activeAdsLimit - $activeAdsLimit
+            ? $activeAdsLimit - $actualActivAds
             : $waitingAdsLimit;
 
         // activate new ads from waiting list
@@ -50,6 +51,6 @@ class UpdateAdsStatus extends Command
                 'status' => 'approved'
             ]);
 
-            Log::info("Update ads status proccessed");
+        Log::info("Update ads status proccessed");
     }
 }
