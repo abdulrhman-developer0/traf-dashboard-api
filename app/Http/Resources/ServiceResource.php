@@ -39,7 +39,7 @@ class ServiceResource extends JsonResource
             'rating'                            => $this->rating,
             'reviews_count'                     => $this->reviews_count ?? 0,
             'rating_stats'                      =>  $this->rating_stats, // ['excellent' => 40, 'good' => 30, 'average' => 20, 'poor' => 10, 'terrible' => 0]
-            'provider_schedule'                         => ServiceScheduleResource::make($this->schedules),
+            'provider_schedule'                         => dd(ServiceScheduleResource::make($this->schedules)),
             'workers'                           => WorkerResource::collection($this->workers),
         ];
     }
