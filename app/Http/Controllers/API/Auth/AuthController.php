@@ -23,7 +23,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::firstWhere('email', $request->email);
-        return $user->account();
+        return $useer;
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->badResponse([], 'Invalid email or password');
