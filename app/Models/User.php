@@ -8,6 +8,7 @@ use App\Contracts\HasAccounts;
 use App\Traits\IntractsWithAccount;
 use App\Traits\UserTypes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -99,5 +100,10 @@ class User extends Authenticatable implements HasMedia, HasAccounts
         $this->expire_at = now()->addMinutes(20);
 
         $this->save();
+    }
+
+    public function location(): HasOne
+    {
+        return $this->hasOne(Location::class);
     }
 }

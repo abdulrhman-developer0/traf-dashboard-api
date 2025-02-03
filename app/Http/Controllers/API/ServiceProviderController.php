@@ -170,7 +170,7 @@ class ServiceProviderController extends Controller
             'account_type'  => 'service-provider',
         ]);
 
-        $user->location()->create(
+        $user->location()->updateOrCreate(
             $request->only([
                 'longitude',
                 'latitude'

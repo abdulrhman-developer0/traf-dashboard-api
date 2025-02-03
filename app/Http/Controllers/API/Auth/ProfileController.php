@@ -53,6 +53,8 @@ class ProfileController extends Controller
                 'phone'     => 'required|string|min:9|max:20',
                 'address'   => 'nullable|string|min:1|max:255',
                 'job' => 'nullable|string|max:255',
+                'longitude'   => 'nullable|numeric',
+                'latitude'   => 'required_with:longitude|numeric'
             ],
             default             => []
         };
@@ -66,6 +68,10 @@ class ProfileController extends Controller
         ]);
 
         $user->fill($request->only(['name']))->save();
+
+        $user->location?->fill(
+            $user->location?->getFillable() ?? []
+        )->save();
 
         $account = $user->account();
         $accountData = collect($validated)

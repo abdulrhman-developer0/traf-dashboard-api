@@ -42,6 +42,8 @@ class UserResource extends JsonResource
             'rating_stats'      => $account->rating_stats,
             'booking_stats'     => $account->booking_stats,
             'subscription'      => $account->currentSubscription ? SubscriptionResource::make($account->currentSubscription) : null,
+            'longitude'         => $this->location?->longitude,
+            'latitude'         => $this->location?->latitude,
         ];
     }
 }
