@@ -153,6 +153,9 @@ class ServiceProviderController extends Controller
             'maroof_document'           => 'required_if:is_personal,true|file|mimes:jpg,png,pdf|max:4096',
             'tax_registeration_number'  => 'required_if:is_personal,false|string|min:1|max:255',
             'accept_policy'             => 'required|boolean',
+
+            'longitude'                 => 'required|numeric',
+            'latitude'                      => 'required|numeric'
         ]);
 
         if (! $request->accept_policy) {
@@ -166,6 +169,13 @@ class ServiceProviderController extends Controller
             'password'      => Hash::make($request->password),
             'account_type'  => 'service-provider',
         ]);
+
+        $user->location()->create(
+            $request->only([
+                'longitude',
+                'latitude'
+            ])
+        );
 
         // Create the serviceProvider associated with the user
         $serviceProvider = ServiceProvider::create([
