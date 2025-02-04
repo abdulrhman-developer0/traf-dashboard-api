@@ -18,23 +18,25 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionsGroupsSeeder::class);
         $this->call(UsersSeeder::class);
 
-        // ads
+        // categories.
+        $this->call(ServiceCategorySeeder::class);
+
+        // default ad price
         $this->call(AdsSeeder::class);
 
         // production seeders
         $this->call(PackagesSeeder::class);
 
-        $this->call(ActivitiesForTestingSeeder::class);
+        // $this->call(ActivitiesForTestingSeeder::class);
 
         // $this->call(CitySeeder::class);
-        $this->call(ClientSeeder::class);
-        $this->call(ServiceProviderSeeder::class);
-        $this->call(WorkerSeeder::class);
-        $this->call(ServiceCategorySeeder::class);
-        $this->call(ServiceSeeder::class);
+        // $this->call(ClientSeeder::class);
+        // $this->call(ServiceProviderSeeder::class);
+        // $this->call(WorkerSeeder::class);
+        // $this->call(ServiceSeeder::class);
         // $this->call(ServiceScheduleSeeder::class);
-        $this->call(BookingSeeder::class);
-        $this->call(ReviewSeeder::class);
+        // $this->call(BookingSeeder::class);
+        // $this->call(ReviewSeeder::class);
 
     }
 }

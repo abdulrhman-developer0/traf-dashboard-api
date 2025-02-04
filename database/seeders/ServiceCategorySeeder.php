@@ -22,7 +22,7 @@ class ServiceCategorySeeder extends Seeder
             ['name' => 'مساج', 'image_path' => 'logos/spa-svgrepo-com.svg', 'is_active' => true],
             ['name' => 'بشرة', 'image_path' => 'logos/skincare-icon.svg', 'is_active' => true],
             ['name' => 'عناية بالشعر', 'image_path' => 'logos/hear-care.svg', 'is_active' => true],
-            ['name' => 'عروض', 'image_path' => 'logos/offers.svg', 'is_active' => true]
+            // ['name' => 'عروض', 'image_path' => 'logos/offers.svg', 'is_active' => true]
         ];
 
         foreach ($servicesCategories as $service) {
