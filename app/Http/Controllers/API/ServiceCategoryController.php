@@ -10,11 +10,16 @@ use App\Traits\APIResponses;
 
 class ServiceCategoryController extends Controller
 {
-    //
     use APIResponses;
+
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum'])->except(['index']);
+    }
+
     public function index()
     {
-        $categories = ServiceCategory::where('is_active', true)->get(['id', 'name','image_path']);
+        $categories = ServiceCategory::where('is_active', true)->get(['id', 'name', 'image_path']);
         return $this->okResponse(ServiceCategoryResource::collection($categories), 'Service categories retrieved successfully');
     }
 

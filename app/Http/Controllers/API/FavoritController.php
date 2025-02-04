@@ -13,6 +13,11 @@ class FavoritController extends Controller
 {
     use APIResponses;
 
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum']);
+    }
+
     public function index(Request $request)
     {
         $client = Auth::user()?->client;

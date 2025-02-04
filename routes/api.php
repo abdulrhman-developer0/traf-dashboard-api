@@ -89,7 +89,16 @@ Route::apiResource('/service-providers', ServiceProviderController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
 
 
+//Serivce Categories 
+Route::apiResource('/service-categories', ServiceCategoryController::class);
 
+// services 
+Route::get('/services/favorits', [FavoritController::class, 'index']);
+Route::post('/services/favorits', [FavoritController::class, 'taggle']);
+
+
+
+Route::apiResource('services', ServiceController::class);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
@@ -123,17 +132,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/chat-messages', ChatMessagesController::class);
     Route::put('/chat-messages/read/{id}', [ChatMessagesController::class, 'markAsRead']);
 
-
-    // services 
-    Route::get('/services/favorits', [FavoritController::class, 'index']);
-    Route::post('/services/favorits', [FavoritController::class, 'taggle']);
-
-
-
-    Route::apiResource('services', ServiceController::class);
-
-    //Serivce Categories 
-    Route::apiResource('/service-categories', ServiceCategoryController::class);
 
     // ServiceSchedule
     Route::apiResource('/service-schedules', ServiceScheduleController::class);
