@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             'account_id'        => $account?->id,
             'type'              => $this->account_type,
             'status'            => $account->status ?? 'approved',
+            'deleted_at'        => $this->deleted_at,
             'photo'             => $account->getFirstMediaUrl('photo'),
             'name'              => $this->name,
             'job'               => $account->job,
