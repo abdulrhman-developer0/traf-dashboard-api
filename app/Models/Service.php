@@ -27,6 +27,7 @@ class Service extends Model implements HasMedia
         'address',
         'is_home_service',
         'is_offer',
+        'is_on_site',
     ];
 
     protected $casts = [
@@ -35,6 +36,7 @@ class Service extends Model implements HasMedia
         'price_after'       => 'float',
         'is_home_service'   => 'boolean',
         'is_offer'          => 'boolean',
+        'is_on_site'        => 'boolean',
     ];
 
     public function registerMediaCollections(): void

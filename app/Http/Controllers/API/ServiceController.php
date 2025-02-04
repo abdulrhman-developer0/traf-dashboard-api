@@ -98,6 +98,7 @@ class ServiceController extends Controller
             'price_before' => 'required|numeric',
             'price_after' => 'nullable|numeric',
             'is_home_service' => 'required|boolean',
+            'is_on_site' => 'required|boolean',
             'address' => 'required_if:is_home_service,false|string|max:500',
             "photo"   => 'nullable|image|max:4096',
         ]);
@@ -109,6 +110,7 @@ class ServiceController extends Controller
         })->toArray() : [];
 
         $is_home_service = $request->is_home_service ?? false;
+        $is_on_site = $request->is_on_site ?? false;
         $is_offer = $request->price_after ? true : false;
 
         // Create the service
@@ -122,8 +124,8 @@ class ServiceController extends Controller
             'price_after' => $validated['price_after'] ?? null,
             'address' => $validated['address'] ?? '',
             'is_home_service' => $is_home_service,
-            'is_offer' => $is_offer,
-            'photo'     => 'nullable|image|max:4096',
+            'is_offer'   => $is_offer,
+            'is_on_site' => $is_on_site
         ]);
 
         // Attach workers to the service (this will create the pivot records in service_workers)
@@ -153,6 +155,7 @@ class ServiceController extends Controller
             'price_before' => 'required|numeric',
             'price_after' => 'nullable|numeric',
             'is_home_service' => 'boolean',
+            'is_on_site'      => 'boolean',
             'address' => 'nullable|string',
             "photo"   => 'nullable|image|max:4096',
         ]);
@@ -170,7 +173,8 @@ class ServiceController extends Controller
             return $this->badResponse([], "You not have a service with id $id");
         }
 
-        $is_home_service = $request->is_home_service ?? false;
+        $is_home_service = $request->is_home_service ?? $service->is_home_service;
+        $is_on_site      = $request->is_on_site ?? $service->is_on_site;
         $is_offer = $request->price_after ? true : false;
 
         $service->update([
@@ -183,7 +187,7 @@ class ServiceController extends Controller
             'is_home_service'   => $is_home_service,
             'address' => $validated['address'] ?? '',
             'is_offer' => $is_offer,
-            'photo'     => 'nullable|image|max:4096',
+            'is_on_site' => $is_on_site,
         ]);
 
 
