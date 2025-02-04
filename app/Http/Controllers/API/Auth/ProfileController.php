@@ -129,8 +129,8 @@ class ProfileController extends Controller
             $user       = Auth::user();
             $account    = $user->account();
 
+            $userDeletedd   = $user->delete();
             $accountDeleted = $account->delete();
-            $userDeletedd   = $user->deleted  = $user->delete();
 
             return $this->okResponse([
                 'user_deleted'       => $userDeletedd,
