@@ -27,11 +27,15 @@ class Booking extends Model
         'address',
         'status',
         'canceled_at',
-        'changed_at'
+        'changed_at',
+        'longitude',
+        'latitude',
     ];
 
     protected $casts = [
-        'date'  => 'datetime'
+        'date'          => 'datetime',
+        'longitude'     => 'float',
+        'latitude'      => 'float',
     ];
 
     public function client()

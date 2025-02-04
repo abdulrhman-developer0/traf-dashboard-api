@@ -40,7 +40,9 @@ class BookingResource extends JsonResource
             'client_phone'      => $this->client->phone,
             'client_photo'      => $this->client->getFirstMediaUrl('photo'),
             'client_address'    => $this->address ?? $this->client->address,
-            'client_rating'     => $this->client->rating
+            'client_rating'     => $this->client->rating,
+            'client_longitude'  => $this->longitude,
+            'client_latitude'   => $this->latitude,
         ];
     }
 

@@ -111,7 +111,9 @@ class BookingController extends Controller
             'service_id'   => 'required|integer|exists:services,id',
             'reference_id' => 'nullable|integer',
             'date'         => 'required|date',
-            'address'      => 'nullable|string:max:255'
+            'address'      => 'nullable|string:max:255',
+            'longitude'     => 'numeric',
+            'latitude'      => 'numeric',
         ]);
 
         // get user
@@ -123,6 +125,8 @@ class BookingController extends Controller
             'reference_id' => $request->reference_id,
             'date' => Carbon::create($request->date)->toDateTimeString(),
             'address' => $request->address,
+            'longitude'     => $request->longitude,
+            'latitude'      => $request->latitude,
         ];
 
         $booking = Booking::create($bookingData);
