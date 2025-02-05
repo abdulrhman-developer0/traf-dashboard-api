@@ -142,7 +142,6 @@ class ServiceProviderController extends Controller
     public function indexWithLocations(Request $request)
     {
         $query = ServiceProvider::query()
-            ->latest()
             ->select(['id', 'user_id', 'rating'])
             ->with('user');
 
