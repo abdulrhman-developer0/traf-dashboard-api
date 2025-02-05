@@ -157,8 +157,7 @@ class ServiceProviderController extends Controller
                         CASE
                             WHEN users.name LIKE ? THEN 1
                             WHEN users.name LIKE ? THEN 2
-                            
-                            ELSE 4
+                            ELSE 3
                         END
                     ", ["$search%", "%$search%", "[$search]"]);
             });
