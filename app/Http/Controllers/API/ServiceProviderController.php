@@ -144,7 +144,7 @@ class ServiceProviderController extends Controller
         $query = ServiceProvider::query();
 
         // filter by search
-        if ($request->input('search') != null) {
+        if ( $request->input('search') != null ) {
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
