@@ -34,8 +34,12 @@ class AuthController extends Controller
 
             $user->generateCode();
 
-            //send mail 
-            $user->notify(new TwoFactorNotification());
+            try {
+                //send mail 
+                $user->notify(new TwoFactorNotification());
+            } catch (\Throwable $throwable) {
+                // 
+            }
 
             if (config('app.env') !== 'production') {
                 $data['test_code'] = $user->code;

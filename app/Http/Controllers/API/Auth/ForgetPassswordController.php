@@ -33,14 +33,18 @@ class ForgetPassswordController extends Controller
             'expired_at'     => now()->addMinutes($this->expiredAfterMinutes)
         ]);
 
-        $user->notify(new OTPNotification($otp->code));
-        
+        try {
+            $user->notify(new OTPNotification($otp->code));
+        } catch (\Throwable $throwable) {
+            // 
+        }
+
         $data = ['to' => $user->email];
 
-        if ( config('app.env') !== 'production' ) {
+        if (config('app.env') !== 'production') {
             $data['test_code'] = $otp->code;
         }
-        
+
 
         return $this->createdResponse($data, 'Code sent successfuly');
     }

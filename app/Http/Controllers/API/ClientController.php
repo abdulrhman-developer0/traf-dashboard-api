@@ -80,8 +80,12 @@ class ClientController extends Controller
 
 
 
-        //send mail 
-        $user->notify(new TwoFactorNotification());
+        try {
+            //send mail 
+            $user->notify(new TwoFactorNotification());
+        } catch (\Throwable $throwable) {
+            // 
+        }
 
         $time = now()->format('h:i a');
         activities(ActivityActions::NewClientRegistered, 'مستخدم جديد', "فام $user->name بالتسجيل في التطبيق في $time");
