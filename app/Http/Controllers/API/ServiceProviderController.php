@@ -190,7 +190,7 @@ class ServiceProviderController extends Controller
         }
 
 
-        $serviceProviders = $query->orderDesc('user.name')->get();
+        $serviceProviders = $query->orderByDesc('user.name')->get();
 
         return $this->okResponse([
             'provider_ids'  => $serviceProviders->pluck('id')->join(','),
