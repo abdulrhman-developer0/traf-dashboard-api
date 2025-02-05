@@ -154,8 +154,7 @@ class ServiceProviderController extends Controller
                     $q->where('name', 'LIKE', "$search%")
                         ->orWhere('name', 'LIKE', "%$search%")
                         ->orWhere('name', 'REGEXP', "[$search]");
-                });
-            })->orderByRaw("
+                })->orderByRaw("
                 CASE
                     WHEN users.name LIKE ? THEN 1
                     WHEN users.name LIKE ? THEN 2
@@ -163,6 +162,7 @@ class ServiceProviderController extends Controller
                     ELSE 4
                 END
             ", ["$search%", "%$search%", "[$search]"]);
+            });
         }
 
         if ($request->input('longitude') && $request->input('latitude')) {
