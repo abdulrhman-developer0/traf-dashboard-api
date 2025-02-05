@@ -181,7 +181,7 @@ class ServiceProviderController extends Controller
                     ->orWhere('name', 'REGEXP', "[$search]");
             });
 
-            $query->join('users', 'service_providers.user_id', '=', 'users.id')
+            $query->join('users', 'user_id', '=', 'users.id')
                 ->orderByRaw("
             CASE
                 WHEN users.name LIKE ? THEN 1
