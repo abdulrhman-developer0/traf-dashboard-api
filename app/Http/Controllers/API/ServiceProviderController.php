@@ -156,10 +156,10 @@ class ServiceProviderController extends Controller
                         ->orWhere('name', 'REGEXP', "[$search]")
                         ->orderByRaw("
                             CASE
-                                WHEN users.name LIKE ? THEN 1
-                                WHEN users.name LIKE ? THEN 2
-                                WHEN users.name REGEXP ? THEN 3
-                                ELSE 4
+                                WHEN users.name LIKE ? THEN 7
+                                WHEN users.name LIKE ? THEN 3
+                                WHEN users.name REGEXP ? THEN 2
+                                ELSE 1
                             END
                     ", ["$search%", "%$search%", "[$search]"]);
                 });
