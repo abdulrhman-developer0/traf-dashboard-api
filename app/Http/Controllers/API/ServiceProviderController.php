@@ -142,26 +142,9 @@ class ServiceProviderController extends Controller
     public function indexWithLocations(Request $request)
     {
         $query = ServiceProvider::query()
+            ->latest()
             ->select(['id', 'user_id', 'rating'])
             ->with('user');
-
-        // filter by search
-        if ($request->input('search') != null) {
-            $search = $request->search;
-
-            $query->whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'LIKE', "$search%")
-                    ->orWhere('name', 'LIKE', "%$search%")
-                    ->orWhere('name', 'REGEXP', "[$search]")
-                    ->orderByRaw("
-                        CASE
-                            WHEN users.name LIKE ? THEN 3
-                            WHEN users.name LIKE ? THEN 2
-                            ELSE 1
-                        END
-                    ", ["$search%", "%$search%"]);
-            });
-        }
 
         if ($request->input('longitude') && $request->input('latitude')) {
 
@@ -189,9 +172,26 @@ class ServiceProviderController extends Controller
             });
         }
 
+        // filter by search
+        if ($request->input('search') != null) {
+            $search = $request->search;
 
-        $serviceProviders = $query->get()
-            ->orderBy('user.name');
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "$search%")
+                    ->orWhere('name', 'LIKE', "%$search%")
+                    ->orWhere('name', 'REGEXP', "[$search]")
+                    ->orderByRaw("
+                        CASE
+                            WHEN users.name LIKE ? THEN 3
+                            WHEN users.name LIKE ? THEN 2
+                            ELSE 1
+                        END
+                    ", ["$search%", "%$search%"]);
+            });
+        }
+
+
+        $serviceProviders = $query->get();
 
         return $this->okResponse([
             'provider_ids'  => $serviceProviders->pluck('id')->join(','),
