@@ -159,7 +159,7 @@ class ServiceProviderController extends Controller
                             WHEN users.name LIKE ? THEN 2
                             ELSE 3
                         END
-                    ", ["$search%", "%$search%", "[$search]"]);
+                    ", ["$search%", "%$search%"]);
             });
         }
 
