@@ -139,6 +139,67 @@ class ServiceProviderController extends Controller
         ], 'Retrieved ServiceProviders Data');
     }
 
+    public function indexWithLocations(Request $request)
+    {
+        $query = ServiceProvider::query();
+
+        // filter by search
+        if ($request->input('search') != null) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "$search%")
+                        ->orWhere('name', 'LIKE', "%$search%")
+                        ->orWhere('name', 'REGEXP', "[$search]")
+                        ->orderByRaw("
+                            CASE
+                                WHEN users.name LIKE ? THEN 1
+                                WHEN users.name LIKE ? THEN 2
+                                WHEN users.name REGEXP ? THEN 3
+                                ELSE 4
+                            END
+                    ", ["$search%", "%$search%", "[$search]"]);
+                });
+            });
+        }
+
+        if ($request->input('longitude') && $request->input('latitude')) {
+
+            // distance in km.
+            $km = $request->input('km', 10);
+
+            // km to geo degrees.
+            $degrees =  $km / 111;
+
+            // longitude range.
+            $longitudeRange = [
+                ($request->input('longitude', 0.1) - $degrees),
+                ($request->input('longitude', 0.1) + $degrees)
+            ];
+
+            // latitude range.
+            $latitudeRange = [
+                ($request->input('latitude', 0.1) - $degrees),
+                ($request->input('latitude', 0.1) + $degrees)
+            ];
+
+            $query->whereHas('user.location', function ($q) use ($longitudeRange, $latitudeRange) {
+                $q->whereBetween('longitude', $longitudeRange)
+                    ->whereBetween('latitude', $latitudeRange);
+            });
+        }
+
+
+        $serviceProviders = $query->with('user')
+            ->get(['id', 'user_id', 'rating']);
+
+        return $this->okResponse([
+            'provider_ids'  => $serviceProviders->pluck('id')->join(','),
+            'items'         => ServiceProviderResource::collection($serviceProviders),
+        ], 'Retrieved ServiceProviders Data');
+    }
+
     /**
      *  Get Partner Service Providers
      */

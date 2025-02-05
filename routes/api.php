@@ -84,7 +84,7 @@ Route::post('/my-ads/pay', [AdController::class, 'payFor']);
 Route::apiResource('/clients', ClientController::class);
 
 
-Route::get('/service-providers/locations', [ServiceProviderController::class, 'index']);
+Route::get('/service-providers/locations', [ServiceProviderController::class, 'indexWithLocations']);
 Route::apiResource('/service-providers', ServiceProviderController::class);
 Route::get('/service-providers/{id}/partners/addresses', [ServiceProviderController::class, 'indexForAddresses']);
 
