@@ -143,7 +143,7 @@ class ServiceProviderController extends Controller
     {
         $query = ServiceProvider::query()
             ->select(['id', 'user_id', 'rating'])
-            ->join('users', 'users.id', '=', 'service_providers.user_id')
+            ->join('users', 'id', '=', 'service_providers.user_id')
             ->with('user');
 
         if ($request->input('longitude') && $request->input('latitude')) {
