@@ -35,12 +35,12 @@ class ServiceProviderController extends Controller
         $query = ServiceProvider::query();
 
         // filter by category
-        if ( $request->input('category_id') != null ) {
+        if ($request->input('category_id') != null) {
             $query->whereHas('services.category', fn($q) => $q->whereId($request->category_id));
         }
 
         // filter by search
-        if ( $request->input('search') != null) {
+        if ($request->input('search') != null) {
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
@@ -67,21 +67,47 @@ class ServiceProviderController extends Controller
             });
         }
 
+        if ($request->input('longitude') && $request->input('latitude')) {
+
+            // distance in km.
+            $km = $request->input('km', 10);
+
+            // km to geo degrees.
+            $degrees =  $km / 111;
+
+            // longitude range.
+            $longitudeRange = [
+                ($request->input('longitude', 0.1) - $degrees),
+                ($request->input('longitude', 0.1) + $degrees)
+            ];
+
+            // latitude range.
+            $latitudeRange = [
+                ($request->input('latitude', 0.1) - $degrees),
+                ($request->input('latitude', 0.1) + $degrees)
+            ];
+
+            $query->whereHas('user.location', function ($q) use ($longitudeRange, $latitudeRange) {
+                $q->whereBetween('longitude', $longitudeRange)
+                    ->whereBetween('latitude', $latitudeRange);
+            });
+        }
+
         // filter by city
-        if ( $request->input('city') != null ) {
+        if ($request->input('city') != null) {
             $query->where('city', 'like', "$request->city%")
                 ->orWhere('city', 'regexp', "[$request->city]");
         }
 
         // filter by area
-        if ( $request->input('area') != null ) {
+        if ($request->input('area') != null) {
             $query->where('area', 'like', "$request->area%")
                 ->orWhere('area', 'regexp', "[$request->area]");
         }
 
         //filter by pricing
         // 100-200
-        if ( $request->input('pricing' != null )) {
+        if ($request->input('pricing' != null)) {
 
             $pricingRange = collect(
                 explode('-', trim($request->pricing, '- '))
@@ -96,7 +122,7 @@ class ServiceProviderController extends Controller
         }
 
         //filter by rating
-        if ( $request->input('rating') != null ) {
+        if ($request->input('rating') != null) {
             $query->where('rating', 'like', "{$request->rating}%")
                 ->orderBy('rating', 'desc');
         }
