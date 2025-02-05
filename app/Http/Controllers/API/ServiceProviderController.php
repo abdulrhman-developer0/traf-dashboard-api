@@ -141,8 +141,7 @@ class ServiceProviderController extends Controller
 
     public function indexWithLocations(Request $request)
     {
-        $query = ServiceProvider::query()
-            ->latest();
+        $query = ServiceProvider::query();
 
         // filter by search
         if ($request->input('search') != null) {
