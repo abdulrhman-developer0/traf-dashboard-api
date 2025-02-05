@@ -22,7 +22,7 @@ class ServiceProviderController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['auth:sanctum'])->except(['index', 'store']);
+        $this->middleware(['auth:sanctum'])->except(['index', 'indexWithLocations', 'store']);
 
         // $this->middleware('account:admin')->except(['update', 'destroy']);
     }
