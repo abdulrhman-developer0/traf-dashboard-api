@@ -179,13 +179,14 @@ class ServiceProviderController extends Controller
                 $q->where('name', 'LIKE', "$search%")
                     ->orWhere('name', 'LIKE', "%$search%")
                     ->orWhere('name', 'REGEXP', "[$search]")
-                    ->orderByRaw("
-                        CASE
-                            WHEN users.name LIKE ? THEN 3
-                            WHEN users.name LIKE ? THEN 2
-                            ELSE 1
-                        END
-                    ", ["$search%", "%$search%"]);
+                    // ->orderByRaw("
+                    //     CASE
+                    //         WHEN users.name LIKE ? THEN 3
+                    //         WHEN users.name LIKE ? THEN 2
+                    //         ELSE 1
+                    //     END
+                    // ", ["$search%", "%$search%"])
+                    ->orderBy('users.name');
             });
         }
 
