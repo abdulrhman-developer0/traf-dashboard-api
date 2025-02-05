@@ -35,12 +35,12 @@ class ServiceProviderController extends Controller
         $query = ServiceProvider::query();
 
         // filter by category
-        if ($request->has('category_id')) {
+        if ( $request->input('category_id') != null ) {
             $query->whereHas('services.category', fn($q) => $q->whereId($request->category_id));
         }
 
         // filter by search
-        if ($request->has('search')) {
+        if ( $request->input('search') != null) {
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
@@ -68,20 +68,20 @@ class ServiceProviderController extends Controller
         }
 
         // filter by city
-        if ($request->has('city')) {
+        if ( $request->input('city') != null ) {
             $query->where('city', 'like', "$request->city%")
                 ->orWhere('city', 'regexp', "[$request->city]");
         }
 
         // filter by area
-        if ($request->has('area')) {
+        if ( $request->input('area') != null ) {
             $query->where('area', 'like', "$request->area%")
                 ->orWhere('area', 'regexp', "[$request->area]");
         }
 
         //filter by pricing
         // 100-200
-        if ($request->has('pricing')) {
+        if ( $request->input('pricing' != null )) {
 
             $pricingRange = collect(
                 explode('-', trim($request->pricing, '- '))
@@ -96,7 +96,7 @@ class ServiceProviderController extends Controller
         }
 
         //filter by rating
-        if ($request->has('rating')) {
+        if ( $request->input('rating') != null ) {
             $query->where('rating', 'like', "{$request->rating}%")
                 ->orderBy('rating', 'desc');
         }
