@@ -104,7 +104,7 @@ class ServiceController extends Controller
             'price_after' => 'nullable|numeric',
             'is_home_service' => 'required|boolean',
             'is_on_site' => 'required|boolean',
-            'address' => 'required_if:is_home_service,false|string|max:500',
+            'address' => 'nullable|string|max:500',
             "photo"   => 'nullable|image|max:4096',
         ]);
 
