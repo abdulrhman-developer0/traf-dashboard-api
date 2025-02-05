@@ -153,15 +153,16 @@ class ServiceProviderController extends Controller
                 $q->whereHas('user', function ($q) use ($search) {
                     $q->where('name', 'LIKE', "$search%")
                         ->orWhere('name', 'LIKE', "%$search%")
-                        ->orWhere('name', 'REGEXP', "[$search]");
-                })->orderByRaw("
-                CASE
-                    WHEN users.name LIKE ? THEN 1
-                    WHEN users.name LIKE ? THEN 2
-                    WHEN user.name REGEXP ? THEN 3
-                    ELSE 4
-                END
-            ", ["$search%", "%$search%", "[$search]"]);
+                        ->orWhere('name', 'REGEXP', "[$search]")
+                        ->orderByRaw("
+                            CASE
+                                WHEN users.name LIKE ? THEN 1
+                                WHEN users.name LIKE ? THEN 2
+                                WHEN user.name REGEXP ? THEN 3
+                                ELSE 4
+                            END
+                        ", ["$search%", "%$search%", "[$search]"]);
+                });
             });
         }
 
