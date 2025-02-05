@@ -194,8 +194,12 @@ class ServiceProviderController extends Controller
 
 
 
-        //send mail 
-        $user->notify(new TwoFactorNotification());
+        try {
+            //send mail 
+            $user->notify(new TwoFactorNotification());
+        } catch (\Throwable $throwable) {
+            // 
+        }
 
         Notification::send(
             User::whereAccountType('admin')->get(),
