@@ -149,20 +149,18 @@ class ServiceProviderController extends Controller
         if ($request->input('search') != null) {
             $search = $request->search;
 
-            $query->where(function ($q) use ($search) {
-                $q->whereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "$search%")
-                        ->orWhere('name', 'LIKE', "%$search%")
-                        ->orWhere('name', 'REGEXP', "[$search]")
-                        ->orderByRaw("
-                            CASE
-                                WHEN users.name LIKE ? THEN 1
-                                WHEN users.name LIKE ? THEN 2
-                                WHEN users.name REGEXP ? THEN 3
-                                ELSE 4
-                            END
-                        ", ["$search%", "%$search%", "[$search]"]);
-                });
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "$search%")
+                    ->orWhere('name', 'LIKE', "%$search%")
+                    ->orWhere('name', 'REGEXP', "[$search]")
+                    ->orderByRaw("
+                        CASE
+                            WHEN users.name LIKE ? THEN 1
+                            WHEN users.name LIKE ? THEN 2
+                            WHEN users.name REGEXP ? THEN 3
+                            ELSE 4
+                        END
+                    ", ["$search%", "%$search%", "[$search]"]);
             });
         }
 
@@ -193,8 +191,7 @@ class ServiceProviderController extends Controller
         }
 
 
-        $serviceProviders = $query->orderBy('users.name')
-            ->get();
+        $serviceProviders = $query->get();
 
         return $this->okResponse([
             'provider_ids'  => $serviceProviders->pluck('id')->join(','),
