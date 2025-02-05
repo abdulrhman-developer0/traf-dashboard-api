@@ -175,18 +175,18 @@ class ServiceProviderController extends Controller
         if ($request->input('search') != null) {
             $search = $request->search;
 
-            $query->where(function ($q) ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->whereHas('user', function ($q) use ($search) {
                     $q->where('name', 'LIKE', "$search%")
                         ->orWhere('name', 'LIKE', "%$search%")
                         ->orWhere('name', 'REGEXP', "[$search]")
                         ->orderByRaw("
-            CASE
-                WHEN users.name LIKE ? THEN 1
-                WHEN users.name LIKE ? THEN 2
-                ELSE 3
-            END
-    ", ["$search%", "%$search%"]);
+                            CASE
+                                WHEN users.name LIKE ? THEN 1
+                                WHEN users.name LIKE ? THEN 2
+                                ELSE 3
+                            END
+                    ", ["$search%", "%$search%"]);
                 });
             });
         }
