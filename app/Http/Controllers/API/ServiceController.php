@@ -57,7 +57,7 @@ class ServiceController extends Controller
 
         //filter by pricing
         // 100-200
-        if ($request->input('pricing' != null)) {
+        if ($request->input('pricing') != null ) {
 
             $pricingRange = collect(
                 explode('-', trim($request->pricing, '- '))
