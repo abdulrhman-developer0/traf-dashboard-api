@@ -23,8 +23,7 @@ class ServiceController extends Controller
 
     public function index(Request $request)
     {
-        $clientId = Auth::user();//?->client?->id ?? 'null';
-        dd($clientId);
+        $clientId = $request->input('account_id', 'null');
 
         $query    =  Service::query()
             ->selectRaw("
