@@ -109,12 +109,18 @@ class ServiceProviderController extends Controller
 
             $query->when(
                 $pricingRange->count() == 2,
-                fn($q) => $q->whereBetween('price_before', $pricingRange)
-                    ->orWhereBetween('price_after', $pricingRange)
+                fn($q) => $q->whereHas(
+                    'services',
+                    fn($q) => $q->whereBetween('price_before', $pricingRange)
+                        ->orWhereBetween('price_after', $pricingRange)
+                )
             )->when(
                 $pricingRange->count() == 1,
-                fn($q) => $q->where('price_before', '>=', $pricingRange[0])
-                    ->orWhere('price_after', '>=', $pricingRange[0])
+                fn($q) => $q->whereHas(
+                    'services',
+                    fn($q) => $q->where('price_before', '>=', $pricingRange[0])
+                        ->orWhere('price_after', '>=', $pricingRange[0])
+                )
             );
         }
 
