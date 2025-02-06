@@ -24,6 +24,10 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $query    =  Service::query()
+        ->selectRaw("
+            *,
+            (SELECT COUNT(*) FROM favorits) as is_favorite
+        ")
             // Get only first schedule for each worker where service_id = service.id
             ->with('workers.schedules', function ($q) {
                 $q->whereHas(
@@ -33,9 +37,10 @@ class ServiceController extends Controller
                     'service',
                     fn($q) => $q->whereRaw('service_id = services.id')
                 )->latest();
-            })->with([
-                'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
-            ])->latest();
+            // })->withCount([
+            //     'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
+            // ])
+            ->latest();
 
         // filter by search
         if ($request->has('search')) {
