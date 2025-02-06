@@ -18,18 +18,18 @@ class ServiceController extends Controller
 
     public function __construct(Request $request)
     {
-        $authenticatedMethods = ['show'];
+        $exceptedMethods = ['show'];
 
-        if ( $request->hasHeader('Authorization') ) {
-            $authenticatedMethods =  ['index', ...$authenticatedMethods];
+        if (! $request->hasHeader('Authorization')) {
+            $exceptedMethods = ['index', 'show'];
         }
 
-        $this->middleware(['auth:sanctum'])->except($authenticatedMethods);
+        $this->middleware(['auth:sanctum'])->except($exceptedMethods);
     }
 
     public function index(Request $request)
     {
-        $clientId = Auth::user()?->client;//?->id ?? 'null';
+        $clientId = Auth::user()?->client?->id ?? 'null';
         dd($clientId);
 
         $query    =  Service::query()
