@@ -33,7 +33,7 @@ class ServiceController extends Controller
                     'service',
                     fn($q) => $q->whereRaw('service_id = services.id')
                 )->latest();
-            })->withCount([
+            })->with([
                 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             ])->latest();
 
