@@ -24,7 +24,7 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $query    =  Service::query()
-        ->selectRaw("
+            ->selectRaw("
             *,
             (SELECT COUNT(*) FROM favorits) as is_favorite
         ")
@@ -37,7 +37,8 @@ class ServiceController extends Controller
                     'service',
                     fn($q) => $q->whereRaw('service_id = services.id')
                 )->latest();
-            // })->withCount([
+            })
+            // ->withCount([
             //     'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             // ])
             ->latest();
@@ -89,7 +90,7 @@ class ServiceController extends Controller
                 // )
             )
             ->paginate($request->page_size ?? 10);
-            // ->get();
+        // ->get();
 
         // return $services;
 
