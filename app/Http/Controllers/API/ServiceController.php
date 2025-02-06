@@ -20,6 +20,7 @@ class ServiceController extends Controller
     {
         $authenticatedMethods = ['show'];
 
+        dd($request->all());
         dd($request->header('Authoriztion', ""));
 
         $this->middleware(['auth:sanctum'])->except($authenticatedMethods);
