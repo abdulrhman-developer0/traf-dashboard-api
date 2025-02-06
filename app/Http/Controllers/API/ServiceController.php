@@ -16,9 +16,13 @@ class ServiceController extends Controller
 {
     use APIResponses;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->middleware(['auth:sanctum'])->except(['index', 'show']);
+        $authenticatedMethods = ['show'];
+
+        dd($request->header('Authoriztion', ""));
+
+        $this->middleware(['auth:sanctum'])->except($authenticatedMethods);
     }
 
     public function index(Request $request)
