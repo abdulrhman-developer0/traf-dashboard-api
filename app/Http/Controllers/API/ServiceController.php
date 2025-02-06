@@ -34,8 +34,7 @@ class ServiceController extends Controller
                     fn($q) => $q->whereRaw('service_id = services.id')
                 )->latest();
             })->with([
-                // 'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
-                'clientFavorites' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
+                'clientFavorites as is_favorite' => fn($q) => $q->where('client_id', Auth::user()?->client?->id)->limit(1),
             ])->latest();
 
         // filter by search
@@ -87,7 +86,7 @@ class ServiceController extends Controller
             ->paginate($request->page_size ?? 10);
             // ->get();
 
-        return $services;
+        // return $services;
 
 
         return $this->okResponse(ServiceCollection::make($services), 'Services retrieved successfully');
