@@ -47,22 +47,14 @@ class ServiceProviderController extends Controller
                 $q->whereHas('user', function ($q) use ($search) {
                     $q->where('name', 'LIKE', "$search%")
                         ->orWhere('name', 'LIKE', "%$search%")
-                        ->orWhere('name', 'REGEXP', "[$search]")
+                        // ->orWhere('name', 'REGEXP', "[$search]")
                         ->orderByRaw("
                             CASE
                                 WHEN users.name LIKE ? THEN 1
                                 WHEN users.name LIKE ? THEN 2
-                                WHEN users.name REGEXP ? THEN 3
-                                ELSE 4
+                                ELSE 3
                             END
-                    ", ["$search%", "%$search%", "[$search]"]);
-                })->orWhereHas('services', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "$search%")
-                        ->orWhere('name', 'LIKE', "%$search%")
-                        ->orWhereHas('category', function ($q) use ($search) {
-                            $q->where('name', 'LIKE', "$search%")
-                                ->orWhere('name', 'LIKE', "%$search%");
-                        });
+                    ", ["$search%", "%$search%"]);
                 });
             });
         }
@@ -107,18 +99,23 @@ class ServiceProviderController extends Controller
 
         //filter by pricing
         // 100-200
-        if ($request->input('pricing' != null)) {
+        if ($request->input('pricing') != null) {
 
             $pricingRange = collect(
                 explode('-', trim($request->pricing, '- '))
             )->map(
                 fn($v) => trim($v, '- ')
-            )->toArray();
+            );
 
-            $query->whereHas('services', function ($q) use ($pricingRange) {
-                $q->whereBetween('price_before', $pricingRange)
-                    ->orWhereBetween('price_after', $pricingRange);
-            });
+            $query->when(
+                $pricingRange->count() == 2,
+                fn($q) => $q->whereBetween('price_before', $pricingRange)
+                    ->orWhereBetween('price_after', $pricingRange)
+            )->when(
+                $pricingRange->count() == 1,
+                fn($q) => $q->where('price_before', '>=', $pricingRange[0])
+                    ->orWhere('price_after', '>=', $pricingRange[0])
+            );
         }
 
         //filter by rating
