@@ -87,7 +87,7 @@ class ServiceController extends Controller
             ->paginate($request->page_size ?? 10);
             // ->get();
 
-        // return $services;
+        return $services;
 
 
         return $this->okResponse(ServiceCollection::make($services), 'Services retrieved successfully');
