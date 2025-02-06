@@ -20,7 +20,7 @@ class ServiceController extends Controller
     {
         $exceptedMethods = ['show'];
 
-        if (! $request->hasHeader('Authorization')) {
+        if (! $request->hasHeader('Authorization') || $request->header('Authorization') == 'null' ) {
             $exceptedMethods = ['index', 'show'];
         }
 
