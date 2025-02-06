@@ -28,7 +28,7 @@ class ServiceController extends Controller
         $query    =  Service::query()
             ->selectRaw("
             *,
-            (SELECT COUNT(*) FROM favorits WHERE client_id = $clientId) as is_favorite
+            (SELECT COUNT(*) FROM favorits WHERE favorits.client_id = $clientId) as is_favorite
         ")
             // Get only first schedule for each worker where service_id = service.id
             ->with('workers.schedules', function ($q) {
