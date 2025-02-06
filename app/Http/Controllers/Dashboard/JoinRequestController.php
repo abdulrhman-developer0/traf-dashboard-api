@@ -104,7 +104,11 @@ class JoinRequestController extends Controller
                 'rejected'  => new ServiceProviderRejected($provider)
             };
 
-            $provider->user->notify($notification);
+            try {
+                $provider->user->notify($notification);
+            } catch (\Throwable $throwable) {
+                // 
+            }
         }
 
         return back();
