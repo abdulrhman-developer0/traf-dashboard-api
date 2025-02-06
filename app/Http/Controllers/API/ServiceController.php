@@ -55,6 +55,20 @@ class ServiceController extends Controller
             $query->whereIn('service_provider_id', $ids);
         }
 
+        //filter by pricing
+        // 100-200
+        if ($request->input('pricing' != null)) {
+
+            $pricingRange = collect(
+                explode('-', trim($request->pricing, '- '))
+            )->map(
+                fn($v) => trim($v, '- ')
+            )->toArray();
+
+            $query->whereBetween('price_before', $pricingRange)
+                ->orWhereBetween('price_after', $pricingRange);
+        }
+
         $services =  $query
             ->with(
                 'schedules',
