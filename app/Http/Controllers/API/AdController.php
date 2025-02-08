@@ -31,7 +31,7 @@ class AdController extends Controller
             ->whereStatus('approved')
             ->where('end_date', '>',  now())
             ->latest()
-            ->limit(10)
+            // ->limit(10)
             ->get()
             ->map(function (AD $ad) {
                 return [

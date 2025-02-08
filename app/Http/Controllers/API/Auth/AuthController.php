@@ -82,6 +82,11 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $user = $request->user();
+
+        $user->update([
+            'fcm_token' => null
+        ]);
+
         $user->currentAccessToken()->delete();
 
         return $this->okResponse([], 'Token deleted successfuly');
