@@ -20,7 +20,7 @@ class ServiceController extends Controller
     {
         $exceptedMethods = ['show'];
 
-        if (! $request->hasHeader('Authorization') ) {
+        if (! $request->hasHeader('Authorization')) {
             $exceptedMethods = ['index', 'show'];
         }
 
@@ -32,6 +32,7 @@ class ServiceController extends Controller
         $clientId = Auth::user()?->client?->id ?? 'null';
 
         $query    =  Service::query()
+            ->whereHas('user')
             ->selectRaw("
             *,
             (SELECT COUNT(*) FROM `favorits` WHERE `favorits`.`client_id` = $clientId AND `favorits`.`service_id` = `services`.`id`) as is_favorite
