@@ -32,7 +32,7 @@ class ServiceController extends Controller
         $clientId = Auth::user()?->client?->id ?? 'null';
 
         $query    =  Service::query()
-            ->whereHas('user')
+            ->whereHas('serviceProvider')
             ->selectRaw("
             *,
             (SELECT COUNT(*) FROM `favorits` WHERE `favorits`.`client_id` = $clientId AND `favorits`.`service_id` = `services`.`id`) as is_favorite
