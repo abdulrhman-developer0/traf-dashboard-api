@@ -27,12 +27,14 @@ class ServiceProvider extends Model implements HasMedia
         'area',
         'city',
         'status',
-        'rejection_reason'
+        'rejection_reason',
+        'bank_account_number',
     ];
 
     protected $casts = [
         'is_personal'  => 'boolean',
-        'rating' => 'float'
+        'rating' => 'float',
+        'bank_account_number',
     ];
 
     public function registerMediaCollections(): void

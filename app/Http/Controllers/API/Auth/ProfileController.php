@@ -54,7 +54,8 @@ class ProfileController extends Controller
                 'address'   => 'nullable|string|min:1|max:255',
                 'job' => 'nullable|string|max:255',
                 'longitude'   => 'nullable|numeric',
-                'latitude'   => 'required_with:longitude|numeric'
+                'latitude'   => 'required_with:longitude|numeric',
+                'bank_account_number' => 'nullable|string|min:1|max:255',
             ],
             default             => []
         };
