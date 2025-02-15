@@ -239,7 +239,7 @@ class ServiceProviderController extends Controller
         // Validate incoming request data
         $request->validate([
             'name'                      => 'required|string|min:1|max:255',
-            'email'                     => 'required|email|min:5|max:255|unique:users,email',
+            'phone'                     => 'required|string|min:5|max:255|unique:users,email',
             'password'                  => 'required|string|min:8|max:255|confirmed',
             'phone'                     => 'required|string|min:9|max:20',
             'is_personal'               => 'required|boolean',
@@ -258,7 +258,7 @@ class ServiceProviderController extends Controller
         // Create the user first (since the serviceProvider depends on the user)
         $user = User::create([
             'name'          => $request->name,
-            'email'         => $request->email,
+            'phone'         => $request->phone,
             'password'      => Hash::make($request->password),
             'account_type'  => 'service-provider',
         ]);
