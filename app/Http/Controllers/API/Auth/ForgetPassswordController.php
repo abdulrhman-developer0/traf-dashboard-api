@@ -7,6 +7,7 @@ use App\Models\OneTimePassword;
 use App\Models\ResetToken;
 use App\Models\User;
 use App\Notifications\OTPNotification;
+use App\Services\SmsService;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,28 +19,39 @@ class ForgetPassswordController extends Controller
 
     protected $expiredAfterMinutes = 10;
 
+    public function __construct(
+        protected SmsService $sms
+    ) {
+        // 
+    }
+
     public function send(Request $request)
     {
         $request->validate([
-            'email'  => 'required|email|exists:users'
+            'phone'  => 'required|string|exists:users'
         ]);
 
-        $user = User::firstWhere('email', $request->email);
+        $user = User::firstWhere('phone', $request->email);
 
 
         $otp = OneTimePassword::create([
-            'email'         => $user->email,
+            'email'         => $user->phone,
             'code'          => random_int(10000, 99999),
             'expired_at'     => now()->addMinutes($this->expiredAfterMinutes)
         ]);
 
         try {
-            $user->notify(new OTPNotification($otp->code));
+            // $user->notify(new OTPNotification($otp->code));
+
+            $this->sms->send(
+                $user->phone,
+                "كود التحقق الخاص بك هو $user->code"
+            );
         } catch (\Throwable $throwable) {
             // 
         }
 
-        $data = ['to' => $user->email];
+        $data = ['to' => $user->phone];
 
         if (config('app.env') !== 'production') {
             $data['test_code'] = $otp->code;
@@ -53,11 +65,11 @@ class ForgetPassswordController extends Controller
     public function check(Request $request)
     {
         $request->validate([
-            'email'  => 'required|email|exists:users',
+            'phone'  => 'required|string|exists:users',
             'code'  => 'required|string|digits:5'
         ]);
 
-        $otp = OneTimePassword::whereEmail($request->email)
+        $otp = OneTimePassword::whereEmail($request->phone)
             ->whereCode($request->code)
             ->where('expired_at', '>', now())
             ->first();
@@ -66,7 +78,7 @@ class ForgetPassswordController extends Controller
             return $this->badResponse([], 'Invalid Code');
         }
 
-        $user = User::firstWhere('email', $otp->email);
+        $user = User::firstWhere('phone', $otp->phone);
 
         $plainTextToken = "$otp->id|" . Str::random(24);
 

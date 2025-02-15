@@ -31,7 +31,7 @@ class UserResource extends JsonResource
             'photo'               => $account->getFirstMediaUrl('photo'),
             'name'                => $this->name,
             'job'                 => $account->job,
-            'email'               => $this->email,
+            'phone'               => $this->phone,
             'phone'               => $account->phone,
             'address'             => $account->address,
             'bank_account_number' => $account->bank_account_number,

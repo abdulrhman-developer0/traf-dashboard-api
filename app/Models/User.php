@@ -35,7 +35,8 @@ class User extends Authenticatable implements HasMedia, HasAccounts
      */
     protected $fillable = [
         'name',
-        'email',
+        // 'email',
+        'phone',
         'password',
         'last_activity',
         'account_type',
@@ -74,7 +75,6 @@ class User extends Authenticatable implements HasMedia, HasAccounts
     {
 
         return $this->getFirstMediaUrl('avatar');
-
     }
 
 

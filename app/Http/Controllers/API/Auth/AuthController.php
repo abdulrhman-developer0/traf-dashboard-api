@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\TwoFactorNotification;
+use App\Services\SmsService;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,14 +16,20 @@ class AuthController extends Controller
 {
     use APIResponses;
 
+    public function __construct(
+        protected SmsService $sms
+    ) {
+        // 
+    }
+
     public function login(Request $request)
     {
         $request->validate([
-            'email'     => 'required|email',
+            'phone'     => 'required|string',
             'password'  => 'required|string|min:8'
         ]);
 
-        $user = User::firstWhere('email', $request->email);
+        $user = User::firstWhere('phone', $request->phone);
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->badResponse([], 'Invalid email or password');
@@ -36,7 +43,12 @@ class AuthController extends Controller
 
             try {
                 //send mail 
-                $user->notify(new TwoFactorNotification());
+                // $user->notify(new TwoFactorNotification());
+
+                $this->sms->send(
+                    $user->phone,
+                    "كود التحقق الخاص بك هو $user->code"
+                );
             } catch (\Throwable $throwable) {
                 // 
             }
@@ -52,27 +64,7 @@ class AuthController extends Controller
             ], "حسابك قيد المراجعة من قبل المسؤل ");
         }
 
-
-
-
-        // send mobile
-        //    $message="رمز التحقق هو ".$user->code;
-        //    $account_sid=getenv("TWILIO_SID");
-        //    $auth_token=getenv("TWILIO_TOKEN");
-        //    $twilio_number=getenv("TWILIO_FROM");
-        //    $client=new Client($account_sid,$auth_token);
-        //    $client->messages->create('+2001027629534',[
-        //     'from'=> $twilio_number,
-        //     'body' => $message
-        //    ]);
-        //     return response()->json([
-        //      'message' => 'Verification code sent',
-        //      'code' => $user->code,  // Remove this in production
-        //  ]);
-
-        // if ($user->account_type == 'client' || ($user->account_type == 'service-provider' && $user->serviceProvider->status == 'approved')) {
         $data['token'] = $user->createToken('api-user-login')->plainTextToken;
-        // }
 
         $data['user'] = UserResource::make($user);
 

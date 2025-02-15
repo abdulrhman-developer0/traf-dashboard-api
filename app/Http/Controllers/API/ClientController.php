@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Client;
 use App\Models\User;
 use App\Notifications\TwoFactorNotification;
+use App\Services\SmsService;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,9 @@ class ClientController extends Controller
 {
     use APIResponses;
 
-    public function __construct()
-    {
+    public function __construct(
+        protected SmsService $sms
+    ) {
         $this->middleware(['auth:sanctum'])->except(['store']);
     }
 
@@ -82,7 +84,12 @@ class ClientController extends Controller
 
         try {
             //send mail 
-            $user->notify(new TwoFactorNotification());
+            // $user->notify(new TwoFactorNotification());
+
+            $this->sms->send(
+                $user->phone,
+                "كود التحقق الخاص بك هو $user->code"
+            );
         } catch (\Throwable $throwable) {
             // 
         }
