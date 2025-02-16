@@ -29,18 +29,20 @@ class UsersSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        $dev_user->assignRole('Admin');
+        // $dev_user->assignRole('Admin');
 
-        $dev_user = User::factory()->create([
-            'name' => 'Abed Said',
-            'email' => 'abed.allah.said@gmail.com',
-            'password' => Hash::make('abedsaid'),
-            'account_type' => 'admin',
-            'created_at' => now(),
-            'updated_at' => now(),
+        // $dev_user = User::factory()->create([
+        //     'name' => 'Abed Said',
+        //     'email' => 'abed.allah.said@gmail.com',
+        //     'password' => Hash::make('abedsaid'),
+        //     'account_type' => 'admin',
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
 
-        ]);
-        $dev_user->assignRole('Admin');
+        // ]);
+        // $dev_user->assignRole('Admin');
+
+        return;
 
 
         
