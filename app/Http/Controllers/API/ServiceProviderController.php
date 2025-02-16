@@ -239,7 +239,7 @@ class ServiceProviderController extends Controller
         // Validate incoming request data
         $request->validate([
             'name'                      => 'required|string|min:1|max:255',
-            'phone'                     => 'required|string|min:9|max:20|exists:users',
+            'phone'                     => 'required|string|min:9|max:20|unique:users',
             'password'                  => 'required|string|min:8|max:255|confirmed',
             'is_personal'               => 'required|boolean',
             'maroof_document'           => 'required_if:is_personal,true|file|mimes:jpg,png,pdf|max:4096',
