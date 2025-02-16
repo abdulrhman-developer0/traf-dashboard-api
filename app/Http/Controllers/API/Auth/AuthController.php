@@ -32,7 +32,7 @@ class AuthController extends Controller
         $user = User::firstWhere('phone', $request->phone);
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return $this->badResponse([], 'Invalid email or password');
+            return $this->badResponse([], 'Invalid Credentials');
         }
 
         $data = [];
