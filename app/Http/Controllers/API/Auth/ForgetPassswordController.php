@@ -69,7 +69,7 @@ class ForgetPassswordController extends Controller
             'code'   => 'required|string|digits:5'
         ]);
 
-        $otp = OneTimePassword::wherePhone($request->phone)
+        $otp = OneTimePassword::whereEmail($request->phone)
             ->whereCode($request->code)
             ->where('expired_at', '>', now())
             ->first();
