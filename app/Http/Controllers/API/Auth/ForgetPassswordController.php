@@ -31,7 +31,7 @@ class ForgetPassswordController extends Controller
             'phone'  => 'required|string|exists:users'
         ]);
 
-        $user = User::firstWhere('phone', $request->email);
+        $user = User::firstWhere('phone', $request->phone);
 
 
         $otp = OneTimePassword::create([
