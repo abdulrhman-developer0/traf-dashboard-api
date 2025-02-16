@@ -78,7 +78,7 @@ class ForgetPassswordController extends Controller
             return $this->badResponse([], 'Invalid Code');
         }
 
-        $user = User::firstWhere('phone', $otp->phone);
+        $user = User::firstWhere('phone', $request->phone);
 
         $plainTextToken = "$otp->id|" . Str::random(24);
 
