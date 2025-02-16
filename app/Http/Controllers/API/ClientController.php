@@ -75,7 +75,7 @@ class ClientController extends Controller
 
         $data = [];
 
-        $data['token'] = $user->createToken($user->email)->plainTextToken;
+        $data['token'] = $user->createToken($user->phone)->plainTextToken;
 
 
         $user->generateCode();

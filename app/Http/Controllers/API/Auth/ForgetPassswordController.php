@@ -118,7 +118,7 @@ class ForgetPassswordController extends Controller
         $resetToken->expired_at = now();
         $resetToken->save();
 
-        $data = ['token' => $user->createToken($user->email)->plainTextToken];
+        $data = ['token' => $user->createToken($user->phone)->plainTextToken];
 
         return $this->createdResponse($data, 'Reset password successfuly');
     }

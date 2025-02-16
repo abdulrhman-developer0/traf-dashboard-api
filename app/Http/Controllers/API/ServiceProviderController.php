@@ -319,7 +319,7 @@ class ServiceProviderController extends Controller
 
         $data = [];
 
-        $data['token'] = $user->createToken($user->email)->plainTextToken;
+        $data['token'] = $user->createToken($user->phone)->plainTextToken;
 
         if (config('app.env') !== 'production') {
             $data['test_code'] = $user->code;

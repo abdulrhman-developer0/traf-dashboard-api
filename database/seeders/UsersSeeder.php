@@ -23,7 +23,7 @@ class UsersSeeder extends Seeder
 
         $dev_user = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@traf.com',
+            'phone' => 'admin@traf.com',
             'password' => Hash::make('adminadmin'),
             'account_type' => 'admin',
             'created_at' => now(),

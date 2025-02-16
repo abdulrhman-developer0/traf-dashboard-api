@@ -64,7 +64,7 @@ class AuthController extends Controller
             ], "حسابك قيد المراجعة من قبل المسؤل ");
         }
 
-        $data['token'] = $user->createToken('api-user-login')->plainTextToken;
+        $data['token'] = $user->createToken($user->phone)->plainTextToken;
 
         $data['user'] = UserResource::make($user);
 
