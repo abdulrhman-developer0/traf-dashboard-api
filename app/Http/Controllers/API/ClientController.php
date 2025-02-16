@@ -52,9 +52,8 @@ class ClientController extends Controller
         // Validate incoming request data
         $request->validate([
             'name'      => 'required|string|min:1|max:255',
-            'phone'     => 'required|string|min:5|max:255|unique:users,email',
+            'phone'     => 'required|string|min:9|max:20|exists:users',
             'password'  => 'required|string|min:8|max:255|confirmed',
-            'phone'     => 'required|string|min:9|max:20',
             'address'   => 'nullable|string|min:1|max:255',
         ]);
 
