@@ -46,11 +46,11 @@ class ProfileController extends Controller
 
         $dynmicRules = match ($user->account_type) {
             'client'            => [
-                'phone'     => 'required|string|min:9|max:20',
+                // 'phone'     => 'required|string|min:9|max:20',
                 'address'   => 'nullable|string|min:1|max:255',
             ],
             'service-provider'  => [
-                'phone'     => 'required|string|min:9|max:20',
+                // 'phone'     => 'required|string|min:9|max:20',
                 'address'   => 'nullable|string|min:1|max:255',
                 'job' => 'nullable|string|max:255',
                 'longitude'   => 'nullable|numeric',
