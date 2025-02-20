@@ -18,6 +18,13 @@ class Booking extends Model
         'confirmed',
         'done'
     ];
+    public const PAYMENT_SATUSES = [
+        'pending',
+        'fully_captured',
+        'fully_refunded',
+        'canceled',
+        'failed'
+    ];
 
     protected $fillable = [
         'client_id',
@@ -30,6 +37,10 @@ class Booking extends Model
         'changed_at',
         'longitude',
         'latitude',
+        'payment_method',
+        'payment_status',
+        'reference_payment',
+        'payment_amount',
     ];
 
     protected $casts = [

@@ -116,6 +116,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::patch('/bookings/change', [BookingController::class, 'change']);
     Route::apiResource('/bookings', BookingController::class);
+    Route::get('/bookings/tamara/checkout/{booking_id}', [BookingController::class,'tamaraCreateCheckout']);
+    Route::get('/bookings/tamara/{booking_id}/cancel', [BookingController::class,'tamaraCancel']);
+    Route::get('/bookings/tamara/{booking_id}/failure', [BookingController::class,'tamaraFailure']);
+    Route::get('/bookings/tamara/{booking_id}/success', [BookingController::class,'tamaraGetOrderDetails']);
+    Route::get('/bookings/tamara/{booking_id}/notification', [BookingController::class,'tamaraNotification']);
 
 
     Route::apiResource('/reviews', ReviewsController::class);

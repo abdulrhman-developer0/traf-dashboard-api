@@ -40,5 +40,11 @@ return [
         'integration_id' => env('PAYMOB_INTEGRATION_ID'),
         'hmac_secret' => env('PAYMOB_HMAC_SECRET'),
     ],
+    'tamara' => [
+        'api_url' => env('TAMARA_API_URL'),
+        'api_token' => env('TAMARA_API_TOKEN'),
+        'api_request_timeout' => env('TAMARA_API_REQUEST_TIMEOUT', 1000),
+    ],
+
 
 ];

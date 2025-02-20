@@ -24,6 +24,7 @@
         "spatie/laravel-permission": "^6.9",
         "spatie/laravel-query-builder": "^6.2",
         "spatie/laravel-translatable": "^6.8",
+        "tamara-solution/php-sdk": "^2.0",
         "tightenco/ziggy": "^2.3",
         "twilio/sdk": "^8.3"
     },

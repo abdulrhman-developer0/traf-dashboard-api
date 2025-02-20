@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Models\Client;
+use App\Models\Service;
 use App\Models\ServiceProvider;
 use App\Notifications\DBNotification;
 use App\Notifications\PusherNotification;
@@ -21,9 +22,15 @@ use Illuminate\Support\Facades\Notification;
 class BookingController extends Controller
 {
     use APIResponses;
-
+    protected  $apiUrl;
+    protected $apiToken;
+    protected $apiRequestTimeout;
     public function __construct()
     {
+        $this->apiUrl = config('services.tamara.api_url');
+        $this->apiToken = config('services.tamara.api_token');
+        $this->apiRequestTimeout = config('services.tamara.api_request_timeout');
+
         // protected methods
         $this->middleware('auth:sanctum');
 
@@ -104,7 +111,130 @@ class BookingController extends Controller
 
         return $this->okResponse(BookingResource::make($booking), 'Retrieved booking successfully');
     }
+    public function tamaraCancel($booking_id)
+    {
+        $booking = Booking::findOrFail($booking_id);
+        $booking->payment_status = 'canceled';
+        $booking->save();
+        return $this->okResponse([], __('Tamara Payment Canceled'));
+    }
+    public function tamaraFailure($booking_id)
+    {
+        $booking = Booking::findOrFail($booking_id);
+        $booking->payment_status = 'failed';
+        $booking->save();
+        return $this->okResponse([], __('Tamara Payment Failed'));
+    }
+    public function tamaraNotification($booking_id)
+    {
+        $booking = Booking::findOrFail($booking_id);
+        return $this->okResponse([], __('Tamara Payment Success'));
+    }
+    public function tamaraCreateCheckout($booking_id)
+    {
 
+        $booking = Booking::findOrFail($booking_id);
+        $booking->payment_method = 'tamara';
+        $booking->payment_status = 'pending';
+        $booking->reference_payment = 'TAMARA-' . uniqid();
+        $booking->save();
+
+        $client_ = new \GuzzleHttp\Client();
+        $service = $booking->service;
+        $client = $booking->client;
+        $user = $client->user;
+        $currency = 'SAR';
+        $response = $client_->request('POST', $this->apiUrl.'/checkout', [
+          'body' => json_encode([
+              'total_amount' => ['amount' => $service->payment_amount, 'currency' => $currency],
+              'shipping_amount' => ['amount' => 1, 'currency' => $currency],
+              'tax_amount' => ['amount' => 1, 'currency' => $currency],
+              'order_reference_id' => $booking->reference_payment ,
+              'order_number' => $booking->id,
+              'discount' => [],
+              'items' => [[
+                  'name' => $service->name,
+                  'type' => 'Service',
+                  'reference_id' => $service->id,
+                  'sku' => 'S-'.$service->id.'B-'.$booking->id,
+                  'quantity' => 1,
+                  'discount_amount' => [],
+                  'tax_amount' => ['amount' => 0, 'currency' => $currency],
+                  'unit_price' => ['amount' => $service->price_after, 'currency' => $currency],
+                  'total_amount' => ['amount' => $service->price_after, 'currency' => $currency]
+              ]],
+              'consumer' => [
+                  'email' => $user->email,
+                  'first_name' => $user->name,
+                  'last_name' => $user->name,
+                  'phone_number' => $user->phone
+              ],
+              'country_code' => 'SA',
+              'description' => $service->description,
+              'merchant_url' => [
+                  'cancel' => asset('api/bookings/tamara/'.$booking->id.'/cancel?type=tamara'),
+                  'failure' => asset('api/bookings/tamara/'.$booking->id.'/failure?type=tamara'),
+                  'success' => asset('api/bookings/tamara/'.$booking->id.'/success?type=tamara'),
+                  'notification' => asset('api/bookings/tamara/'.$booking->id.'/notification?type=tamara')
+              ],
+              'payment_type' => 'PAY_BY_INSTALMENTS',
+              'instalments' => 3,
+              'billing_address' => [
+                  'city' => $client->city,
+                  'country_code' => 'SA',
+                  'first_name' => $user->name,
+                  'last_name' => $user->name,
+                  'line1' => $client->address,
+                  'phone_number' => $client->phone,
+                  'region' => 'As Sulimaniyah'
+              ],
+              'shipping_address' => [
+                  'city' => $client->city,
+                  'country_code' => 'SA',
+                  'first_name' =>$user->name,
+                  'last_name' => $user->name,
+                  'line1' => $client->address,
+                  'phone_number' => $client->phone,
+                  'region' => 'As Sulimaniyah'
+              ],
+              'is_mobile' => true,
+              'locale' => 'ar_SA'
+          ]),
+          'headers' => [
+            'accept' => 'application/json',
+            'authorization' => 'Bearer '.$this->apiToken,
+            'content-type' => 'application/json',
+          ],
+        ]);
+        $body = json_decode($response->getBody()->getContents());
+        return $this->okResponse($body, __('Tamara checkout created successfully'));
+    }
+    public function tamaraGetOrderDetails($booking_id)
+    {
+
+        $booking = Booking::findOrFail($booking_id);
+        if($booking->payment_method != 'tamara'){
+            return $this->badResponse('Booking payment method is not tamara');
+        }
+        $booking->payment_status = 'pending';
+        $booking->save();
+
+        $client_ = new \GuzzleHttp\Client();
+        $response = $client_->request('POST', $this->apiUrl.'/merchants/orders/reference-id/'.$booking->reference_payment , [
+          'headers' => [
+            'accept' => 'application/json',
+            'authorization' => 'Bearer '.$this->apiToken,
+            'content-type' => 'application/json',
+          ],
+        ]);
+        $body = json_decode($response->getBody()->getContents());
+        if($body->data->status != 'new'){
+            $booking->payment_status = $body->data->status;
+            $booking->save();
+            return $this->okResponse($body, __('Tamara Payment Completed'));
+        }
+        return $this->okResponse($body, __('Tamara Payment Pending'));
+    }
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -118,7 +248,7 @@ class BookingController extends Controller
 
         // get user
         $user                   = Auth::user();
-
+        $service = Service::findOrFail($request->service_id);
         $bookingData = [
             'client_id' => $user->client->id,
             'service_id' => $request->service_id,
@@ -126,7 +256,8 @@ class BookingController extends Controller
             'date' => Carbon::create($request->date)->toDateTimeString(),
             'address' => $request->address,
             'longitude'     => $request->longitude,
-            'latitude'      => $request->latitude,
+            'latitude'          => $request->latitude,
+            'payment_amount'    => $service->price_after,
         ];
 
         $booking = Booking::create($bookingData);
@@ -190,8 +321,6 @@ class BookingController extends Controller
 
         $booking->status = $status;
         $booking->save();
-
-
         if ($booking->status == 'canceled') {
 
             $booking->canceled_at = now();
