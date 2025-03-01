@@ -106,4 +106,9 @@ class User extends Authenticatable implements HasMedia, HasAccounts
     {
         return $this->hasOne(Location::class);
     }
+
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
 }
