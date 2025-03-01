@@ -32,23 +32,23 @@ class BookingController extends Controller
         $this->apiRequestTimeout = config('services.tamara.api_request_timeout');
 
         // protected methods
-        $this->middleware('auth:sanctum');
+        // $this->middleware('auth:sanctum');
 
 
-        // this methods are only for client
-        $this->middleware('account:client')->only([
-            'store',
-            'change'
-        ]);
+        // // this methods are only for client
+        // $this->middleware('account:client')->only([
+        //     'store',
+        //     'change'
+        // ]);
 
-        $this->middleware('account:client,service-provider')->only([
-            'update'
-        ]);
+        // $this->middleware('account:client,service-provider')->only([
+        //     'update'
+        // ]);
 
-        // this methods are only for service provider and admin
-        $this->middleware('account:service-provider,admin')->only([
-            'destroy',
-        ]);
+        // // this methods are only for service provider and admin
+        // $this->middleware('account:service-provider,admin')->only([
+        //     'destroy',
+        // ]);
     }
 
 
