@@ -99,6 +99,7 @@ Route::post('/services/favorits', [FavoritController::class, 'taggle']);
 
 
 Route::apiResource('services', ServiceController::class);
+Route::get('/bookings/tamara/checkout-test/{booking_id}', [BookingController::class,'tamaraCreateCheckout']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
