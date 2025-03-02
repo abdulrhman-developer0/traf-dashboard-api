@@ -84,6 +84,11 @@ class User extends Authenticatable implements HasMedia, HasAccounts
             ->logOnly(['name', 'email']);
     }
 
+    public function initializeWallet(): Wallet
+    {
+        return $this->wallet()->firstOrCreate();
+    }
+
 
     // public function notifications()
     // {

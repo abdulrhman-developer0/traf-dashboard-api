@@ -47,6 +47,7 @@ class UserResource extends JsonResource
             'longitude'         => $this->location?->longitude,
             'latitude'         => $this->location?->latitude,
             'created_at'       => $this->created_at,
+            'wallet'           => $this->wallet->only(['balance']),
         ];
     }
 }

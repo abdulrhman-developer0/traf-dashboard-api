@@ -65,6 +65,9 @@ class ClientController extends Controller
             'account_type'  => 'client',
         ]);
 
+        // Initialize wallet if not exists.
+        $user->initializeWallet();
+
         // Create the client associated with the user
         $client = Client::create([
             'user_id'       => $user->id, // Assuming a relationship between Client and User

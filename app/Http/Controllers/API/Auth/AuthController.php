@@ -35,6 +35,9 @@ class AuthController extends Controller
             return $this->badResponse([], 'Invalid Credentials');
         }
 
+        // Initialize wallet if not exists.
+        $user->initializeWallet();
+
         $data = [];
 
         if (! $user->code_verified) {

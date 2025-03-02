@@ -261,6 +261,9 @@ class ServiceProviderController extends Controller
             'password'      => Hash::make($request->password),
             'account_type'  => 'service-provider',
         ]);
+        
+        // Initialize wallet if not exists.
+        $user->initializeWallet();
 
         $user->location()->updateOrCreate(
             $request->only([
