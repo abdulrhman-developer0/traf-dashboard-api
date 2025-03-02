@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enums\TransactionStatusEnum;
-use App\Enums\TransactionTypeEnum;
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -22,8 +22,8 @@ class Transaction extends Model
     ];
 
     protected $casts = [
-        'transaction_type' => TransactionTypeEnum::class,
-        'status' => TransactionStatusEnum::class,
+        'transaction_type' => TransactionType::class,
+        'status' => TransactionStatus::class,
     ];
 
     public function transactionable(): MorphTo

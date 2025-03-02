@@ -30,6 +30,7 @@ use App\Http\Controllers\PaytabsController;
 use App\Http\Controllers\Webhooks\PaymobWebhook;
 use App\Http\Controllers\API\FcmController;
 use App\Http\Controllers\API\PolicyController;
+use App\Http\Controllers\API\WalletController;
 use App\Http\Middleware\TwoFactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -75,6 +76,10 @@ Route::prefix('auth')->group(function () {
         Route::delete('/profile', [ProfileController::class, 'destroyAccount']);
     });
 });
+
+Route::get('/wallet', [WalletController::class, 'index']);
+Route::post('/wallet/deposit', [WalletController::class, 'deposit']);
+Route::post('/wallet/withdraw', [WalletController::class, 'withdraw']);
 
 Route::get('/ads', [AdController::class, 'index']);
 Route::post('/ads', [AdController::class, 'store']);
