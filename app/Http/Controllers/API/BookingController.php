@@ -144,67 +144,67 @@ class BookingController extends Controller
         $client = $booking->client;
         $user = $client->user;
         $currency = 'SAR';
-        $response = $client_->request('POST', $this->apiUrl.'/checkout', [
-          'body' => json_encode([
-              'total_amount' => ['amount' => $service->payment_amount, 'currency' => $currency],
-              'shipping_amount' => ['amount' => 1, 'currency' => $currency],
-              'tax_amount' => ['amount' => 1, 'currency' => $currency],
-              'order_reference_id' => $booking->reference_payment ,
-              'order_number' => $booking->id,
-              'discount' => [],
-              'items' => [[
-                  'name' => $service->name,
-                  'type' => 'Service',
-                  'reference_id' => $service->id,
-                  'sku' => 'S-'.$service->id.'B-'.$booking->id,
-                  'quantity' => 1,
-                  'discount_amount' => [],
-                  'tax_amount' => ['amount' => 0, 'currency' => $currency],
-                  'unit_price' => ['amount' => $service->price_after, 'currency' => $currency],
-                  'total_amount' => ['amount' => $service->price_after, 'currency' => $currency]
-              ]],
-              'consumer' => [
-                  'email' => $user->email,
-                  'first_name' => $user->name,
-                  'last_name' => $user->name,
-                  'phone_number' => $user->phone
-              ],
-              'country_code' => 'SA',
-              'description' => $service->description,
-              'merchant_url' => [
-                  'cancel' => asset('api/bookings/tamara/'.$booking->id.'/cancel?type=tamara'),
-                  'failure' => asset('api/bookings/tamara/'.$booking->id.'/failure?type=tamara'),
-                  'success' => asset('api/bookings/tamara/'.$booking->id.'/success?type=tamara'),
-                  'notification' => asset('api/bookings/tamara/'.$booking->id.'/notification?type=tamara')
-              ],
-              'payment_type' => 'PAY_BY_INSTALMENTS',
-              'instalments' => 3,
-              'billing_address' => [
-                  'city' => $client->city,
-                  'country_code' => 'SA',
-                  'first_name' => $user->name,
-                  'last_name' => $user->name,
-                  'line1' => $client->address,
-                  'phone_number' => $client->phone,
-                  'region' => 'As Sulimaniyah'
-              ],
-              'shipping_address' => [
-                  'city' => $client->city,
-                  'country_code' => 'SA',
-                  'first_name' =>$user->name,
-                  'last_name' => $user->name,
-                  'line1' => $client->address,
-                  'phone_number' => $client->phone,
-                  'region' => 'As Sulimaniyah'
-              ],
-              'is_mobile' => true,
-              'locale' => 'ar_SA'
-          ]),
-          'headers' => [
-            'accept' => 'application/json',
-            'authorization' => 'Bearer '.$this->apiToken,
-            'content-type' => 'application/json',
-          ],
+        $response = $client_->request('POST', $this->apiUrl . '/checkout', [
+            'body' => json_encode([
+                'total_amount' => ['amount' => $service->payment_amount, 'currency' => $currency],
+                'shipping_amount' => ['amount' => 1, 'currency' => $currency],
+                'tax_amount' => ['amount' => 1, 'currency' => $currency],
+                'order_reference_id' => $booking->reference_payment,
+                'order_number' => $booking->id,
+                'discount' => [],
+                'items' => [[
+                    'name' => $service->name,
+                    'type' => 'Service',
+                    'reference_id' => $service->id,
+                    'sku' => 'S-' . $service->id . 'B-' . $booking->id,
+                    'quantity' => 1,
+                    'discount_amount' => [],
+                    'tax_amount' => ['amount' => 0, 'currency' => $currency],
+                    'unit_price' => ['amount' => $service->price_after, 'currency' => $currency],
+                    'total_amount' => ['amount' => $service->price_after, 'currency' => $currency]
+                ]],
+                'consumer' => [
+                    'email' => $user->email,
+                    'first_name' => $user->name,
+                    'last_name' => $user->name,
+                    'phone_number' => $user->phone
+                ],
+                'country_code' => 'SA',
+                'description' => $service->description,
+                'merchant_url' => [
+                    'cancel' => asset('api/bookings/tamara/' . $booking->id . '/cancel?type=tamara'),
+                    'failure' => asset('api/bookings/tamara/' . $booking->id . '/failure?type=tamara'),
+                    'success' => asset('api/bookings/tamara/' . $booking->id . '/success?type=tamara'),
+                    'notification' => asset('api/bookings/tamara/' . $booking->id . '/notification?type=tamara')
+                ],
+                'payment_type' => 'PAY_BY_INSTALMENTS',
+                'instalments' => 3,
+                'billing_address' => [
+                    'city' => $client->city,
+                    'country_code' => 'SA',
+                    'first_name' => $user->name,
+                    'last_name' => $user->name,
+                    'line1' => $client->address,
+                    'phone_number' => $client->phone,
+                    'region' => 'As Sulimaniyah'
+                ],
+                'shipping_address' => [
+                    'city' => $client->city,
+                    'country_code' => 'SA',
+                    'first_name' => $user->name,
+                    'last_name' => $user->name,
+                    'line1' => $client->address,
+                    'phone_number' => $client->phone,
+                    'region' => 'As Sulimaniyah'
+                ],
+                'is_mobile' => true,
+                'locale' => 'ar_SA'
+            ]),
+            'headers' => [
+                'accept' => 'application/json',
+                'authorization' => 'Bearer ' . $this->apiToken,
+                'content-type' => 'application/json',
+            ],
         ]);
         $body = json_decode($response->getBody()->getContents());
         return $this->okResponse($body, __('Tamara checkout created successfully'));
@@ -213,22 +213,22 @@ class BookingController extends Controller
     {
 
         $booking = Booking::findOrFail($booking_id);
-        if($booking->payment_method != 'tamara'){
+        if ($booking->payment_method != 'tamara') {
             return $this->badResponse('Booking payment method is not tamara');
         }
         $booking->payment_status = 'pending';
         $booking->save();
 
         $client_ = new \GuzzleHttp\Client();
-        $response = $client_->request('POST', $this->apiUrl.'/merchants/orders/reference-id/'.$booking->reference_payment , [
-          'headers' => [
-            'accept' => 'application/json',
-            'authorization' => 'Bearer '.$this->apiToken,
-            'content-type' => 'application/json',
-          ],
+        $response = $client_->request('POST', $this->apiUrl . '/merchants/orders/reference-id/' . $booking->reference_payment, [
+            'headers' => [
+                'accept' => 'application/json',
+                'authorization' => 'Bearer ' . $this->apiToken,
+                'content-type' => 'application/json',
+            ],
         ]);
         $body = json_decode($response->getBody()->getContents());
-        if($body->data->status != 'new'){
+        if ($body->data->status != 'new') {
             $booking->payment_status = $body->data->status;
             $booking->save();
             return $this->okResponse($body, __('Tamara Payment Completed'));
@@ -244,6 +244,7 @@ class BookingController extends Controller
             'address'      => 'nullable|string:max:255',
             'longitude'     => 'numeric',
             'latitude'      => 'numeric',
+            'is_cash'       => 'boolean'
         ]);
 
         // get user
@@ -258,6 +259,7 @@ class BookingController extends Controller
             'longitude'     => $request->longitude,
             'latitude'          => $request->latitude,
             'payment_amount'    => $service->price_after,
+            'status'            => $request->is_cash ? 'cash' : 'pending'
         ];
 
         $booking = Booking::create($bookingData);

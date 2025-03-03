@@ -55,12 +55,7 @@ class WalletController extends Controller
             'reference_id'      => $request->reference_id
         ]);
 
-
-        $balance = $wallet->transactions()
-            ->where('status', TransactionStatus::COMPLETED)
-            ->sum('amount');
-
-        $wallet->increment('balance', $balance);
+        $wallet->increment('balance', $request->amount);
 
         return $this->okResponse(
             [

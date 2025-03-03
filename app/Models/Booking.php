@@ -16,6 +16,7 @@ class Booking extends Model
         'pending',
         'canceled',
         'confirmed',
+        'cash',
         'done'
     ];
     public const PAYMENT_SATUSES = [
