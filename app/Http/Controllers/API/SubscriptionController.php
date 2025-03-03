@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Enums\ActivityActions;
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Subscription;
+use App\Models\Transaction;
 use App\Services\PayMobService;
 use App\Traits\APIResponses;
 use Carbon\Carbon;
@@ -34,8 +37,9 @@ class SubscriptionController extends Controller
     public function subscribe(Request $request)
     {
         $validated = $request->validate([
-            'package_id' => 'required|exists:packages,id',
-            'transaction_id' => 'required'
+            'package_id'     => 'required|exists:packages,id',
+            'with_wallet'    => 'boolean',
+            'transaction_id' => 'required_without:with_wallet|string'
         ]);
 
         $user = Auth::user();
@@ -49,7 +53,29 @@ class SubscriptionController extends Controller
         try {
             DB::beginTransaction();
 
-            if (! $serviceProvider->currentSubscription()->exists() ) {
+            if ($request->with_wallet && $user->wallet->balance < $package->price) {
+                return $this->badResponse(
+                    [
+                        'balance'   => $user->wallet->balance,
+                        'price'    => $package->price,
+                    ],
+                    __('هnsufficient_balance')
+                );
+            }
+
+            if ( $request->with_wallet ) {
+                $transaction = $user->wallet->transactions()->create([
+                    'transaction_type'  => TransactionType::PAYMENT,
+                    'status'            => TransactionStatus::COMPLETED,
+                    'amount'            => $package->price
+                ]);
+
+                $user->wallet->decrement('balance', $transaction->amount);
+
+                $validated["transaction_id"] = $transaction->id;
+            }
+
+            if (! $serviceProvider->currentSubscription()->exists()) {
                 $subscription = Subscription::create([
                     'service_provider_id' => $serviceProvider->id,
                     'package_id' => $package->id,
@@ -57,14 +83,15 @@ class SubscriptionController extends Controller
                     'amount' => $package->price,
                     'start_date' => Carbon::now(),  // Set current timestamp as the start date
                     'end_date' => Carbon::now()->addDays($package->duration_in_days),
-                    'transaction_reference'=> $validated["transaction_id"]
+                    'transaction_reference' => $validated["transaction_id"]
                 ]);
             } else {
                 $subscription = $serviceProvider->currentSubscription;
 
                 // $leftDays =  round(now()->diffInDays($subscription->end_date));
-                
+
                 $subscription->end_date = $subscription->end_date->addDays($package->duration_in_days);
+                $subscription->transaction_reference = $validated["transaction_id"];
                 $subscription->save();
             }
 
@@ -73,7 +100,7 @@ class SubscriptionController extends Controller
 
             DB::commit();
 
-            return $this->okResponse(['payment' => $subscription ], 'Payment subscription created successfully.');
+            return $this->okResponse(['payment' => $subscription], 'Payment subscription created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->badResponse([], 'Failed to create subscription: ' . $e->getMessage());

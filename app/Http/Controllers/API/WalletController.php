@@ -78,15 +78,15 @@ class WalletController extends Controller
 
         $wallet = $user->wallet()->firstOrCreate();
 
-                if ( $request->amount > $wallet->balance ) {
-                    return $this->badResponse(
-                        [
-                            'balance'   => $wallet->balance,
-                            'amount'    => $request->amount,
-                        ],
-                        __('هnsufficient_balance')
-                    );
-                }
+        if ($request->amount > $wallet->balance) {
+            return $this->badResponse(
+                [
+                    'balance'   => $wallet->balance,
+                    'amount'    => $request->amount,
+                ],
+                __('هnsufficient_balance')
+            );
+        }
 
 
         $transaction = $wallet->transactions()->create([
