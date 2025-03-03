@@ -55,6 +55,7 @@ class WalletController extends Controller
             'reference_id'      => $request->reference_id
         ]);
 
+        // ..
         $wallet->increment('balance', $request->amount);
 
         return $this->okResponse(
