@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Enums\ActivityActions;
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Events\PushNotification;
 use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
@@ -314,6 +316,7 @@ class BookingController extends Controller
 
 
 
+        // You can't cancel or change the current booking
         if ($status == 'canceled' && $totalBookingCanceledToday >= 1) {
             return $this->badResponse([
                 'reason'    => 'cancel_limitation_error'
@@ -323,6 +326,7 @@ class BookingController extends Controller
 
         $booking->status = $status;
         $booking->save();
+
         if ($booking->status == 'canceled') {
 
             $booking->canceled_at = now();
@@ -380,9 +384,17 @@ class BookingController extends Controller
             $refundedAmount = $payment->amount * (1 - $refundPenaltyPercentage / 100);
 
             if ($refundedAmount > 0) {
+                $clientUser = $booking->client->user;
 
                 // call refund service here.
-                // ??
+                $clientUser->wallet->transactions()->create([
+                    'transaction_type'  => TransactionType::REFUND,
+                    'status'            => TransactionStatus::COMPLETED,
+                    'amount'            => $refundedAmount,
+                    'reference_id'      => $payment->id
+                ]);
+
+                $clientUser->wallet->increment('balance', $refundedAmount);
 
                 activities(ActivityActions::RefundProcessed, 'عملية استرجاع اموال', "تم ارجاع مبلغ $refundedAmount ريال الي {$booking->client->user->name}");
 

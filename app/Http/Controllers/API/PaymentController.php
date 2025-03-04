@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Enums\ActivityActions;
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Payment;
@@ -25,13 +27,14 @@ class PaymentController extends Controller
         $this->payMobService = $payMobService;
     }
 
-    
+
     public function subscribe(Request $request)
     {
         // Validate the booking and transaction_id
         $request->validate([
-            'booking_id' => 'required|exists:bookings,id',
-            'transaction_id' => 'required'
+            'booking_id'     => 'required|exists:bookings,id',
+            'with_wallet'    => 'boolean',
+            'transaction_id' => 'required_without:with_wallet|string'
         ]);
 
 
@@ -50,11 +53,9 @@ class PaymentController extends Controller
             return $this->badResponse('Unauthorized access to the booking');
         }
 
-        // Update the booking status
-        $booking->status = 'confirmed';
-        $booking->save();
 
         $service = $booking->service;
+
         $serviceName = $service->name;
         $amount = $service->is_offer ? $service->price_after : $service->price_before;
 
@@ -62,15 +63,53 @@ class PaymentController extends Controller
         DB::beginTransaction();
 
         try {
+            $transactionId = 1;
+
+            if ($request->with_wallet && $user->wallet->balance < $amount) {
+                return $this->badResponse(
+                    [
+                        'balance'   => $user->wallet->balance,
+                        'amount'    => $amount,
+                    ],
+                    __('هnsufficient_balance')
+                );
+            }
+
+            if ($request->with_wallet) {
+                $transaction = $user->wallet->transactions()->create([
+                    'transaction_type'  => TransactionType::WITHDRAW,
+                    'status'            => TransactionStatus::COMPLETED,
+                    'amount'            => $amount
+                ]);
+
+                $user->wallet->decrement('balance', $amount);
+
+                $transactionId = $transaction->id;
+            }
 
             // Create the payment record
             $payment = Payment::create([
                 'booking_id' => $booking->id,
                 'payment_status' => 'paid',
-                'transaction_reference' => $request->transaction_id,  // Corrected variable
+                'transaction_reference' => $transactionId,
                 'amount' => $amount,  // Assuming you need to store the amount as well
                 'service_id' => $service->id, // Assuming you need to store service_id
             ]);
+
+            $ServiceProviderUser = $service->serviceProvider->user;
+
+            $transaction = $ServiceProviderUser->wallet->transactions()->create([
+                'transaction_type'  => TransactionType::DEPOSIT,
+                'status'            => TransactionStatus::COMPLETED,
+                'amount'            => $amount,
+                'reference_id'      => $payment->id
+            ]);
+
+            $ServiceProviderUser->wallet->increment('balance', $amount);
+
+            // Update the booking status
+            $booking->status = 'confirmed';
+            $booking->save();
 
             // Commit the transaction
             DB::commit();
@@ -78,12 +117,12 @@ class PaymentController extends Controller
             $targtUser = $booking->service->serviceProvider->user;
 
             $title   = 'تم تأكيد موعد';
-            $message = __('mobile.confirmed_booking',[
+            $message = __('mobile.confirmed_booking', [
                 'service_name' => $booking->service->name,
                 'name' => $user->name,
                 'time' => $booking->date->format('h:i A')
             ], 'ar');
-            
+
             $data = [
                 'status' => 'confirmed',
                 'date' => $booking->date,
@@ -108,7 +147,7 @@ class PaymentController extends Controller
                     $message
                 );
 
-                activities(ActivityActions::PaymentMade, 'عملية دفع جديدة', "قام $user->name بدفع $amount ريال لجلسة {$booking->service->name}");
+            activities(ActivityActions::PaymentMade, 'عملية دفع جديدة', "قام $user->name بدفع $amount ريال لجلسة {$booking->service->name}");
 
             // Optionally: You can return a success response with payment details
             return $this->okResponse(['payment' => $payment], 'Payment subscription created successfully.');
