@@ -27,15 +27,15 @@ class WalletController extends Controller
 
         $balance = $wallet->balance;
 
-        $totalDeposit = $wallet->where('transaction_type', TransactionType::DEPOSIT)->sum('amount');
+        $totalDeposit = where('transaction_type', TransactionType::DEPOSIT)->sum('amount');
 
-        $totalWithdraw = $wallet->where('transaction_type', TransactionType::WITHDRAW)->sum('amount');
+        $totalWithdraw = where('transaction_type', TransactionType::WITHDRAW)->sum('amount');
 
-        $totalPayment = $wallet->where('transaction_type', TransactionType::PAYMENT)->sum('amount');
+        $totalPayment = where('transaction_type', TransactionType::PAYMENT)->sum('amount');
 
-        $totalRefund = $wallet->where('transaction_type', TransactionType::REFUND)->sum('amount');
+        $totalRefund = where('transaction_type', TransactionType::REFUND)->sum('amount');
 
-        $totalTransfer = $wallet->where('transaction_type', TransactionType::TRANSFER)->sum('amount');
+        $totalTransfer = where('transaction_type', TransactionType::TRANSFER)->sum('amount');
 
         $transactionPaginator = $wallet->transactions()
             ->latest()
