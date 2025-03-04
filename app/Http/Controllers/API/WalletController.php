@@ -6,6 +6,7 @@ use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TransactionResource;
+use App\Models\Transaction;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 
@@ -24,14 +25,30 @@ class WalletController extends Controller
 
         $wallet = $user->wallet()->firstOrCreate();
 
+        $balance = $wallet->balance;
+
+        $totalDeposit = $wallet->where('transaction_type', TransactionType::DEPOSIT)->sum('amount');
+
+        $totalWithdraw = $wallet->where('transaction_type', TransactionType::WITHDRAW)->sum('amount');
+
+        $totalPayment = $wallet->where('transaction_type', TransactionType::PAYMENT)->sum('amount');
+
+        $totalRefund = $wallet->where('transaction_type', TransactionType::REFUND)->sum('amount');
+
+        $totalTransfer = $wallet->where('transaction_type', TransactionType::TRANSFER)->sum('amount');
+
         $transactionPaginator = $wallet->transactions()
             ->latest()
             ->paginate($request->input('page_size', 20));
 
         return $this->okResponse(
             [
-                'balance'       => $wallet->balance,
-                'transactions'  => TransactionResource::collection($transactionPaginator->items())
+                'balance'           => $balance,
+                'total_deposit'     => $totalDeposit,
+                'total_withdraw'    => $totalWithdraw,
+                'total_payment'     => $totalPayment,
+                'total_transfer'    => $totalTransfer,
+                'transactions'      => TransactionResource::collection($transactionPaginator->items())
             ],
             __('wallet_retrieved_successfuly')
         );
