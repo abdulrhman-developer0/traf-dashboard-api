@@ -25,11 +25,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phone'     => 'required|string',
+            'email'     => 'nullable|email|exists:users',
+            'phone'     => 'required_without:email|string',
             'password'  => 'required|string|min:8'
         ]);
 
-        $user = User::firstWhere('phone', $request->phone);
+        $user = User::where('email', $request->email)
+            ->orWhere('phone', $request->phone)
+            ->first();
+
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->badResponse([], 'Invalid Credentials');
@@ -67,7 +71,8 @@ class AuthController extends Controller
             ], "حسابك قيد المراجعة من قبل المسؤل ");
         }
 
-        $data['token'] = $user->createToken($user->phone)->plainTextToken;
+        $username = $user->phone ??  $user->email;
+        $data['token'] = $user->createToken($request->ip() . '/' .  $username)->plainTextToken;
 
         $data['user'] = UserResource::make($user);
 

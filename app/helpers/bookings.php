@@ -29,7 +29,7 @@ if (!function_exists('isTimeAvailable')) {
         // Check if the time is available
         foreach ($schedules as $schedule) {
             $existingBooking = DB::table('bookings')
-                ->whereStatus('confirmed')
+                ->whereIn('status', ['confirmed', 'cash'])
                 ->whereNotIn('id', $ignoredIds)
                 ->where('service_id', $serviceId)
                 ->where('date', $datetime)
