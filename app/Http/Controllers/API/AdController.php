@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\adResource;
 use App\Models\Ad;
@@ -121,7 +123,9 @@ class AdController extends Controller
     {
         $request->validate([
             'ad_id'                 => 'required|integer|exists:ads,id',
-            'transaction_id'        => 'required|string|max:255'
+            'with_wallet'           => 'boolean',
+            'amount'                => 'required_with:with_wallet|numeric',
+            'transaction_id'        => 'required_without:with_wallet|string|max:255'
         ]);
 
         $user = Auth::user();
@@ -152,7 +156,31 @@ class AdController extends Controller
             ], "Invalid ad status");
         }
 
-        $ad->transaction_id = $request->transaction_id;
+        $transactionId = $request->transaction_id;
+
+        if ($request->with_wallet && $user->wallet->balance < $request->amount) {
+            return $this->badResponse(
+                [
+                    'balance'   => $user->wallet->balance,
+                    'amount'    => $request->amount,
+                ],
+                __('هnsufficient_balance')
+            );
+        }
+
+        if ($request->with_wallet) {
+            $transaction = $user->wallet->transactions()->create([
+                'transaction_type'  => TransactionType::PAYMENT,
+                'status'            => TransactionStatus::COMPLETED,
+                'amount'            => $request->amount
+            ]);
+
+            $user->wallet->decrement('balance', $transaction->amount);
+
+            $transactionId = $transaction->id;
+        }
+
+        $ad->transaction_id = $transactionId;
         $ad->status         = 'approved';
 
         $ad->save();
