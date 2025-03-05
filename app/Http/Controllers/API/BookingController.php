@@ -62,7 +62,7 @@ class BookingController extends Controller
 
         $query = Booking::query()
             ->latest()
-            // ->whereIn('status', ['confirmed', 'done', 'cash'])
+            ->whereIn('status', ['confirmed', 'done', 'cash'])
             // ->where('created_at', '>=', now()->subDays(90))
             ->with(['client', 'service'])
             ->with('reviews', function ($quary) use ($user, $account) {
@@ -324,6 +324,8 @@ class BookingController extends Controller
 
         $booking->status = $status;
         $booking->save();
+
+        return $status;
 
         if ($booking->status == 'canceled') {
 
