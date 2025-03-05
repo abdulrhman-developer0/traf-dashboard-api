@@ -322,7 +322,7 @@ class BookingController extends Controller
         }
 
         $cashMode = $booking->status == 'cash';
-        
+
         $booking->status = $status;
         $booking->save();
 
@@ -382,7 +382,10 @@ class BookingController extends Controller
 
             $payment    = $booking->payments;
 
-            $refundedAmount = $payment->amount * (1 - $refundPenaltyPercentage / 100);
+            $amount = $payment->amount ?? 0;
+            return $amount;
+
+            $refundedAmount = $amount * (1 - $refundPenaltyPercentage / 100);
 
             if ($refundedAmount > 0 && !$cashMode ) {
                 $clientUser = $booking->client->user;
