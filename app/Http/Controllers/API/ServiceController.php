@@ -153,6 +153,8 @@ class ServiceController extends Controller
             ];
         })->toArray() : [];
 
+        return $serviceWorkers;
+
         $is_home_service = $request->is_home_service ?? false;
         $is_on_site = $request->is_on_site ?? false;
         $is_offer = $request->price_after ? true : false;
