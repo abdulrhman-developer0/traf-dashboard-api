@@ -194,3 +194,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware(['auth:sanctum']);
+
+
+Route::prefix('/dashboard')->group(base_path('/routes/dashboard.php'));

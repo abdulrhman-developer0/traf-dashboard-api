@@ -19,7 +19,8 @@ use Inertia\Inertia;
 class HomeController extends Controller
 {
     use APIResponses;
-    public function index(Request $request)
+
+    public function __invoke(Request $request)
     {
 
         $year = $request->input('year', now()->year);
