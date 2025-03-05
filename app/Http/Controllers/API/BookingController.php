@@ -321,7 +321,8 @@ class BookingController extends Controller
             ], "You can't cancel or change the current booking");
         }
 
-
+        $cashMode = $booking->status == 'cash';
+        
         $booking->status = $status;
         $booking->save();
 
@@ -371,6 +372,7 @@ class BookingController extends Controller
                 $message
             );
 
+
             $leftHours = now()->diffInHours($booking->date);
             // $leftHours = 2;
 
@@ -382,7 +384,7 @@ class BookingController extends Controller
 
             $refundedAmount = $payment->amount * (1 - $refundPenaltyPercentage / 100);
 
-            if ($refundedAmount > 0) {
+            if ($refundedAmount > 0 && !$cashMode ) {
                 $clientUser = $booking->client->user;
 
                 // call refund service here.
