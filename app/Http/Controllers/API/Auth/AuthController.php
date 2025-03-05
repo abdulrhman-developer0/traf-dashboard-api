@@ -31,8 +31,8 @@ class AuthController extends Controller
         ]);
 
         $user = User::query()
-            ->where('email', $request->email)
-            ->orWhere('phone', $request->phone)
+            ->when($request->email, fn($q) => $q->where('email', $request->email))
+            ->when($request->phone, fn($q) => $q->where('phone', $request->phone))
             ->first();
 
 
