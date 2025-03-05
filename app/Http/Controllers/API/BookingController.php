@@ -325,7 +325,7 @@ class BookingController extends Controller
         $booking->status = $status;
         $booking->save();
 
-        return $status;
+        return $booking->status;
 
         if ($booking->status == 'canceled') {
 
