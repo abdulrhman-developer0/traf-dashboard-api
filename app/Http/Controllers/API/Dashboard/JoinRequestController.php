@@ -17,6 +17,7 @@ use Inertia\Inertia;
 class JoinRequestController extends Controller
 {
     use APIResponses;
+
     public function index(Request $request)
     {
         $year = $request->input('year', now()->year);
@@ -67,7 +68,7 @@ class JoinRequestController extends Controller
             ->whereStatus('pending')
             ->latest()
             ->with(['user'])
-            ->paginate(4);
+            ->paginate($request->input('page_size', 4));
 
 
         $data = [
@@ -92,14 +93,15 @@ class JoinRequestController extends Controller
     {
 
         $request->validate([
-            'status' => 'required',
-            // 'rejection_reason'  => 'required'
+            'status' => 'required|in:approved,rejected',
+            'rejection_reason'  => 'required_if:status,rejected'
         ]);
 
         $provider = ServiceProvider::find($id);
         if (!$provider) {
             return $this->notFoundResponse([], 'Service Provider not found');
         }
+
         $provider->update(
             $request->only(['status', 'rejection_reason'])
         );
@@ -115,6 +117,5 @@ class JoinRequestController extends Controller
 
         // return back();
         return $this->okResponse($provider, 'Status updated successfully');
-
     }
 }
