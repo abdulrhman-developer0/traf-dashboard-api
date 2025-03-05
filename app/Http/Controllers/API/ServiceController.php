@@ -153,8 +153,6 @@ class ServiceController extends Controller
             ];
         })->toArray() : [];
 
-        return $serviceWorkers;
-
         $is_home_service = $request->is_home_service ?? false;
         $is_on_site = $request->is_on_site ?? false;
         $is_offer = $request->price_after ? true : false;
@@ -211,6 +209,8 @@ class ServiceController extends Controller
                 'worker_id' => trim($workerId, ' ,'),
             ];
         })->toArray() : [];
+
+        return $serviceWorkers;
 
         $serviceProvider = Auth::user()?->account();
         $service         = $serviceProvider->services()->find($id);
