@@ -66,7 +66,7 @@ class HomeController extends Controller
             ->select(['id', 'client_id', 'service_id', 'date', 'status'])
             ->latest()
             ->with('client.user', 'service.serviceProvider.user')
-            ->paginate(3);
+            ->paginate($request->input('page_size', 3));
 
         $category_stats = ServiceCategory::query()
             ->join('services', 'services.service_category_id', '=', 'service_categories.id')
