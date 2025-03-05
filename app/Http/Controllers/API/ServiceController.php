@@ -205,6 +205,7 @@ class ServiceController extends Controller
         ]);
 
         $serviceWorkers = $request->has('service_workers') ? collect(explode(',', $validated['service_workers']))->map(function ($workerId) {
+            return trim($workerId, ' ,');
             return [
                 'worker_id' => trim($workerId, ' ,'),
             ];
