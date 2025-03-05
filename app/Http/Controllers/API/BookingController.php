@@ -383,7 +383,6 @@ class BookingController extends Controller
             $payment    = $booking->payments;
 
             $amount = $payment->amount ?? 0;
-            return $amount;
 
             $refundedAmount = $amount * (1 - $refundPenaltyPercentage / 100);
 
