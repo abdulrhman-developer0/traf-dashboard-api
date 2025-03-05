@@ -210,7 +210,6 @@ class ServiceController extends Controller
             ];
         })->toArray() : [];
 
-        return $serviceWorkers;
 
         $serviceProvider = Auth::user()?->account();
         $service         = $serviceProvider->services()->find($id);
@@ -237,7 +236,7 @@ class ServiceController extends Controller
         ]);
 
 
-        if ($request->has('service_workers') && !empty($request->service_workers)) {
+        if ( !empty($serviceWorkers) ) {
             $service->workers()->sync($serviceWorkers);
         }
 
