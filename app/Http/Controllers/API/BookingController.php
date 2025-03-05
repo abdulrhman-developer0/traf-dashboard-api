@@ -315,11 +315,11 @@ class BookingController extends Controller
 
 
         // You can't cancel or change the current booking
-        if ($status == 'canceled' && $totalBookingCanceledToday >= 1) {
-            return $this->badResponse([
-                'reason'    => 'cancel_limitation_error'
-            ], "You can't cancel or change the current booking");
-        }
+        // if ($status == 'canceled' && $totalBookingCanceledToday >= 1) {
+        //     return $this->badResponse([
+        //         'reason'    => 'cancel_limitation_error'
+        //     ], "You can't cancel or change the current booking");
+        // }
 
         $cashMode = $booking->status == 'cash';
 
