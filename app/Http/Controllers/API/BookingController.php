@@ -407,7 +407,7 @@ class BookingController extends Controller
             };
 
             return $this->okResponse([
-                'amount'                => $payment->amount,
+                'amount'                => $amount,
                 'refunded_amount'       => $refundedAmount,
                 'penalty_percentage'    => $refundPenaltyPercentage
             ], 'Booking canceled successfuly');
