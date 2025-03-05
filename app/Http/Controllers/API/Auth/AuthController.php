@@ -30,7 +30,8 @@ class AuthController extends Controller
             'password'  => 'required|string|min:8'
         ]);
 
-        $user = User::where('email', $request->email)
+        $user = User::query()
+            ->where('email', $request->email)
             ->orWhere('phone', $request->phone)
             ->first();
 
