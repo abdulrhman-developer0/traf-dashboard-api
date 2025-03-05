@@ -246,7 +246,6 @@ class BookingController extends Controller
             'address'      => 'nullable|string:max:255',
             'longitude'     => 'numeric',
             'latitude'      => 'numeric',
-            'is_cash'       => 'boolean'
         ]);
 
         // get user
@@ -257,11 +256,10 @@ class BookingController extends Controller
             'service_id' => $request->service_id,
             'reference_id' => $request->reference_id,
             'date' => Carbon::create($request->date)->toDateTimeString(),
-            'address' => $request->address,
-            'longitude'     => $request->longitude,
+            'address'           => $request->address,
+            'longitude'         => $request->longitude,
             'latitude'          => $request->latitude,
             'payment_amount'    => $service->price_after,
-            'status'            => $request->is_cash ? 'cash' : 'pending'
         ];
 
         $booking = Booking::create($bookingData);
