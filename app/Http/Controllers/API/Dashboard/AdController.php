@@ -65,7 +65,8 @@ class AdController extends Controller
     public function update(Request $request, Ad $ad)
     {
         $request->validate([
-            'status' => 'required',
+            'status' => 'required|string|in:approved,rejected',
+            'notes'  => 'required_if:status,rejected|string',
         ]);
 
         $ad->update($request->only(['status', 'notes']));
@@ -117,7 +118,6 @@ class AdController extends Controller
 
         // return back()->with('status', ['type' => 'success', 'action' => 'تم تحديث الإعلان بنجاح', 'text' => '']);
         return $this->okResponse($ad, 'تم تحديث الإعلان بنجاح');
-
     }
 
     // public function update(Request $request, $id)
