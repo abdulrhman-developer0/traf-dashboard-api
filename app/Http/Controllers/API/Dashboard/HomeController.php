@@ -84,7 +84,7 @@ class HomeController extends Controller
                 $category['percentage'] = (float) $category['percentage'];
                 return $category;
             })->sortByDesc('percentage')
-            ->toArray();
+            ->values();
 
         $data = [
             'stats' => $stats,
