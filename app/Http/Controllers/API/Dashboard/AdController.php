@@ -51,7 +51,7 @@ class AdController extends Controller
         //     'data' => $data,
         //     'title' => 'Ads'
         // ]);
-        return $this->okResponse($ads, "Ads retrieved successfuly");
+        return $this->okResponse($data, "Ads retrieved successfuly");
     }
 
 
