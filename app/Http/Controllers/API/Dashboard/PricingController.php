@@ -94,7 +94,9 @@ class PricingController extends Controller
         $package = Package::create($request->only(['name', 'price', 'price_after', 'duration_in_days', 'ads_discount']));
 
         // return back()->with('status', ['type' => 'success', 'action' => 'تم اضافة الباقة بنجاح', 'text' => '']);
-        return $this->createdResponse(new LatestPackageCollection($package), 'Package created successfully');
+        return $this->createdResponse([
+            'package' => $package
+        ], 'Package created successfully');
     }
 
     public function update(Request $request, $id)
@@ -115,7 +117,6 @@ class PricingController extends Controller
 
         // return back()->with('status', ['type' => 'success', 'action' => 'تم تعديل الباقة بنجاح', 'text' => '']);
         return $this->okResponse(new LatestPackageCollection($package), 'Package updated successfully');
-
     }
 
 
