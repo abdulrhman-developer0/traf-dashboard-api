@@ -16,7 +16,10 @@ class ActivityController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $activityPaginator = Activity::latest()->paginate($request->input('page_size', 6));
+        $activityPaginator = Activity::query()
+            ->select(['action', 'title', 'description', 'context', 'created_at'])
+            ->latest()
+            ->paginate($request->input('page_size', 6));
 
         return $this->okResponse(
             [
