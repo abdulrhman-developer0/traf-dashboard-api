@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Dashboard\ActivityController;
 use App\Http\Controllers\API\Dashboard\AdController;
 use App\Http\Controllers\API\Dashboard\BookingController;
 use App\Http\Controllers\API\Dashboard\CategoryController;
@@ -14,7 +15,10 @@ use App\Http\Controllers\API\Dashboard\ServiceProviderController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
     Route::get('/home', HomeController::class);
+
+    Route::get('/activities', ActivityController::class);
 
     Route::get('/join-requests', [JoinRequestController::class, 'index']);
     Route::put('/join-requests/{id}', [JoinRequestController::class, 'update']);
