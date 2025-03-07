@@ -35,21 +35,14 @@ class AdController extends Controller
             'in_ads_today_amount' => $in_ads_today_amount,
         ];
 
-        $ads = [];
-
-        // Grab all ad statuses.
-        foreach (Ad::STATUSES as $status) {
-            $paginator = Ad::query()
-                ->whereStatus($status)
-                ->latest()
-                ->paginate(6);
-
-            $ads[$status] = AdCollection::make($paginator);
-        }
+        $ads = Ad::query()
+            ->then($request->status, fn($q) => $q->whereStatus($request->status))
+            ->latest()
+            ->paginate(6);
 
         $data = [
             'stats' => $stats,
-            'ads' => $ads
+            'ads' => AdCollection::make($paginator)
         ];
 
         //dd($data);
