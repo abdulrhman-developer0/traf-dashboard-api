@@ -12,6 +12,7 @@ use App\Http\Controllers\API\Dashboard\PolicyController;
 use App\Http\Controllers\API\Dashboard\PricingController;
 use App\Http\Controllers\API\Dashboard\ServiceController;
 use App\Http\Controllers\API\Dashboard\ServiceProviderController;
+use App\Http\Controllers\API\Dashboard\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -40,5 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/ads', AdController::class);
 
     Route::apiResource('/policies', PolicyController::class);
+
+    Route::apiResource('/withdraw-transactions', WithdrawController::class);
 
 });
