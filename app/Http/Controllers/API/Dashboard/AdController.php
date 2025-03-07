@@ -36,7 +36,7 @@ class AdController extends Controller
         ];
 
         $ads = Ad::query()
-            ->then($request->status, fn($q) => $q->whereStatus($request->status))
+            ->when($request->status, fn($q) => $q->whereStatus($request->status))
             ->latest()
             ->paginate(6);
 
