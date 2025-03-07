@@ -5,11 +5,14 @@ namespace App\Http\Controllers\API\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\CategoryResource;
 use App\Models\ServiceCategory;
+use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
+    use APIResponses;
+
     public function index()
     {
         $categories = ServiceCategory::get();
