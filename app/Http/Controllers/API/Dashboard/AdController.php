@@ -42,7 +42,7 @@ class AdController extends Controller
 
         $data = [
             'stats' => $stats,
-            'ads' => AdCollection::make($paginator)
+            'ads' => AdCollection::make($ads)
         ];
 
         //dd($data);
