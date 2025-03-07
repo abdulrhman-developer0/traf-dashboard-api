@@ -22,7 +22,7 @@ class ActivityController extends Controller
             [
                 'current_page' => $activityPaginator->currentPage(),
                 'last_page'    => $activityPaginator->lastPage(),
-                'activities'   => $activityPaginator->items,
+                'activities'   => $activityPaginator->items(),
             ],
             __('Activities retrieved successfuly')
         );
