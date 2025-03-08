@@ -14,9 +14,15 @@ class LatestBookingsCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
+        $currentPage = $this->currentPage();
+        $lastPage    = $this->lastPage();
+
+        $nextPage = $currentPage + 1;
+
         return [
-            'current_page'  => $this->currentPage(),
-            'last_page'     => $this->lastPage(),
+            'current_page'  => $currentPage,
+            'last_page'     => $lastPage,
+            'next_page'     => $nextPage < $lastPage? $nextPage : null,
             'next_page_url' => $this->nextPageUrl(),
             'items'     => $this->collection->map(function($item) {
                 return [
