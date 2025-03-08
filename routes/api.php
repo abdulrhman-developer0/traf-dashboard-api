@@ -80,6 +80,7 @@ Route::prefix('auth')->group(function () {
 Route::get('/wallet', [WalletController::class, 'index']);
 Route::post('/wallet/deposit', [WalletController::class, 'deposit']);
 Route::post('/wallet/withdraw', [WalletController::class, 'withdraw']);
+Route::put('/wallet/bank-details', [WalletController::class, 'updateBankDetails']);
 
 Route::get('/ads', [AdController::class, 'index']);
 Route::post('/ads', [AdController::class, 'store']);

@@ -20,10 +20,10 @@ class WithdrawController extends Controller
     public function index(Request $request)
     {
         $withdrawPaginator = Transaction::query()
-            ->with(['wallet.user'])
+            ->with(['transactionable.user'])
             ->latest()
             ->where('transaction_type', TransactionType::WITHDRAW)
-            ->where('status', TransactionStatus::PENDING)
+            ->when($request->status, fn($q) => $q->where('status', $request->status))
             ->paginate($request->input('page_size', 20));
 
 
@@ -58,10 +58,8 @@ class WithdrawController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $statuses = implode(',', TransactionStatus::values());
-
         $request->validate([
-            'status' => "required|string|in:$statuses"
+            'status' => "required|string|in:completed,failed"
         ]);
 
 
@@ -74,14 +72,20 @@ class WithdrawController extends Controller
                 [],
                 __("No transaction with id: $id")
             );
-
-            $transaction->update($request->validated());
-
-            return $this->okResponse(
-                [],
-                __("Transaction updated successfuly")
-            );
         }
+
+        $validated = $request->only(['status']);
+
+        if ($request->status == 'completed') {
+            $validated['description'] = "تمت الموافقة على طلب السحب";
+        }
+
+        $transaction->update($validated);
+
+        return $this->okResponse(
+            [],
+            __("Transaction updated successfuly")
+        );
     }
 
     /**

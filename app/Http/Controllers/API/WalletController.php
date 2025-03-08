@@ -6,6 +6,7 @@ use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TransactionResource;
+use App\Http\Resources\WalletResource;
 use App\Models\Transaction;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
@@ -25,31 +26,8 @@ class WalletController extends Controller
 
         $wallet = $user->wallet()->firstOrCreate();
 
-        $balance = $wallet->balance;
-
-        $totalDeposit = $wallet->transactions()->where('transaction_type', TransactionType::DEPOSIT)->sum('amount');
-
-        $totalWithdraw = $wallet->transactions()->where('transaction_type', TransactionType::WITHDRAW)->sum('amount');
-
-        $totalPayment = $wallet->transactions()->where('transaction_type', TransactionType::PAYMENT)->sum('amount');
-
-        $totalRefund = $wallet->transactions()->where('transaction_type', TransactionType::REFUND)->sum('amount');
-
-        $totalTransfer = $wallet->transactions()->where('transaction_type', TransactionType::TRANSFER)->sum('amount');
-
-        $transactionPaginator = $wallet->transactions()
-            ->latest()
-            ->paginate($request->input('page_size', 20));
-
         return $this->okResponse(
-            [
-                'balance'           => $balance,
-                'total_deposit'     => $totalDeposit,
-                'total_withdraw'    => $totalWithdraw,
-                'total_payment'     => $totalPayment,
-                'total_transfer'    => $totalTransfer,
-                'transactions'      => TransactionResource::collection($transactionPaginator->items())
-            ],
+            WalletResource::make($wallet),
             __('wallet_retrieved_successfuly')
         );
     }
@@ -65,15 +43,11 @@ class WalletController extends Controller
 
         $wallet = $user->wallet()->firstOrCreate();
 
-        $transaction = $wallet->transactions()->create([
-            'transaction_type'  => TransactionType::DEPOSIT,
-            'status'            => TransactionStatus::COMPLETED,
-            'amount'            => $request->amount,
-            'reference_id'      => $request->reference_id
-        ]);
-
-        // ..
-        $wallet->increment('balance', $request->amount);
+        $transaction = $wallet->deposit(
+            amount: $request->amount,
+            description: "شحن المحفظة : تم شحن المحفظة بنجاح",
+            refId: $request->reference_id
+        );
 
         return $this->okResponse(
             [
@@ -106,11 +80,11 @@ class WalletController extends Controller
         }
 
 
-        $transaction = $wallet->transactions()->create([
-            'transaction_type'  => TransactionType::WITHDRAW,
-            'status'            => TransactionStatus::PENDING,
-            'amount'            => $request->amount,
-        ]);
+        $transaction = $wallet->withdraw(
+            amount: $request->amount,
+            description: "طلب السحب قيد الانتظار",
+            refId: null
+        );
 
         return $this->okResponse(
             [
@@ -118,6 +92,25 @@ class WalletController extends Controller
                 'transaction'  => TransactionResource::make($transaction)
             ],
             __('transaction_created_successful')
+        );
+    }
+
+    public function updateBankDetails(Request $request)
+    {
+        $request->validate([
+            'account_holder_name' => 'required|string|max:255',
+            'account_number' => 'required|string|max:30',
+            'iban' => 'required|string|max:34',
+            'bank_name' => 'required|string|max:255',
+        ]);
+
+        $wallet = $request->user()->initializeWallet();
+
+        $wallet->update($request->only(['account_holder_name', 'account_number', 'iban', 'bank_name']));
+
+        return $this->okResponse(
+            [],
+            'Bank details updated successfully'
         );
     }
 }
