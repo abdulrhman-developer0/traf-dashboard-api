@@ -22,7 +22,7 @@ class LatestBookingsCollection extends ResourceCollection
         return [
             'current_page'  => $currentPage,
             'last_page'     => $lastPage,
-            'next_page'     => $nextPage < $lastPage? $nextPage : null,
+            'next_page'     => $nextPage > $lastPage? null : $nextPage,
             'next_page_url' => $this->nextPageUrl(),
             'items'     => $this->collection->map(function($item) {
                 return [
