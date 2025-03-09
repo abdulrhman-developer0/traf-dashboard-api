@@ -54,6 +54,21 @@ class Wallet extends Model
         return $transaction;
     }
 
+    public function pay(float $amount, string $description, ?string $refId = null)
+    {
+        $transaction = $this->transactions()->create([
+            'transaction_type'  => TransactionType::PAYMENT,
+            'status'            => TransactionStatus::COMPLETED,
+            'description'       => $description,
+            'amount'            => $amount,
+            'reference_id'      => $refId
+        ]);
+
+        $this->decrement('balance', $transaction->amount);
+
+        return $transaction;
+    }
+
     /** End Of Logic functions */
 
     /** Start Of Relationships */

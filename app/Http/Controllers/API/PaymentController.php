@@ -98,14 +98,11 @@ class PaymentController extends Controller
 
             $ServiceProviderUser = $service->serviceProvider->user;
 
-            $transaction = $ServiceProviderUser->wallet->transactions()->create([
-                'transaction_type'  => TransactionType::DEPOSIT,
-                'status'            => TransactionStatus::COMPLETED,
-                'amount'            => $amount,
-                'reference_id'      => $payment->id
-            ]);
-
-            $ServiceProviderUser->wallet->increment('balance', $amount);
+            $transaction = $user->wallet->deposit(
+                amount: $amount,
+                description: "تم شحن المحفظة بنجاح",
+                refId: $payment->id
+            );
 
             // Update the booking status
             $booking->status = 'confirmed';

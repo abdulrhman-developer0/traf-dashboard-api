@@ -136,7 +136,7 @@ class AdController extends Controller
             ->whereId($request->ad_id)
             ->first();
 
-        if (! $ad) {
+        if (! $ad ) {
             return $this->badResponse([
                 'reason' => 'invalid_id'
             ], "You not have an Ad with id {$request->ad_id}");
@@ -169,13 +169,11 @@ class AdController extends Controller
         }
 
         if ($request->with_wallet) {
-            $transaction = $user->wallet->transactions()->create([
-                'transaction_type'  => TransactionType::PAYMENT,
-                'status'            => TransactionStatus::COMPLETED,
-                'amount'            => $request->amount
-            ]);
-
-            $user->wallet->decrement('balance', $transaction->amount);
+            $transaction = $user->wallet->pay(
+                amount: $request->amount,
+                description: "تم دفع الإعلان بنجاح",
+                refId: null
+            );
 
             $transactionId = $transaction->id;
         }

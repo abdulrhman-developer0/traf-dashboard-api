@@ -63,14 +63,12 @@ class SubscriptionController extends Controller
                 );
             }
 
-            if ( $request->with_wallet ) {
-                $transaction = $user->wallet->transactions()->create([
-                    'transaction_type'  => TransactionType::PAYMENT,
-                    'status'            => TransactionStatus::COMPLETED,
-                    'amount'            => $package->price
-                ]);
-
-                $user->wallet->decrement('balance', $transaction->amount);
+            if ($request->with_wallet) {
+                $transaction = $user->wallet->pay(
+                    amount: $package->price,
+                    description: "تم دفع باقة الاشتراك",
+                    refId: null
+                );
 
                 $validated["transaction_id"] = $transaction->id;
             }

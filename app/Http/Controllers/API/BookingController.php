@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\Console\Descriptor\Descriptor;
 
 class BookingController extends Controller
 {
@@ -326,6 +327,17 @@ class BookingController extends Controller
         $booking->status = $status;
         $booking->save();
 
+        if ($booking->status == 'done'  && !$cashMode) {
+            $amount = $booking->price_after ?? $booking->price_before;
+
+            $user->wallet->deposit(
+                amount: $amount,
+                description: "تم استلام التحويل بنجاح"
+            );
+
+            $user->wallet->increment('total_profit', $amount);
+        }
+
 
         if ($booking->status == 'canceled') {
 
@@ -386,7 +398,7 @@ class BookingController extends Controller
 
             $refundedAmount = $amount * (1 - $refundPenaltyPercentage / 100);
 
-            if ($refundedAmount > 0 && !$cashMode ) {
+            if ($refundedAmount > 0 && !$cashMode) {
                 $clientUser = $booking->client->user;
 
                 // call refund service here.
