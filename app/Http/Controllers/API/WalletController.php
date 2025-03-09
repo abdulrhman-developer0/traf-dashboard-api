@@ -45,7 +45,7 @@ class WalletController extends Controller
 
         $transaction = $wallet->deposit(
             amount: $request->amount,
-            description: "شحن المحفظة : تم شحن المحفظة بنجاح",
+            description: " تم شحن المحفظة بنجاح",
             refId: $request->reference_id
         );
 
