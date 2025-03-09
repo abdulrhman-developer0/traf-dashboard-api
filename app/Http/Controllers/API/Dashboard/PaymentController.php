@@ -60,30 +60,23 @@ class PaymentController extends Controller
             return $actual->sum('amount');
         })->toArray();
 
-        $bookings = [];
-        $statuses = ['paid', 'refund'];
-
-        foreach ($statuses as $status) {
-            $paginator = Booking::query()
-                ->whereHas(
-                    'payments',
-                    fn($q) => $q->where('payment_status', $status)
-                )
-                ->select(['id', 'client_id', 'service_id', 'date', 'status'])
-                ->latest()
-                ->with('client.user', 'service.serviceProvider.user')
-                ->paginate(4);
-
-            $bookings[$status] = BookingCollection::make($paginator);
-        }
+        $bookings = Booking::query()
+            ->whereHas(
+                'payments',
+                fn($q) => $q->when($request->status, fn($q) => $q->where('payment_status', $request->status))
+            )
+            ->select(['id', 'client_id', 'service_id', 'date', 'status'])
+            ->latest()
+            ->with('client.user', 'service.serviceProvider.user')
+            ->paginate($request->input('page_size', 4));
 
 
         $data = [
             'stats' => $stats,
             'chart' => $chart,
-            'bookings' => $bookings,
+            'bookings' => BookingCollection::make($bookings),
         ];
-        
+
         //dd($data);
         // return Inertia::render('payments/index', [
         //     'data' => $data,
@@ -91,6 +84,5 @@ class PaymentController extends Controller
         //     'title' => 'Payments'
         // ]);
         return $this->okResponse($data, 'Payments data retrieved successfully');
-
     }
 }
