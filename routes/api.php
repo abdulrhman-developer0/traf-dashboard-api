@@ -39,6 +39,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/cron', function () {
 
+    Artisan::call('app:subscription-reminder');
+
     Artisan::call('app:booking-reminder');
 
     Artisan::call('app:update-ads-status');
@@ -105,7 +107,7 @@ Route::post('/services/favorits', [FavoritController::class, 'taggle']);
 
 
 Route::apiResource('services', ServiceController::class);
-Route::get('/bookings/tamara/checkout-test/{booking_id}', [BookingController::class,'tamaraCreateCheckout']);
+Route::get('/bookings/tamara/checkout-test/{booking_id}', [BookingController::class, 'tamaraCreateCheckout']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/cities', CityController::class);
@@ -123,11 +125,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::patch('/bookings/change', [BookingController::class, 'change']);
     Route::apiResource('/bookings', BookingController::class);
-    Route::get('/bookings/tamara/checkout/{booking_id}', [BookingController::class,'tamaraCreateCheckout']);
-    Route::get('/bookings/tamara/{booking_id}/cancel', [BookingController::class,'tamaraCancel']);
-    Route::get('/bookings/tamara/{booking_id}/failure', [BookingController::class,'tamaraFailure']);
-    Route::get('/bookings/tamara/{booking_id}/success', [BookingController::class,'tamaraGetOrderDetails']);
-    Route::get('/bookings/tamara/{booking_id}/notification', [BookingController::class,'tamaraNotification']);
+    Route::get('/bookings/tamara/checkout/{booking_id}', [BookingController::class, 'tamaraCreateCheckout']);
+    Route::get('/bookings/tamara/{booking_id}/cancel', [BookingController::class, 'tamaraCancel']);
+    Route::get('/bookings/tamara/{booking_id}/failure', [BookingController::class, 'tamaraFailure']);
+    Route::get('/bookings/tamara/{booking_id}/success', [BookingController::class, 'tamaraGetOrderDetails']);
+    Route::get('/bookings/tamara/{booking_id}/notification', [BookingController::class, 'tamaraNotification']);
 
 
     Route::apiResource('/reviews', ReviewsController::class);
