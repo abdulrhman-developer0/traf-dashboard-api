@@ -26,11 +26,22 @@ class WithdrawController extends Controller
             ->when($request->status, fn($q) => $q->where('status', $request->status))
             ->paginate($request->input('page_size', 20));
 
+        $currentPage = $withdrawPaginator->currentPage();
+        $lastPage    = $withdrawPaginator->lastPage();
+
+        $nextPage = $currentPage + 1;
+        $prevPage = $currentPage - 1;
+
+
 
         return $this->okResponse(
             [
-                'last_page'     => $withdrawPaginator->currentPage(),
-                'last_page'     => $withdrawPaginator->lastPage(),
+                'current_page'  => $currentPage,
+                'last_page'     => $lastPage,
+                'next_page'     => $nextPage > $lastPage ? null : $nextPage,
+                'prev_page'     => $prevPage < 1 ? null : $prevPage,
+                'next_page_url' => $withdrawPaginator->nextPageUrl(),
+                'per_page'  => $withdrawPaginator->perPage(),
                 'transactions'  => TransactionResource::collection($withdrawPaginator->items())
             ],
             __('Withdraw transactions retrived successfuly')
