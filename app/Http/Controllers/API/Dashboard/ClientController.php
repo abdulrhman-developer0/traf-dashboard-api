@@ -23,7 +23,8 @@ class ClientController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $clientsQuery = Client::query();
+        $clientsQuery = Client::query()
+            ->whereHas('user');
 
         $clients_count = $clientsQuery->count();
         $new_clients = Client::whereDay('created_at', now())->count();
@@ -168,10 +169,9 @@ class ClientController extends Controller
     {
         $client = Client::find($id);
 
-        $client->delete();
+        $client->user->delete();
 
         // back();
         return $this->okResponse([], "Client deleted successfully");
-
     }
 }

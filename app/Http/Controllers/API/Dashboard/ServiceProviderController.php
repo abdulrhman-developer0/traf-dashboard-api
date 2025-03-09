@@ -23,7 +23,8 @@ class ServiceProviderController extends Controller
     {
         $year = $request->input('year', now()->year);
 
-        $providerssQuery = ServiceProvider::query();
+        $providerssQuery = ServiceProvider::query()
+            ->wheeHas('user');
 
         $providers_count = $providerssQuery->count();
         $new_providers = ServiceProvider::whereDay('created_at', now())->count();
@@ -86,7 +87,6 @@ class ServiceProviderController extends Controller
         // ]);
 
         return $this->okResponse($data);
-
     }
 
     public function show(Request $request, string $id)
@@ -165,7 +165,6 @@ class ServiceProviderController extends Controller
         //     'title' => 'Providers'
         // ]);
         return $this->okResponse($data);
-
     }
 
     public function destroy($id)
@@ -176,7 +175,7 @@ class ServiceProviderController extends Controller
             return $this->notFoundResponse([], 'Service Provider not found');
         }
 
-        $provider->delete();
+        $provider->user->delete();
 
         return $this->okResponse([], 'Service provider deleted successfully');
         // back();
