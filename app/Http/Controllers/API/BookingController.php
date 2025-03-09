@@ -406,6 +406,7 @@ class BookingController extends Controller
                     'transaction_type'  => TransactionType::REFUND,
                     'status'            => TransactionStatus::COMPLETED,
                     'amount'            => $refundedAmount,
+                    "description"       => "تم استرداد المبلغ المستحق بنجاح",
                     'reference_id'      => $payment->id
                 ]);
 
