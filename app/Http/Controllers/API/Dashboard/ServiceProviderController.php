@@ -24,7 +24,7 @@ class ServiceProviderController extends Controller
         $year = $request->input('year', now()->year);
 
         $providerssQuery = ServiceProvider::query()
-            ->whereHas('user', fn ($q) => $q->whereNull('deleted_at'));
+            ->whereHas('user', fn($q) => $q->whereNull('deleted_at'));
 
         $providers_count = $providerssQuery->count();
         $new_providers = ServiceProvider::whereDay('created_at', now())->count();
@@ -65,7 +65,7 @@ class ServiceProviderController extends Controller
             return $actual->count();
         })->toArray();
 
-        $providers_paginated = ServiceProvider::query()
+        $providers_paginated = $providerssQuery
             ->select(['id', 'user_id', 'is_personal', 'status', 'created_at'])
             ->whereStatus('pending')
             ->latest()
