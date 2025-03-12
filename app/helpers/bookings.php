@@ -20,6 +20,7 @@ if (!function_exists('isTimeAvailable')) {
             ->where('service_id', $serviceId)
             ->where('start_date', '<=', $datetime)
             ->where('end_date', '>=', $datetime)
+            ->when(request()->reference_id, fn($q) => $q->where('reference_id', request()->reference_id))
             ->get();
 
         // ignored ids
