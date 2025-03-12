@@ -24,7 +24,7 @@ class ServiceProviderController extends Controller
         $year = $request->input('year', now()->year);
 
         $providerssQuery = ServiceProvider::query()
-            ->wheeHas('user');
+            ->whereHas('user');
 
         $providers_count = $providerssQuery->count();
         $new_providers = ServiceProvider::whereDay('created_at', now())->count();
