@@ -64,7 +64,7 @@ class JoinRequestController extends Controller
         })->toArray();
 
         $providers_paginated = ServiceProvider::query()
-        ->where('user', fn ($q) => $q->whereNull('deleted_at'))
+            ->whereHas('user', fn($q) => $q->whereNull('deleted_at'))
             ->select(['id', 'user_id', 'tax_registeration_number', 'is_personal', 'status', 'created_at'])
             ->whereStatus('pending')
             ->latest()
