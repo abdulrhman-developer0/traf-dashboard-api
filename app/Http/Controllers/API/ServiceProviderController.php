@@ -23,8 +23,7 @@ class ServiceProviderController extends Controller
 
     public function __construct(
         protected SmsService $sms
-    )
-    {
+    ) {
         $this->middleware(['auth:sanctum'])->except(['index', 'indexWithLocations', 'store']);
 
         // $this->middleware('account:admin')->except(['update', 'destroy']);
@@ -35,7 +34,8 @@ class ServiceProviderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = ServiceProvider::query();
+        $query = ServiceProvider::query()
+            ->whereHas('user', fn($q) => $q->whereNull('deleted_at'));
 
         // filter by category
         if ($request->input('category_id') != null) {
@@ -261,7 +261,7 @@ class ServiceProviderController extends Controller
             'password'      => Hash::make($request->password),
             'account_type'  => 'service-provider',
         ]);
-        
+
         // Initialize wallet if not exists.
         $user->initializeWallet();
 

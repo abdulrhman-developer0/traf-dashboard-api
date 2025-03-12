@@ -32,7 +32,9 @@ class ClientController extends Controller
     {
         $user = Auth::user();
 
-        $query = Client::with('user');
+        $query = Client::query()
+            ->whereHas('user', fn($q) => $q->whereNull('deleted_at'))
+            ->with('user');
 
         // Retrieve all clients with associated user data
         $clients = $query->get();
@@ -89,9 +91,9 @@ class ClientController extends Controller
             // $user->notify(new TwoFactorNotification());
 
             $this->sms->send(
-                    $user->phone,
-                    "كود التحقق الخاص بك هو $user->code"
-                );
+                $user->phone,
+                "كود التحقق الخاص بك هو $user->code"
+            );
         } catch (\Throwable $throwable) {
             // 
         }
