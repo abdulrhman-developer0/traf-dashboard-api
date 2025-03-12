@@ -66,6 +66,7 @@ class ClientController extends Controller
         })->toArray();
 
         $clients_paginated = Client::query()
+            ->whereHas('user', fn($q) => $q->whereNull('deleted_at'))
             ->select(['id', 'user_id', 'phone', 'created_at'])
             ->latest()
             ->with(['user'])
