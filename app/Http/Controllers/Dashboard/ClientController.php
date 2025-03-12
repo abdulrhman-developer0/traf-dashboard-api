@@ -63,7 +63,8 @@ class ClientController extends Controller
         })->toArray();
 
         $clients_paginated = Client::query()
-            ->select(['id', 'user_id', 'phone' ,'created_at'])
+            ->whereHas('user', fn($q) => $q->whereNull('deleted_at'))
+            ->select(['id', 'user_id', 'phone', 'created_at'])
             ->latest()
             ->with(['user'])
             ->paginate(4);
@@ -156,7 +157,6 @@ class ClientController extends Controller
         ];
 
         return $data;
-        
     }
 
     public function destroy($id)
