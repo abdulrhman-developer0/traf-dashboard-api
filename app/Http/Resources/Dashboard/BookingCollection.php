@@ -37,7 +37,7 @@ class BookingCollection extends ResourceCollection
                     'provider_name'     => $item->service?->serviceProvider->user->name,
                     'provider_rating'     => $item->service?->serviceProvider->rating,
                     'client_photo'        => $item->client->getFirstMediaUrl('photo'),
-                    'client_name'         => $item->client->user->name,
+                    'client_name'         => $item->client?->user?->name ?? "no client",
                     'client_rating'       => $item->client->rating,
                     'from'                => $item->date->startOfHour()->format('h:i A'),
                     'to'                  => $item->date->addHour()->startOfHour()->format('h:i A'),
