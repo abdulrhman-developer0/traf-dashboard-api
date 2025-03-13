@@ -13,6 +13,7 @@ use Carbon\Carbon;
 class BookingController extends Controller
 {
     use APIResponses;
+
     public function index(Request $request)
     {
         //dd($request);
@@ -20,6 +21,7 @@ class BookingController extends Controller
 
 
         $bookings_paginated = Booking::query()
+            ->whereHas('client.user', fn($q) => $q->whereNull('deleted_at'))
             ->whereDate('date', $date)
             ->latest()
             ->paginate(4);

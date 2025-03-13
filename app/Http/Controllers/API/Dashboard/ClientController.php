@@ -19,6 +19,7 @@ use Inertia\Inertia;
 class ClientController extends Controller
 {
     use APIResponses;
+    
     public function index(Request $request)
     {
         $year = $request->input('year', now()->year);
