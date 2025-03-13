@@ -22,6 +22,7 @@ class BookingController extends Controller
 
         $bookings_paginated = Booking::query()
             ->whereHas('client.user', fn($q) => $q->whereNull('deleted_at'))
+            ->whereHas('service.serviceProvider.user', fn($q) => $q->whereNull('deleted_at'))
             ->whereDate('date', $date)
             ->latest()
             ->paginate(4);
