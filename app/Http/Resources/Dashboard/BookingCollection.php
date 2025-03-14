@@ -46,7 +46,7 @@ class BookingCollection extends ResourceCollection
                     'payment_status'      => $item->payments?->status,
                     'paid_amount'         => $item->payments?->amount,
                     'refunded_amount'         => $item->payments?->refunded_amount,
-                    'type'                    => ($item->payments?->refunded_amount) ? 'refund' : 'apid',
+                    'type'                    => ($item->payments?->refunded_amount) ? 'refund' : 'paid',
                     'created_at'              => $item->created_at,
                     'client_phone'         => $item->client->phone,
 
