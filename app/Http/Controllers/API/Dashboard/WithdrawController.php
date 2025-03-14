@@ -20,6 +20,7 @@ class WithdrawController extends Controller
     public function index(Request $request)
     {
         $withdrawPaginator = Transaction::query()
+            ->whereHas('transactionable.user', fn($q) => $q->whereNull('deleted_at'))
             ->with(['transactionable.user'])
             ->latest()
             ->where('transaction_type', TransactionType::WITHDRAW)
