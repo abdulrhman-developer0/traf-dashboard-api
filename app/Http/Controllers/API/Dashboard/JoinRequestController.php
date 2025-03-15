@@ -95,7 +95,7 @@ class JoinRequestController extends Controller
 
         $request->validate([
             'status' => 'required|in:approved,rejected',
-            'rejection_reason'  => 'required_if:status,rejected'
+            'rejection_reason'  => 'string'
         ]);
 
         $provider = ServiceProvider::find($id);
