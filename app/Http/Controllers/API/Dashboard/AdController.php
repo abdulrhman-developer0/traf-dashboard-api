@@ -59,7 +59,7 @@ class AdController extends Controller
     {
         $request->validate([
             'status' => 'required|string|in:approved,rejected',
-            'notes'  => 'required_if:status,rejected|string',
+            'notes'  => '|string',
         ]);
 
         $ad->update($request->only(['status', 'notes']));
