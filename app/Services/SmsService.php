@@ -19,7 +19,6 @@ class SmsService
             'message'       => $message,
         ]);
 
-        dd($response->body(), $message, $message);
 
         if ($response->body() != 'Success') {
             throw new Exception("Dreams SMS Error with code: " . $response->body());
