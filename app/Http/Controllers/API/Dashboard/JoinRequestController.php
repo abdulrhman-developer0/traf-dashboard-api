@@ -25,7 +25,7 @@ class JoinRequestController extends Controller
         //$requestsQuery = ServiceProvider::query();
 
         $total_requests = ServiceProvider::count();
-        $approved_count = ServiceProvider::whereHas('user')->where('status', 'approved')->count();
+        $approved_count = ServiceProvider::where('status', 'approved')->count();
         $rejected_count = ServiceProvider::where('status', 'rejected')->count();
         $pending_count = ServiceProvider::where('status', 'pending')->count();
 
