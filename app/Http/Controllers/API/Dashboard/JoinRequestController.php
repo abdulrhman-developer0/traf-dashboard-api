@@ -30,7 +30,7 @@ class JoinRequestController extends Controller
         $pending_count = ServiceProvider::whereHas('user', fn($q) => $q->whereNull('deleted_at'))->whereStatus('pending')->count();
 
 
-        $year_total_requests = ServiceProvider::whereYear('created_at', $year)->count();
+        $year_total_requests = ServiceProvider::whereHas('user', fn($q) => $q->whereNull('deleted_at'))->whereYear('created_at', $year)->count();
 
         $stats = [
             'total_requests' => $total_requests,
