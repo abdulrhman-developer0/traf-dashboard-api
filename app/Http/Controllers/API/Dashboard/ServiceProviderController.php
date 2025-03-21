@@ -176,7 +176,12 @@ class ServiceProviderController extends Controller
             return $this->notFoundResponse([], 'Service Provider not found');
         }
 
-        $provider->user->delete();
+        $user = $provider->user;
+
+        $user->phone = $user->phone . '-' . $user->created_at;
+        $user->save();
+
+        $user->delete();
 
         return $this->okResponse([], 'Service provider deleted successfully');
         // back();

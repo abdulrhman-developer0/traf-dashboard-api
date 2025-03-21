@@ -19,7 +19,7 @@ use Inertia\Inertia;
 class ClientController extends Controller
 {
     use APIResponses;
-    
+
     public function index(Request $request)
     {
         $year = $request->input('year', now()->year);
@@ -171,7 +171,12 @@ class ClientController extends Controller
     {
         $client = Client::find($id);
 
-        $client->user->delete();
+        $user = $client->user;
+
+        $user->phone = $user->phone . '-' . $user->created_at;
+        $user->save();
+
+        $user->delete();
 
         // back();
         return $this->okResponse([], "Client deleted successfully");
