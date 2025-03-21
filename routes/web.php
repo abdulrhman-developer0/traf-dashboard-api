@@ -37,7 +37,7 @@ use App\Http\Controllers\Dashboard\UserProfileController;
 
 
 Route::get('/', function () {
-    return "<h1>This is The Hosted API for Tarf APP/Dashboard";
+    return redirect("https://management.tarf-beauty.com");
 });
 
 
