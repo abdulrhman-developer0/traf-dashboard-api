@@ -19,6 +19,20 @@ class BookingController extends Controller
         //dd($request);
         $date = $request->has('date') ? $request->date : Carbon::now()->toDateString();
 
+        $booking_count                   = Booking::count();
+        $confirmed_booking_count         = Booking::whereStatus('confirmed')->count();
+        $cash_booking_count              = Booking::whereStatus('cash')->count();
+        $canceled_booking_count          = Booking::whereStatus('canceled')->count();
+        $done_booking_count              = Booking::whereStatus('done')->count();
+
+        $stats = [
+            'booking_count'             => $booking_count,
+            'confirmed_booking_count'   => $confirmed_booking_count,
+            'cash_booking_count'        => $cash_booking_count,
+            'canceled_booking_count'    => $canceled_booking_count,
+            'done_booking_count'        => $done_booking_count
+        ];
+
 
         $bookings_paginated = Booking::query()
             ->where(function ($q) {
@@ -30,6 +44,7 @@ class BookingController extends Controller
             ->paginate(4);
 
         $data = [
+            'stats'    => $stats,
             'bookings' => BookingCollection::make($bookings_paginated),
         ];
 
