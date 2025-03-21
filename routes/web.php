@@ -37,7 +37,7 @@ use App\Http\Controllers\Dashboard\UserProfileController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return "<h1>This is The Hosted API for Tarf APP/Dashboard";
 });
 
 
