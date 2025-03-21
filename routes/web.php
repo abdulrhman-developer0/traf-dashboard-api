@@ -36,42 +36,48 @@ use App\Http\Controllers\Dashboard\UserProfileController;
 // Route::get('/test', [CategoryController::class, 'index']);
 
 
+// Route::get('/', function () {
+//     return redirect("https://management.tarf-beauty.com");
+// });
+
 Route::get('/', function () {
-    return redirect("https://management.tarf-beauty.com");
+    return redirect('/');
 });
 
 
-// Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:dashboard-dashboard-view'],'prefix' => ''], function() {
-
-//     Route::get('/', [HomeController::class, 'index'])->name('index');
-
-//     Route::resource('/requests', JoinRequestController::class);
-
-//     Route::resource('/clients', ClientController::class);
-
-//     Route::resource('/service-providers', ServiceProviderController::class);
-
-//     Route::resource('/pricing', PricingController::class);
-
-//     Route::get('/bookings', [BookingController::class, 'index']);
-
-//     Route::get('/services', [ServiceController::class, 'index']);
-
-//     Route::get('/services-categories', [CategoryController::class, 'index']);
-
-//     Route::get('/payments', [PaymentController::class, 'index']);
-
-//     Route::resource('/policies', PolicyController::class);
-
-//     Route::resource('/ads', AdController::class);
 
 
-//     Route::resource('my-profile', UserProfileController::class);
-//     Route::get('/my-settings', [UserSettingsController::class, 'index'])->name('my-settings');
-//     Route::put('/my-settings/change-password', [UserSettingsController::class, 'changePassword'])->name('change-password');
+Route::group(['middleware' => ['auth:web','Inertia','UserLastActivity', 'can:dashboard-dashboard-view'],'prefix' => ''], function() {
+
+    Route::get('/', [HomeController::class, 'index'])->name('index');
+
+    Route::resource('/requests', JoinRequestController::class);
+
+    Route::resource('/clients', ClientController::class);
+
+    Route::resource('/service-providers', ServiceProviderController::class);
+
+    Route::resource('/pricing', PricingController::class);
+
+    Route::get('/bookings', [BookingController::class, 'index']);
+
+    Route::get('/services', [ServiceController::class, 'index']);
+
+    Route::get('/services-categories', [CategoryController::class, 'index']);
+
+    Route::get('/payments', [PaymentController::class, 'index']);
+
+    Route::resource('/policies', PolicyController::class);
+
+    Route::resource('/ads', AdController::class);
 
 
-// });
+    Route::resource('my-profile', UserProfileController::class);
+    Route::get('/my-settings', [UserSettingsController::class, 'index'])->name('my-settings');
+    Route::put('/my-settings/change-password', [UserSettingsController::class, 'changePassword'])->name('change-password');
 
 
-// require __DIR__ . '/auth.php';
+});
+
+
+require __DIR__ . '/auth.php';
