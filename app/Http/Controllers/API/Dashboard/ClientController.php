@@ -34,7 +34,7 @@ class ClientController extends Controller
             ->whereAccountType('client')
             ->count();
 
-        $year_total_clients = Client::whereHas('user', fn($q) => $q->whereNull('deleted_at'))->whereYear('created_at', $year)->count();
+        $year_total_clients = Client::whereNull('deleted_at'))->whereYear('created_at', $year)->count();
 
         $stats = [
             'clients_count' => $clients_count,
