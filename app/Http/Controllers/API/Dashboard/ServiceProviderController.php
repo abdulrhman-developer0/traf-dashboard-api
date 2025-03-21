@@ -68,7 +68,7 @@ class ServiceProviderController extends Controller
         $providers_paginated = ServiceProvider::query()
             ->whereHas('user', fn($q) => $q->whereNull('deleted_at'))
             ->select(['id', 'user_id', 'is_personal', 'status', 'created_at'])
-            ->whereStatus('pending')
+            ->whereStatus('approved')
             ->latest()
             ->with(['user'])
             ->paginate(4);
