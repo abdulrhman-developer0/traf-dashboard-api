@@ -29,11 +29,6 @@ class JoinRequestController extends Controller
         $rejected_count = ServiceProvider::whereHas('user', fn($q) => $q->whereNull('deleted_at'))->whereStatus('rejected')->count();
         $pending_count = ServiceProvider::whereHas('user', fn($q) => $q->whereNull('deleted_at'))->whereStatus('pending')->count();
 
-        ServiceProvider::whereHas('user', fn($q) => $q->whereNotNull('deleted_at'))->get()->map(function ($i) {
-            $i->phone = $i->phone . '-' . $i->created_at;
-            $i->save();
-        });
-
 
         $year_total_requests = ServiceProvider::whereYear('created_at', $year)->count();
 
