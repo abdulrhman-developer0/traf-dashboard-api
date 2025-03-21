@@ -25,16 +25,16 @@ class ClientController extends Controller
         $year = $request->input('year', now()->year);
 
         $clientsQuery = Client::query()
-            ->whereHas('user');
+            ->whereHas('user', fn($q) => $q->whereNull('deleted_at'));
 
         $clients_count = $clientsQuery->count();
-        $new_clients = Client::whereDay('created_at', now())->count();
+        $new_clients = Client::whereHas('user', fn($q) => $q->whereNull('deleted_at'))->whereDay('created_at', now())->count();
         $logouts_count = 0;
         $deleted_accounts = User::onlyTrashed()
             ->whereAccountType('client')
             ->count();
 
-        $year_total_clients = Client::whereYear('created_at', $year)->count();
+        $year_total_clients = Client::whereHas('user', fn($q) => $q->whereNull('deleted_at'))->whereYear('created_at', $year)->count();
 
         $stats = [
             'clients_count' => $clients_count,
