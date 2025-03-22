@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\API\Dashboard;
 
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\BookingCollection;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Models\Transaction;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,8 +26,8 @@ class PaymentController extends Controller
 
         $total_in_payments = Payment::count();
         $in_payments_amount = Payment::sum('amount');
-        $total_out_payments = 10;
-        $out_payments_amount = 459;
+        $total_out_payments = Transaction::whereStatus(TransactionStatus::COMPLETED)->whereTransactionType(TransactionType::WITHDRAW)->count();
+        $out_payments_amount = Transaction::whereStatus(TransactionStatus::COMPLETED)->whereTransactionType(TransactionType::WITHDRAW)->sum('amount');
         $year_in_payments_amount = Payment::whereYear('created_at', $year)->sum('amount');
 
         $stats = [
