@@ -63,6 +63,10 @@ class HomeController extends Controller
         })->toArray();
 
         $bookings_paginated = Booking::query()
+            ->where(function ($q) {
+                $q->whereHas('client.user', fn($q) => $q->whereNull('deleted_at'))
+                    ->whereHas('service.serviceProvider.user', fn($q) => $q->whereNull('deleted_at'));
+            })
             ->select(['id', 'client_id', 'service_id', 'date', 'status'])
             ->latest()
             ->with('client.user', 'service.serviceProvider.user')
