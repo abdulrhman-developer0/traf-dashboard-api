@@ -122,7 +122,7 @@ class AdController extends Controller
         return $this->okResponse(
             [
                 'current_price' => $adPrice,
-                'old_prices'    => $oldPrices
+                'history'    => $oldPrices
             ],
             __('Ad Price Retrieved Successfuly')
         );
@@ -142,7 +142,7 @@ class AdController extends Controller
         return $this->okResponse(
             [
                 'current_price' => $adPrice,
-                'old_prices'    => $oldPrices
+                'history'    => $oldPrices
             ],
             __('Ad Price Created Successfuly')
         );
