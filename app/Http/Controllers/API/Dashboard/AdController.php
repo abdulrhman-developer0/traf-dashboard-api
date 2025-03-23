@@ -127,4 +127,24 @@ class AdController extends Controller
             __('Ad Price Retrieved Successfuly')
         );
     }
+
+    public function updateAdPrice(Request $request)
+    {
+        $validated = $request->validate([
+            'price' => 'required|numeric|min:1.00'
+        ]);
+
+        AdPrice::create($validated);
+
+        $oldPrices = AdPrice::latest()->get();
+        $adPrice = $oldPrices->first();
+
+        return $this->okResponse(
+            [
+                'current_price' => $adPrice,
+                'old_prices'    => $oldPrices
+            ],
+            __('Ad Price Created Successfuly')
+        );
+    }
 }
