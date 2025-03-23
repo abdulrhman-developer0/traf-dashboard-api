@@ -116,7 +116,7 @@ class AdController extends Controller
 
     public function adPrice()
     {
-        $adPrice = AdPrice::last();
+        $adPrice = AdPrice::latest()->first();
 
         return $this->okResponse(
             [
