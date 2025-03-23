@@ -39,9 +39,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/payments', PaymentController::class);
 
     Route::apiResource('/ads', AdController::class);
+    Route::get('/ad-price', [AdController::class, 'adPrice']);
+    Route::post('/ad-price', [AdController::class, 'updateAdPrice']);
 
     Route::apiResource('/policies', PolicyController::class);
 
     Route::apiResource('/withdraw-transactions', WithdrawController::class);
-
 });

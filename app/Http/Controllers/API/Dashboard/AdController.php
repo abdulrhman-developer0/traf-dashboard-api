@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\AdCollection;
 use App\Models\Ad;
+use App\Models\AdPrice;
 use App\Notifications\DBNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
@@ -113,52 +114,15 @@ class AdController extends Controller
         return $this->okResponse($ad, 'تم تحديث الإعلان بنجاح');
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $ad = Ad::findOrFail($id);
+    public function adPrice()
+    {
+        $adPrice = AdPrice::last();
 
-
-    //     $validatedData = $request->validate([
-    //         'status' => 'required|string',
-    //         'notes' => 'nullable|string'
-    //     ]);
-
-
-    //     $ad->fill($validatedData);
-
-
-    //     if ($request->status === 'pending-payment') {
-    //         $ad->start_date = now();
-    //         $ad->end_date = now()->addDays($ad->duration_in_days);
-    //     }
-
-    //     $ad->save();
-
-
-    //     if (in_array($request->status, ['rejected', 'pending-payment'])) {
-    //         $targetUser = $ad->serviceProvider->user;
-
-    //         $messages = [
-    //             'rejected' => ['تم رفض إعلانك', 'يرجى مراجعة أسباب الرفض ثم المحاولة مرة أخرى.'],
-    //             'pending-payment' => ['تم مراجعة إعلانك', 'تمت الموافقة على إعلانك، يرجى متابعة عملية الدفع لنشره.']
-    //         ];
-
-    //         $data = [
-    //             'status' => $request->status,
-    //             'title' => $messages[$request->status][0],
-    //             'message' => $messages[$request->status][1],
-    //             'sent_at' => now(),
-    //             'ad_id' => $ad->id,
-    //             'user' => null,
-    //         ];
-
-
-    //         $targetUser->notify(new DBNotification($data));
-
-    //         app('App\Http\Controllers\API\FcmController')
-    //             ->sendFcmNotification($targetUser->id, $data['title'], $data['message']);
-    //     }
-
-    //     return $this->okResponse($ad, 'تم تحديث الإعلان بنجاح');
-    // }
+        return $this->okResponse(
+            [
+                'ad_price' => $adPrice
+            ],
+            __('Ad Price Retrieved Successfuly')
+        );
+    }
 }
