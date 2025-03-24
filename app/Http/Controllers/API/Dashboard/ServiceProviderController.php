@@ -85,7 +85,7 @@ class ServiceProviderController extends Controller
             ->whereStatus('approved')
             ->latest()
             ->with(['user', 'currentSubscription'])
-            ->paginate(4);
+            ->paginate($request->input('page_size', 4));
 
 
         $data = [
