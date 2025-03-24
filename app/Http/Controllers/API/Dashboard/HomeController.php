@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\ServiceProvider;
 use App\Models\Client;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
@@ -32,12 +33,18 @@ class HomeController extends Controller
 
         $year_bookings_count = Booking::whereYear('created_at', $year)->count();
 
+        $total_subscriptions = Subscription::count();
+        $total_subscriptions_amount = Subscription::sum('amount');
+
+
         $stats = [
             'users_count' => $users_count,
             'clients_count' => $clients_count,
             'providers_count' => $providers_count,
             'bookings_count' => $bookings_count,
             'year_bookings_count' => $year_bookings_count,
+            'total_subscriptions' => $total_subscriptions,
+            'total_subscriptions_amount' => $total_subscriptions_amount,
         ];
 
         $start = now()->startOfYear();
