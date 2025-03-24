@@ -67,6 +67,17 @@ class ServiceProviderController extends Controller
 
         $providers_paginated = ServiceProvider::query()
             ->whereHas('user', fn($q) => $q->whereNull('deleted_at'))
+            ->when($request->has('type'), function ($q) use ($request) {
+                $type = $request->input('type', 'all');
+
+                if ($type == 'subscribed') {
+                    $q->whereHas('currentSubscription');
+                } else if ($type == 'unsubscribed') {
+                    $q->whereDoesntHave('currentSubscription');
+                } else {
+                    return;
+                }
+            })
             ->select(['id', 'user_id', 'is_personal', 'status', 'tax_registeration_number', 'created_at'])
             ->whereStatus('approved')
             ->latest()
