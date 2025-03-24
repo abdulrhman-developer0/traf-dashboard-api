@@ -84,7 +84,7 @@ class ServiceProviderController extends Controller
             ->select(['id', 'user_id', 'is_personal', 'status', 'tax_registeration_number', 'created_at'])
             ->whereStatus('approved')
             ->latest()
-            ->with(['user'])
+            ->with(['user', 'currentSubscription'])
             ->paginate(4);
 
 
