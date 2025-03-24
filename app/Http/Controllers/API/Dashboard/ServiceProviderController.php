@@ -70,7 +70,10 @@ class ServiceProviderController extends Controller
             ->when($request->has('type'), function ($q) use ($request) {
                 $type = $request->input('type', 'all');
 
-                if ($type == 'subscribed') {
+                if ($type == 'all') {
+                    return;
+                }
+                else if ($type == 'subscribed') {
                     $q->whereHas('currentSubscription');
                 } else if ($type == 'unsubscribed') {
                     $q->whereDoesntHave('currentSubscription');
