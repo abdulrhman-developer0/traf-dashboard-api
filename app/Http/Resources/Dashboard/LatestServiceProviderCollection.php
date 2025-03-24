@@ -37,7 +37,7 @@ class LatestServiceProviderCollection extends ResourceCollection
                     'tax_number'        => $item->tax_registeration_number,
                     'maroof_document'   => $item->getFirstMediaUrl('maroof_document'),
                     'created_at'        => $item->created_at->format('Y-m-dTH:i'),
-                    'subscribed'        => $this->subscribed
+                    'current_subscription'        => $item->currentSubscription,
                 ];
             })
         ];
