@@ -75,7 +75,7 @@ class ServiceProviderController extends Controller
                 } else if ($type == 'unsubscribed') {
                     $q->whereDoesntHave('currentSubscription');
                 } else {
-                    return;
+                    $q->whereNull('id');
                 }
             })
             ->select(['id', 'user_id', 'is_personal', 'status', 'tax_registeration_number', 'created_at'])
