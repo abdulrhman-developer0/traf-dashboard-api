@@ -36,6 +36,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
+Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
 
 Route::get('/cron', function () {
 
