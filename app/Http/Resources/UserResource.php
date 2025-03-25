@@ -30,6 +30,7 @@ class UserResource extends JsonResource
             'deleted_at'          => $this->deleted_at,
             'photo'               => $account?->getFirstMediaUrl('photo') ?? $this->getFirstMediaUrl('photo'),
             'name'                => $this->name,
+            'email'               => $this->email,
             'job'                 => $account?->job,
             'phone'               => $this->phone,
             // 'phone'               => $account?->phone,
