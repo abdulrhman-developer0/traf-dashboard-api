@@ -96,7 +96,7 @@ class ProfileController extends Controller
             'photo'     => 'required|image',
         ]);
 
-        $account = Auth::user()?->account();
+        $account = (Auth::user()?->account()) ?? Auth::user();
 
         $account?->addMedia($request->file('photo'))
             ->toMediaCollection('photo');
