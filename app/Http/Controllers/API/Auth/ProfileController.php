@@ -58,13 +58,13 @@ class ProfileController extends Controller
                 'bank_account_number' => 'nullable|string|min:1|max:255',
             ],
             'admin'             => [
-                'email'     => "required|email|unique:users,email,$user->id",
+                'email'     => "nullable|email|unique:users,email,$user->id",
             ],
             default             => []
         };
 
         $validated = $request->validate([
-            'name'      => 'required|string|min:1|max:255',
+            'name'      => 'nullable|string|min:1|max:255',
             'photo'     => 'nullable|image|max:4096',
             'area'      => 'nullable|string|min:1|max:255',
             'city' => 'nullable|string|min:1|max:255',
