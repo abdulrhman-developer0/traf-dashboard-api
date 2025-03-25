@@ -71,7 +71,7 @@ class ProfileController extends Controller
             ...$dynmicRules
         ]);
 
-        $user->fill($request->only(['name']))->save();
+        $user->fill($request->only(['name', 'email']))->save();
 
         $user->location?->fill(
             $user->location?->getFillable() ?? []
