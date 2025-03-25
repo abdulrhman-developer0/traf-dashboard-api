@@ -64,6 +64,8 @@ class PaymentController extends Controller
         })->toArray();
 
         $bookings = Booking::query()
+            ->whereHas('service.serviceProvider.user', fn($q) => $q->whereNull('deleted_at'))
+            ->whereHas('client.user', fn($q) => $q->whereNull('deleted_at'))
             ->whereHas('service', fn($q) => $q->whereNull('deleted_at'))
             ->whereHas(
                 'payments',
