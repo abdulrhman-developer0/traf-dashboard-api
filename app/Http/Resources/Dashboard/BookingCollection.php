@@ -32,7 +32,7 @@ class BookingCollection extends ResourceCollection
 
                 return [
                     'id'                => $item->id,
-                    'service_name'      => $item->service->name,
+                    'service_name'      => $item->service?->name ?? 'خدمة محذوفة',
                     'provider_photo'    => $item->service->serviceProvider->getFirstMediaUrl('photo'),
                     'provider_name'     => $item->service?->serviceProvider?->user?->name ?? "deleted provider",
                     'provider_rating'     => $item->service?->serviceProvider->rating,
