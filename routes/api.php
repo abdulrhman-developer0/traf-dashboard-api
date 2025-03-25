@@ -69,7 +69,7 @@ Route::prefix('auth')->group(function () {
 
         Route::get('/profile/reports', [ProfileController::class, 'reports']);
 
-        Route::post('/profile/change-photo', [ProfileController::class, 'changePhoto']);
+        Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
         Route::get('/profile/{id}', [ProfileController::class, 'dataFor']);
 
         Route::patch('/profile/change-password', [ProfileController::class, 'changePassword']);
