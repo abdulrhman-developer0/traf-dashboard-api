@@ -72,7 +72,7 @@ Route::prefix('auth')->group(function () {
         Route::any('/profile/change-photo', [ProfileController::class, 'changePhoto']);
         Route::get('/profile/{id}', [ProfileController::class, 'dataFor']);
 
-        Route::patch('/profile/change-password', [ProfileController::class, 'changePassword']);
+        Route::any('/profile/change-password', [ProfileController::class, 'changePassword']);
 
         Route::delete('/profile', [ProfileController::class, 'destroyAccount']);
     });
