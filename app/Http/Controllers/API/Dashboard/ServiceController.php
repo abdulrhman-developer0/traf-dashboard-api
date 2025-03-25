@@ -7,6 +7,7 @@ use App\Http\Resources\Dashboard\LatestServiceCollection;
 use App\Models\Payment;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Notifications\DBNotification;
 use App\Traits\APIResponses;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -106,6 +107,33 @@ class ServiceController extends Controller
             'deletion_reason' => $request->input('deletion_reason', "NO Reason"),
             'deleted_at'      => now()
         ]);
+
+        $targetUser = $service->serviceProvider->user;
+
+        $title = "تم حذف خدمتك";
+
+        $message = "تم حذف الخدمة لانتهاكك لي شروط مجتمعنا";
+
+        $data = [
+            'status' => 'service_deleted',
+            'title' => $title,
+            'message' => $message,
+            'deletion_reason' => $request->deletion_reason,
+            'sent_at' => now(),
+            'ad_id' => null,
+            'user' => null,
+        ];
+
+        // Notify the target user in the database.
+        $targetUser->notify(new DBNotification($data));
+
+        // Notify the target user via FCM
+        app('App\Http\Controllers\API\FcmController')
+            ->sendFcmNotification(
+                $targetUser->id,
+                $title,
+                $message
+            );
 
         return $this->okResponse([], __('Service Deleted Successfuly'));
     }

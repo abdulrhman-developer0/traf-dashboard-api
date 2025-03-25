@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Service extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, SoftDeletes;
 
     // Define the fillable fields for mass assignment
     protected $fillable = [
@@ -28,6 +29,8 @@ class Service extends Model implements HasMedia
         'is_home_service',
         'is_offer',
         'is_on_site',
+        'deletion_reason',
+        'deleted_at',
     ];
 
     protected $casts = [
