@@ -57,6 +57,9 @@ class ProfileController extends Controller
                 'latitude'   => 'required_with:longitude|numeric',
                 'bank_account_number' => 'nullable|string|min:1|max:255',
             ],
+            'admin'             => [
+                'email'     => "required|email|unique:users,email,$user->id",
+            ],
             default             => []
         };
 
