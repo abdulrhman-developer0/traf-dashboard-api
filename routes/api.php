@@ -36,8 +36,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
-
 Route::get('/cron', function () {
 
     Artisan::call('app:subscription-reminder');
@@ -71,7 +69,7 @@ Route::prefix('auth')->group(function () {
 
         Route::get('/profile/reports', [ProfileController::class, 'reports']);
 
-        Route::patch('/profile/change-photo', [ProfileController::class, 'changePhoto']);
+        Route::post('/profile/change-photo', [ProfileController::class, 'changePhoto']);
         Route::get('/profile/{id}', [ProfileController::class, 'dataFor']);
 
         Route::patch('/profile/change-password', [ProfileController::class, 'changePassword']);
