@@ -98,6 +98,7 @@ class ProfileController extends Controller
 
         $account = Auth::user()?->account();
 
+        dd($request->file('photo'));
         $account?->addMedia($request->file('photo'))
             ->toMediaCollection('photo');
 
