@@ -71,6 +71,12 @@ class User extends Authenticatable implements HasMedia, HasAccounts
         ];
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('photo')
+            ->singleFile();
+    }
+
     public function getAvatarAttribute()
     {
 

@@ -87,7 +87,26 @@ class ServiceController extends Controller
         // ]);
 
         return $this->okResponse($data, 'Services data retrieved successfully');
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $request->validate([
+            'deletion_reason' => "required|string:max:500"
+        ]);
 
 
+        $service = Service::find($id);
+
+        if (!$service) {
+            return $this->notFoundResponse();
+        }
+
+        $service->update([
+            'deletion_reason' => $request->input('deletion_reason', "NO Reason"),
+            'deleted_at'      => now()
+        ]);
+
+        return $this->okResponse([], __('Service Deleted Successfuly'));
     }
 }
