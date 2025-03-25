@@ -93,13 +93,12 @@ class ProfileController extends Controller
     public function changePhoto(Request $request)
     {
         $request->validate([
-            'photo'     => 'required|image|max:4096',
+            'file'     => 'required|image',
         ]);
 
         $account = Auth::user()?->account();
 
-        dd($request->file('photo'));
-        $account?->addMedia($request->file('photo'))
+        $account?->addMedia($request->file('file'))
             ->toMediaCollection('photo');
 
         return $this->okResponse([], 'Profile photo changed successfuly');
